@@ -2,6 +2,8 @@
 
 An in-cab reverse posture and trajectory assistant for **Euro Truck Simulator 2 1.60**.
 
+[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3767153599) | [Latest GitHub release](https://github.com/yyysheng/ETS2mods/releases/latest)
+
 When reverse gear is selected, the supported factory infotainment screen switches from its normal page to a live 2D maneuver view. It predicts the tractor and connected trailer posture from steering and articulation telemetry, and overlays nearby road, yard, and terrain outlines within a 30 m working area. It does not change the player camera and does not reuse mirror or camera feeds.
 
 ![ETS2 Reverse Posture Assistant](assets/workshop_cover.jpg)
@@ -26,7 +28,7 @@ When reverse gear is selected, the supported factory infotainment screen switche
 
 ### Steam Workshop package
 
-1. Subscribe to the Workshop item.
+1. Subscribe to the [Steam Workshop item](https://steamcommunity.com/sharedfiles/filedetails/?id=3767153599).
 2. Download `ETS2_Reverse_Posture_Assistant_v0.6.0_Runtime_for_Workshop.zip` from [Releases](https://github.com/yyysheng/ETS2mods/releases/latest).
 3. Extract it and run `Install-Runtime-Only.bat`.
 
