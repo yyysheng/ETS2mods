@@ -13,7 +13,10 @@ FEATURES
 
 IMPORTANT RUNTIME REQUIREMENT
 Steam Workshop can install the interface package only. The required runtime component must be installed from GitHub:
-https://github.com/yyysheng/ETS2mods/releases/latest
+https://github.com/yyysheng/ETS2mods/releases/download/reverse-posture-assistant-v0.6.0/ETS2_Reverse_Posture_Assistant_v0.6.0_Runtime_for_Workshop.zip
+
+Source and documentation:
+https://github.com/yyysheng/ETS2mods/tree/main/mods/ETS2_Reverse_Posture_Assistant
 
 Compatibility: ETS2 1.60.*, Windows x64, DirectX 11.
 
@@ -30,6 +33,9 @@ Compatibility: ETS2 1.60.*, Windows x64, DirectX 11.
 
 重要运行组件
 Steam 创意工坊只能安装界面包。完整动态功能还需要从 GitHub 安装运行组件：
-https://github.com/yyysheng/ETS2mods/releases/latest
+https://github.com/yyysheng/ETS2mods/releases/download/reverse-posture-assistant-v0.6.0/ETS2_Reverse_Posture_Assistant_v0.6.0_Runtime_for_Workshop.zip
+
+源码与说明：
+https://github.com/yyysheng/ETS2mods/tree/main/mods/ETS2_Reverse_Posture_Assistant
 
 兼容版本：ETS2 1.60.*，Windows x64，DirectX 11。
