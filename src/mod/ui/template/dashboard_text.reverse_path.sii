@@ -1,0 +1,7 @@
+SiiNunit
+{
+ui::text_template : txt.revpose.gear_page {
+ name: "Reverse posture assistant gear page"
+ text: "<img src=/material/ui/reverse_path/%0.mat xscale=stretch yscale=stretch>"
+}
+}

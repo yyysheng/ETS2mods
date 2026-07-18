@@ -1,0 +1,35 @@
+ETS2 Reverse Posture Assistant
+
+[EN]
+Turns supported original infotainment screens into a live reverse posture and trajectory assistant when reverse gear is selected.
+
+FEATURES
+- Live tractor and connected-trailer trajectory prediction
+- Steering and articulation-aware posture simulation
+- Nearby road, yard, and terrain outlines within 30 m
+- No forced camera movement
+- No mirror or camera-feed conflicts
+- Supports 14 original ETS2 1.60 infotainment layouts from DAF, Iveco, MAN, Renault Trucks, Scania, and Volvo
+
+IMPORTANT RUNTIME REQUIREMENT
+Steam Workshop can install the interface package only. The required runtime component must be installed from GitHub:
+https://github.com/yyysheng/ETS2mods/releases/latest
+
+Compatibility: ETS2 1.60.*, Windows x64, DirectX 11.
+
+[中文]
+挂入倒挡后，将支持的原版娱乐屏切换为实时倒车姿态与轨迹预测画面。
+
+功能
+- 实时预测车头与已连接挂车的倒车轨迹
+- 根据方向盘和车身铰接角度模拟未来姿态
+- 显示 30 m 范围内的道路、货场与地形轮廓
+- 不强制切换玩家视角
+- 不调用前视镜、后视镜或摄像机画面
+- 适配 DAF、Iveco、MAN、Renault Trucks、Scania、Volvo 共 14 个原版 1.60 娱乐屏布局
+
+重要运行组件
+Steam 创意工坊只能安装界面包。完整动态功能还需要从 GitHub 安装运行组件：
+https://github.com/yyysheng/ETS2mods/releases/latest
+
+兼容版本：ETS2 1.60.*，Windows x64，DirectX 11。

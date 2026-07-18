@@ -1,0 +1,12 @@
+bin/
+obj/
+release/
+workshop/160_content/
+*.zip
+*.scs
+*.addon64
+*.dll
+*.exe
+*.pdb
+*.bin
+*.log

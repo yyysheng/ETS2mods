@@ -1,0 +1,322 @@
+SiiNunit
+{
+ui::window : _nameless.063ae3791 {
+ window_handler: null
+ clip_children: false
+ keep_aspect: none
+ user_string_data: ""
+ first_direction_focus_id: 0
+ fitting: false
+ my_children: 3
+ my_children[0]: _nameless._.screen1
+ my_children[1]: _nameless._.screen2
+ my_children[2]: _nameless._.revpose
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 0
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: null
+}
+
+ui::group : _nameless._.screen1 {
+ fitting: false
+ my_children: 12
+ my_children[0]: _nameless._.bckg
+ my_children[1]: _nameless._.bare_map
+ my_children[2]: _nameless._.bg_top
+ my_children[3]: _nameless._.bg_bottom
+ my_children[4]: _nameless._.clock
+ my_children[5]: _nameless._.temp
+ my_children[6]: _nameless._.btn_bar
+ my_children[7]: _nameless._.weather_btn
+ my_children[8]: _nameless._.settings_btn
+ my_children[9]: _nameless._.radar_btn
+ my_children[10]: _nameless._.sound_btn
+ my_children[11]: _nameless._.north_btn
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 100
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+
+ui::text : _nameless._.bckg {
+ text: "<color value=FF342F2C><img src=/material/ui/white.mat xscale=stretch yscale=stretch>"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::text : _nameless._.bare_map {
+ text: "<color value=FFFFFFFF><img src=/material/ui/dashboard/bare_map.mat left=0.025 right=0.775 bottom=0.334 top=0.665 xscale=stretch yscale=stretch>"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 657
+ coords_b: 91
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::text : _nameless._.bg_top {
+ text: "<color value=FF101010><img src=/material/ui/white.mat xscale=stretch yscale=stretch>\r\n<color value=FFFFFFFF><ret><align hstyle=center vstyle=center><img src=/material/ui/white.mat width=216 height=4></align>"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 660
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::text : _nameless._.bg_bottom {
+ text: "<color value=FF101010><offset vshift=30><img src=/material/ui/white.mat xscale=stretch yscale=stretch>\r\n<ret><color value=FFFFFFFF><img src=/material/ui/dashboard/iveco_sway/display_over.mat left=0 right=1 top=0.8125 bottom=1 xscale=stretch yscale=stretch>"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 120
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::text_common : _nameless._.clock {
+ value: "23:59"
+ look_template: txt.iveco_swic10.iph_1vall
+ text: ""
+ coords_l: 93
+ coords_r: 216
+ coords_t: 720
+ coords_b: 656
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1050
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::text_common : _nameless._.temp {
+ value: "29|C"
+ look_template: txt.iveco_swic10.iph_bar2valt
+ text: ""
+ coords_l: 1109
+ coords_r: 1230
+ coords_t: 720
+ coords_b: 656
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1000
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::text : _nameless._.btn_bar {
+ text: "<color value=FF261409><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.375 right=0.40625 top=0.8125 bottom=0.875 width=48 height=96>\r\n<img src=/material/ui/dashboard/iveco_sway/display.mat left=0.40625 right=0.40625 top=0.8125 bottom=0.875 width=380 height=96>\r\n<img src=/material/ui/dashboard/iveco_sway/display.mat right=0.375 left=0.40625 top=0.8125 bottom=0.875 width=48 height=96>\r\n<color value=FFFFFFFF>\r\n<ret><offset vshift=32 hshift=42>\r\n<img src=/material/ui/dashboard/iveco_sway/display.mat left=0.125 right=0.1875 top=0.875 bottom=0.9375 width=32 height=32>\r\n<offset hshift=58><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.1875 right=0.25 top=0.875 bottom=0.9375 width=32 height=32>\r\n<offset hshift=58><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.1875 right=0.25 top=0.9375 bottom=1 width=32 height=32>\r\n<offset hshift=58><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.25 right=0.3125 top=0.875 bottom=0.9375 width=32 height=32>\r\n<offset hshift=58><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.25 right=0.3125 top=0.75 bottom=0.8125 width=32 height=32>\r\n<ret><offset vshift=16 hshift=26>\r\n<img src=/material/ui/dashboard/iveco_sway/display.mat left=0.375 right=0.4375 top=0.875 bottom=0.9375 width=64 height=64>\r\n<color value=FFC3AF00>\r\n<offset hshift=26><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.375 right=0.4375 top=0.875 bottom=0.9375 width=64 height=64>\r\n<offset hshift=26><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.375 right=0.4375 top=0.875 bottom=0.9375 width=64 height=64>\r\n<color value=FFAE6D00>\r\n<offset hshift=26><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.375 right=0.4375 top=0.875 bottom=0.9375 width=64 height=64>\r\n<offset hshift=26><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.375 right=0.4375 top=0.875 bottom=0.9375 width=64 height=64>"
+ coords_l: 38
+ coords_r: 522
+ coords_t: 624
+ coords_b: 520
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 4
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::text : _nameless._.weather_btn {
+ text: "<color value=FF261409><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.375 right=0.4375 top=0.75 bottom=0.8125 xscale=stretch yscale=stretch><ret><color value=FFFFFFFF><align hstyle=center vstyle=center><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.25 right=0.3125 top=0.8125 bottom=0.875 width=38 height=38></align>"
+ coords_l: 1073
+ coords_r: 1145
+ coords_t: 624
+ coords_b: 552
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 5
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::text : _nameless._.settings_btn {
+ text: "<color value=FF261409><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.375 right=0.4375 top=0.75 bottom=0.8125 xscale=stretch yscale=stretch><ret><color value=FFFFFFFF><align hstyle=center vstyle=center><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.1875 right=0.25 top=0.75 bottom=0.8125 width=38 height=38></align>"
+ coords_l: 1174
+ coords_r: 1246
+ coords_t: 624
+ coords_b: 552
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 5
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::text : _nameless._.radar_btn {
+ text: "<color value=FF261409><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.375 right=0.4375 top=0.75 bottom=0.8125 xscale=stretch yscale=stretch><ret><color value=FFFFFFFF><align hstyle=center vstyle=center><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.125 right=0.1875 top=0.9375 bottom=1 width=38 height=38></align>"
+ coords_l: 1174
+ coords_r: 1246
+ coords_t: 393
+ coords_b: 321
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 5
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::text : _nameless._.sound_btn {
+ text: "<color value=FF261409><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.375 right=0.4375 top=0.75 bottom=0.8125 xscale=stretch yscale=stretch><ret><color value=FFFFFFFF><align hstyle=center vstyle=center><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.1875 right=0.25 top=0.8125 bottom=0.875 width=38 height=38></align>"
+ coords_l: 1174
+ coords_r: 1246
+ coords_t: 293
+ coords_b: 221
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 5
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::text : _nameless._.north_btn {
+ text: "<color value=FF261409><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.375 right=0.4375 top=0.75 bottom=0.8125 xscale=stretch yscale=stretch><ret><color value=FFFFFFFF><align hstyle=center vstyle=center><img src=/material/ui/dashboard/iveco_sway/display.mat left=0.25 right=0.3125 top=0.9375 bottom=1 width=38 height=38></align>"
+ coords_l: 1174
+ coords_r: 1246
+ coords_t: 193
+ coords_b: 121
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 5
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen1
+}
+
+ui::group : _nameless._.screen2 {
+ fitting: false
+ my_children: 1
+ my_children[0]: _nameless.18bd.a3c0
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 200
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+
+ui::text : _nameless.18bd.a3c0 {
+ text: "<img src=/material/ui/white.mat color=ff000000 xscale=stretch yscale=stretch >"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.screen2
+}
+
+
+ui::text_common : _nameless._.revpose {
+ value: "R"
+ look_template: txt.revpose.gear_page
+ text: ""
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1380
+ layer: 50
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+}

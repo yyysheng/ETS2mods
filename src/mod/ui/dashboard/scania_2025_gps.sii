@@ -1,0 +1,372 @@
+SiiNunit
+{
+ui::window : _nameless.wnd {
+ window_handler: null
+ clip_children: true
+ keep_aspect: none
+ user_string_data: ""
+ first_direction_focus_id: 0
+ fitting: false
+ my_children: 5
+ my_children[0]: _nameless._.shared
+ my_children[1]: _nameless._.display1
+ my_children[2]: _nameless._.display2
+ my_children[3]: _nameless._.display3
+ my_children[4]: _nameless._.revpose
+ coords_l: 0
+ coords_r: 1440
+ coords_t: 810
+ coords_b: 0
+ area_l: 0
+ area_r: 1440
+ area_t: 810
+ area_b: 0
+ id: 0
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: null
+}
+
+ui::group : _nameless._.shared {
+ fitting: false
+ my_children: 1
+ my_children[0]: _nameless._.bcg
+ coords_l: 0
+ coords_r: 1440
+ coords_t: 810
+ coords_b: 0
+ area_l: 0
+ area_r: 1440
+ area_t: 810
+ area_b: 0
+ id: 950
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.wnd
+}
+
+ui::text : _nameless._.bcg {
+ text: "<color value=FFFFFFFF>\r\n<img src=/material/ui/dashboard/scania_2025/display.mat yscale=stretch xscale=stretch left=0.498046875 right=0.501953125 top=0.0078125 bottom=0.375>"
+ coords_l: 0
+ coords_r: 1440
+ coords_t: 810
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.shared
+}
+
+ui::group : _nameless._.display1 {
+ fitting: false
+ my_children: 10
+ my_children[0]: _nameless._.sel_page
+ my_children[1]: _nameless._.gps
+ my_children[2]: _nameless._.bcg1
+ my_children[3]: _nameless._.temp_btn
+ my_children[4]: _nameless._.fan_spd_btn
+ my_children[5]: _nameless._.more_btn
+ my_children[6]: _nameless._.search_btn
+ my_children[7]: _nameless._.recenter_btn
+ my_children[8]: _nameless.1aeb.8780
+ my_children[9]: _nameless.1aeb.89c0
+ coords_l: 0
+ coords_r: 1440
+ coords_t: 810
+ coords_b: 0
+ area_l: 0
+ area_r: 1440
+ area_t: 810
+ area_b: 0
+ id: 100
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.wnd
+}
+
+ui::text : _nameless._.sel_page {
+ text: "<color value=04FFFFFF>\r\n<align hstyle=right>\r\n<margin right=-10><img src=/material/ui/dashboard/scania_2025/display.mat left=0.53125 right=0.53126 top=0.8125 bottom=0.84375 height=10 xscale=stretch></margin>\r\n<offset  vshift=-10><img src=/material/ui/dashboard/scania_2025/display.mat left=0.53125 right=0.5625 top=0.8125 bottom=0.84375 width=10 height=10>\r\n</align>\r\n\r\n<ret><offset vshift=20><align vstyle=bottom bottom=-10><margin right=-10><img src=/material/ui/dashboard/scania_2025/display.mat left=0.53125 right=0.53126 top=0.84374 bottom=0.84375 yscale=stretch xscale=stretch></margin></align>\r\n<ret><offset vshift=20><align vstyle=bottom hstyle=right bottom=-10><img src=/material/ui/dashboard/scania_2025/display.mat left=0.53125 right=0.5625 top=0.84374 bottom=0.84375 yscale=stretch width=10></align>\r\n\r\n<ret>\r\n<align hstyle=right vstyle=bottom>\r\n<margin right=-10><img src=/material/ui/dashboard/scania_2025/display.mat left=0.53125 right=0.53126 bottom=0.8125 top=0.84375 height=10 xscale=stretch></margin>\r\n<offset  vshift=-10><img src=/material/ui/dashboard/scania_2025/display.mat left=0.53125 right=0.5625 bottom=0.8125 top=0.84375 width=10 height=10>\r\n</align>\r\n\r\n"
+ coords_l: 0
+ coords_r: 109
+ coords_t: 271
+ coords_b: 137
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text : _nameless._.gps {
+ text: "<color value=FF1C1611>\r\n<img src=/material/ui/white.mat xscale=stretch yscale=stretch>\r\n<color value=FFFFFFFF>\r\n<ret><img src=/material/ui/dashboard/bare_map.mat left=0.125 right=0.875 bottom=0.289 top=0.7109 xscale=stretch yscale=stretch>"
+ coords_l: 108
+ coords_r: 1440
+ coords_t: 810
+ coords_b: 90
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text : _nameless._.bcg1 {
+ text: "<color value=02FFFFFF>\r\n<img src=/material/ui/dashboard/scania_2025/display.mat yscale=stretch left=0.5312 right=0.5313 top=0.9062 bottom=0.9063 width=108>\r\n<color value=FFFFFFFF>\r\n<img src=/material/ui/dashboard/scania_2025/display.mat xscale=stretch left=0.624 right=0.625 top=0.390625 bottom=0.427734375 height=100>\r\n<color value=FF130F0D>\r\n<ret><align vstyle=bottom><offset hshift=108><img src=/material/ui/dashboard/scania_2025/display.mat xscale=stretch left=0.5312 right=0.5313 top=0.9062 bottom=0.9063 height=90></align>\r\n<color value=FFF0DBCC>\r\n<ret><offset hshift=32 vshift=46><img src=/material/ui/dashboard/scania_2025/display.mat width=44 height=44 left=0.3125 right=0.375 top=0.875 bottom=0.9375>\r\n<ret><offset hshift=32 vshift=180><img src=/material/ui/dashboard/scania_2025/display.mat width=44 height=44 left=0.3125 right=0.375 top=0.9375 bottom=1>\r\n<ret><offset hshift=34 vshift=310><img src=/material/ui/dashboard/scania_2025/display.mat width=40 height=40 left=0.25 right=0.3125 top=0.6875 bottom=0.75>\r\n<ret><offset hshift=30 vshift=447><img src=/material/ui/dashboard/scania_2025/display.mat width=50 height=50 left=0.4375 right=0.501953125 top=0.875 bottom=0.9375>\r\n<ret><offset hshift=33 vshift=586><img src=/material/ui/dashboard/scania_2025/display.mat width=42 height=42 left=0.4375 right=0.5 top=0.9375 bottom=1>\r\n<ret><offset hshift=34 vshift=722><img src=/material/ui/dashboard/scania_2025/display.mat width=42 height=42 left=0.375 right=0.4375 top=0.6875 bottom=0.75>\r\n\r\n<ret><offset hshift=630 vshift=743><img src=/material/ui/dashboard/scania_2025/display.mat width=44 height=44 left=0.375 right=0.4375 top=0.75 bottom=0.8125>\r\n<ret><offset hshift=886 vshift=743><img src=/material/ui/dashboard/scania_2025/display.mat width=44 height=44 left=0.375 right=0.4375 top=0.875 bottom=0.9375>\r\n\r\n<ret><offset hshift=708><img src=/material/ui/dashboard/scania_2025/display.mat width=150 height=10 left=0.501953125 right=0.5595703125 top=0.9658203125 bottom=0.97265625>\r\n<ret><offset hshift=708 vshift=800><img src=/material/ui/dashboard/scania_2025/display.mat width=150 height=10 left=0.501953125 right=0.5595703125 top=0.9658203125 bottom=0.97265625>\r\n\r\n<ret><offset vshift=754 hshift=752><font face=/font/db_scania_sans_cy_cond.font xscale=1.3 yscale=1.2>AUTO</font>"
+ coords_l: 0
+ coords_r: 1440
+ coords_t: 810
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.temp_btn {
+ value: "FF29221D|FFF0DBCC|width=36 height=36 left=0.375 right=0.4375 top=0.9375 bottom=1"
+ look_template: txt.scania_sd_25.cid_btn1
+ text: ""
+ coords_l: 136
+ coords_r: 562
+ coords_t: 82
+ coords_b: 10
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.fan_spd_btn {
+ value: "FF29221D|FFF0DBCC|width=50 height=50 left=0.375 right=0.4375 top=0.8125 bottom=0.875"
+ look_template: txt.scania_sd_25.cid_btn1
+ text: ""
+ coords_l: 1000
+ coords_r: 1426
+ coords_t: 81
+ coords_b: 9
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.more_btn {
+ value: "FF332A24|FFF0DBCC|width=40 height=40 left=0.3125 right=0.375 top=0.8125 bottom=0.875"
+ look_template: txt.scania_sd_25.cid_btn2
+ text: ""
+ coords_l: 137
+ coords_r: 197
+ coords_t: 748
+ coords_b: 688
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.search_btn {
+ value: "FF332A24|FFF0DBCC|width=24 height=24 left=0.3125 right=0.375 top=0.75 bottom=0.8125"
+ look_template: txt.scania_sd_25.cid_btn2
+ text: ""
+ coords_l: 137
+ coords_r: 197
+ coords_t: 681
+ coords_b: 621
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.recenter_btn {
+ value: "FF332A24|FFF0DBCC|width=24 height=24 left=0.3125 right=0.375 top=0.6875 bottom=0.75"
+ look_template: txt.scania_sd_25.cid_btn2
+ text: ""
+ coords_l: 137
+ coords_r: 197
+ coords_t: 307
+ coords_b: 247
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless.1aeb.8780 {
+ value: "FF332A24|FFF0DBCC|width=24 height=24 left=0.4375 right=0.5 top=0.8125 bottom=0.875"
+ look_template: txt.scania_sd_25.cid_btn2
+ text: ""
+ coords_l: 137
+ coords_r: 197
+ coords_t: 240
+ coords_b: 180
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless.1aeb.89c0 {
+ value: "FF332A24|FFF0DBCC|width=36 height=36 left=0.4375 right=0.5 top=0.75 bottom=0.8125"
+ look_template: txt.scania_sd_25.cid_btn2
+ text: ""
+ coords_l: 137
+ coords_r: 197
+ coords_t: 173
+ coords_b: 113
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::group : _nameless._.display2 {
+ fitting: false
+ my_children: 1
+ my_children[0]: _nameless._.clock2
+ coords_l: 0
+ coords_r: 1440
+ coords_t: 810
+ coords_b: 0
+ area_l: 0
+ area_r: 1440
+ area_t: 810
+ area_b: 0
+ id: 200
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.wnd
+}
+
+ui::text_common : _nameless._.clock2 {
+ value: "13:26"
+ look_template: txt.scania_sd_25.cid_big_clk
+ text: ""
+ coords_l: 540
+ coords_r: 900
+ coords_t: 431
+ coords_b: 331
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1050
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display2
+}
+
+ui::group : _nameless._.display3 {
+ fitting: false
+ my_children: 1
+ my_children[0]: _nameless.1ae4.89e0
+ coords_l: 0
+ coords_r: 1440
+ coords_t: 810
+ coords_b: 0
+ area_l: 0
+ area_r: 1440
+ area_t: 810
+ area_b: 0
+ id: 300
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.wnd
+}
+
+ui::text : _nameless.1ae4.89e0 {
+ text: "<color value=FF000000><img src=/material/ui/white.mat xscale=stretch yscale=stretch>"
+ coords_l: 0
+ coords_r: 1440
+ coords_t: 810
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display3
+}
+
+
+ui::text_common : _nameless._.revpose {
+ value: "R"
+ look_template: txt.revpose.gear_page
+ text: ""
+ coords_l: 0
+ coords_r: 1440
+ coords_t: 810
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1380
+ layer: 50
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.wnd
+}
+}
