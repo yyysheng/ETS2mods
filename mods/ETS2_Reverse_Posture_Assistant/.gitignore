@@ -1,0 +1,4 @@
+/build/
+/src/entity_runtime/obj/
+/src/world_runtime/obj/
+/src/world_runtime/obj_tests/
