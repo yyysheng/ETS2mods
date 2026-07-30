@@ -8,6 +8,7 @@ Each mod is isolated under `mods/` with its own source, documentation, packaging
 
 | Mod | Game version | Source | Download | Workshop |
 | --- | --- | --- | --- | --- |
+| ETS2 Reverse Posture Assistant v0.10.7 | 1.60.* | [Source code](https://github.com/yyysheng/ETS2mods/tree/reverse-posture-assistant-v0.10.7/mods/ETS2_Reverse_Posture_Assistant) | [v0.10.7](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.10.7) | — |
 | ETS2 Reverse Posture Assistant | 1.60.* | [Project folder](mods/ETS2_Reverse_Posture_Assistant) | [v0.6.0](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.6.0) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3767153599) |
 
 ## 中文
