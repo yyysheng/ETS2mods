@@ -1,7 +1,3 @@
-param(
-    [switch]$RuntimeOnly
-)
-
 $ErrorActionPreference = 'Stop'
 $packageRoot = Split-Path -Parent $PSScriptRoot
 
@@ -42,29 +38,42 @@ function Find-Ets2GameRoot {
 }
 
 if (Get-Process -Name eurotrucks2 -ErrorAction SilentlyContinue) {
-    throw 'Euro Truck Simulator 2 is running. Exit the game before installing.'
+    throw 'Euro Truck Simulator 2 is running. Exit the game before upgrading.'
 }
+Get-Process -Name ETS2ReverseEnvironment -ErrorAction SilentlyContinue | Stop-Process -Force
 
 $gameRoot = Find-Ets2GameRoot
 $gameBin = Join-Path $gameRoot 'bin\win_x64'
+$pluginDir = Join-Path $gameBin 'plugins'
 $modDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'Euro Truck Simulator 2\mod'
 $runtimeSource = Join-Path $packageRoot 'runtime\ETS2ReverseEntityRuntime.dll'
+$modSource = Join-Path $packageRoot 'mod\ETS2_Reverse_Posture_Assistant_1.60.scs'
 if (-not (Test-Path -LiteralPath $runtimeSource)) { throw "Runtime file is missing: $runtimeSource" }
+if (-not (Test-Path -LiteralPath $modSource)) { throw "Mod file is missing: $modSource" }
 
-New-Item -ItemType Directory -Path $modDir,(Join-Path $gameBin 'plugins') -Force | Out-Null
+$backupDir = Join-Path $gameBin ('reverse_assist_backup\v0.6.0_' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
+New-Item -ItemType Directory -Path $backupDir,$pluginDir,$modDir -Force | Out-Null
 
-Copy-Item -LiteralPath $runtimeSource `
-    -Destination (Join-Path $gameBin 'plugins') -Force
-
-if (-not $RuntimeOnly) {
-    $modSource = Join-Path $packageRoot 'mod\ETS2_Reverse_Posture_Assistant_1.60.scs'
-    if (-not (Test-Path -LiteralPath $modSource)) { throw "Mod file is missing: $modSource" }
-    Copy-Item -LiteralPath $modSource -Destination $modDir -Force
+$legacyFiles = @(
+    (Join-Path $gameBin 'ETS2ReverseScreenRuntime.addon64'),
+    (Join-Path $gameBin 'ETS2ReverseEnvironment.exe'),
+    (Join-Path $gameBin 'ETS2TerrainIndex.bin'),
+    (Join-Path $gameBin 'custom_resources.zip'),
+    (Join-Path $gameBin 'ETS2ReverseGroundGuideProbe.addon64'),
+    (Join-Path $pluginDir 'scs-telemetry.dll')
+)
+foreach ($legacyFile in $legacyFiles) {
+    if (Test-Path -LiteralPath $legacyFile) {
+        Move-Item -LiteralPath $legacyFile -Destination $backupDir -Force
+    }
 }
 
+Copy-Item -LiteralPath $runtimeSource -Destination $pluginDir -Force
+Copy-Item -LiteralPath $modSource -Destination $modDir -Force
+
 Write-Host ''
-Write-Host 'ETS2 Reverse Posture Assistant v0.10.7 installed successfully.' -ForegroundColor Green
-Write-Host "Game directory: $gameRoot"
-Write-Host 'This build uses an SCS telemetry plug-in and native world entities.'
-Write-Host 'dxgi.dll and d3d11.dll were not read, replaced, renamed, or removed.'
-if (-not $RuntimeOnly) { Write-Host 'Enable the mod in the ETS2 Mod Manager before driving.' }
+Write-Host 'ETS2 Reverse Posture Assistant upgraded from v0.6.0 to v0.10.7.' -ForegroundColor Green
+Write-Host "Legacy Reverse Assistant components were backed up to: $backupDir"
+Write-Host 'dxgi.dll, d3d11.dll, TsMap.dll, Newtonsoft.Json.dll, and libdeflate.dll were left untouched.'
+Write-Host 'This prevents the upgrade from damaging ReShade, Snowymoon, or another mod using those files.'
+Write-Host 'Enable or refresh ETS2 Reverse Posture Assistant in the Mod Manager before driving.'
