@@ -286,10 +286,6 @@ Write-FrameModel -Name 'sweep_edge_blue' -Length 0.36 -Width 0.0 -SingleCenterLi
 # Universal-accessory calibration build: use an ordinary always-visible model
 # until every original truck's toy slot and local origin have been verified.
 Write-FrameModel 'accessory_anchor' 10.2 2.55 0.0 0.0 0.0 $false
-# Override the game's animated loading marker with the same collisionless
-# ground frame.  The original PMA may still be requested by the game, but this
-# static model has no bones, so the floating guide-arrow animation has nothing
-# to bind to.
-Write-FrameModel 'loading' 10.2 2.55 0.0 0.0 0.0 $false 'model\symbol'
+# Game-owned model/symbol assets must remain supplied by the base game.
 Write-GuideTexture
 Write-Output $OutputRoot

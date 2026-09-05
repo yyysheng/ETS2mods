@@ -30,10 +30,12 @@ function Find-Ets2GameRoot {
         }
     }
     foreach ($library in $steamLibraries) {
+        if (-not (Test-Path -LiteralPath $library -PathType Container -ErrorAction SilentlyContinue)) { continue }
         $candidates.Add((Join-Path $library 'steamapps\common\Euro Truck Simulator 2'))
     }
 
     foreach ($candidate in $candidates | Select-Object -Unique) {
+        if (-not (Test-Path -LiteralPath $candidate -PathType Container -ErrorAction SilentlyContinue)) { continue }
         if (Test-Path -LiteralPath (Join-Path $candidate 'bin\win_x64\eurotrucks2.exe')) {
             return $candidate
         }
@@ -63,7 +65,7 @@ if (-not $RuntimeOnly) {
 }
 
 Write-Host ''
-Write-Host 'ETS2 Reverse Posture Assistant v0.10.7 installed successfully.' -ForegroundColor Green
+Write-Host 'ETS2 Reverse Posture Assistant v0.10.9 installed successfully.' -ForegroundColor Green
 Write-Host "Game directory: $gameRoot"
 Write-Host 'This build uses an SCS telemetry plug-in and native world entities.'
 Write-Host 'dxgi.dll and d3d11.dll were not read, replaced, renamed, or removed.'

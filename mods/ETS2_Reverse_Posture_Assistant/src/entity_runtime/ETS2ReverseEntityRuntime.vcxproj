@@ -36,7 +36,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;UNICODE;_UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\..\..\third_party\scs-sdk-plugin\scs_sdk\include;$(ProjectDir)..\..\..\..\..\..\third_party\reshade\deps\minhook\include;$(ProjectDir)..\..\..\..\..\..\third_party\reshade\deps\minhook\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\third_party\scs-sdk-plugin\scs_sdk\include;$(ProjectDir)..\..\third_party\reshade\deps\minhook\include;$(ProjectDir)..\..\third_party\reshade\deps\minhook\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>
@@ -51,11 +51,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="native_entity_runtime.cpp" />
-    <ClCompile Include="$(ProjectDir)..\..\..\..\..\..\third_party\reshade\deps\minhook\src\buffer.c" />
-    <ClCompile Include="$(ProjectDir)..\..\..\..\..\..\third_party\reshade\deps\minhook\src\hook.c" />
-    <ClCompile Include="$(ProjectDir)..\..\..\..\..\..\third_party\reshade\deps\minhook\src\trampoline.c" />
-    <ClCompile Include="$(ProjectDir)..\..\..\..\..\..\third_party\reshade\deps\minhook\src\hde\hde64.c" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\reshade\deps\minhook\src\buffer.c" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\reshade\deps\minhook\src\hook.c" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\reshade\deps\minhook\src\trampoline.c" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\reshade\deps\minhook\src\hde\hde64.c" />
     <None Include="native_entity_runtime.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="build_profiles.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

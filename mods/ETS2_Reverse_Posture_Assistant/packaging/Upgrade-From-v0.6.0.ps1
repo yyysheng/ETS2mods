@@ -26,10 +26,12 @@ function Find-Ets2GameRoot {
         }
     }
     foreach ($library in $steamLibraries) {
+        if (-not (Test-Path -LiteralPath $library -PathType Container -ErrorAction SilentlyContinue)) { continue }
         $candidates.Add((Join-Path $library 'steamapps\common\Euro Truck Simulator 2'))
     }
 
     foreach ($candidate in $candidates | Select-Object -Unique) {
+        if (-not (Test-Path -LiteralPath $candidate -PathType Container -ErrorAction SilentlyContinue)) { continue }
         if (Test-Path -LiteralPath (Join-Path $candidate 'bin\win_x64\eurotrucks2.exe')) {
             return $candidate
         }
@@ -72,7 +74,7 @@ Copy-Item -LiteralPath $runtimeSource -Destination $pluginDir -Force
 Copy-Item -LiteralPath $modSource -Destination $modDir -Force
 
 Write-Host ''
-Write-Host 'ETS2 Reverse Posture Assistant upgraded from v0.6.0 to v0.10.7.' -ForegroundColor Green
+Write-Host 'ETS2 Reverse Posture Assistant upgraded from v0.6.0 to v0.10.9.' -ForegroundColor Green
 Write-Host "Legacy Reverse Assistant components were backed up to: $backupDir"
 Write-Host 'dxgi.dll, d3d11.dll, TsMap.dll, Newtonsoft.Json.dll, and libdeflate.dll were left untouched.'
 Write-Host 'This prevents the upgrade from damaging ReShade, Snowymoon, or another mod using those files.'

@@ -9,4 +9,4 @@ The generated `160_content` package is intentionally excluded from Git because i
 3. Select this `workshop` directory in SCS Workshop Uploader 1.60.1.
 4. Use `../assets/workshop_cover_640x360.jpg` as the preview image.
 
-The published item is available at [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3767153599).
+The published item is available at [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3776052935).

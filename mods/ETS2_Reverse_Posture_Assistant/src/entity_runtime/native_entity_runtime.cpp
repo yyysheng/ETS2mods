@@ -23,12 +23,11 @@
 #include <common\scssdk_telemetry_trailer_common_channels.h>
 #include <MinHook.h>
 
+#include "build_profiles.hpp"
 #include "..\world_runtime\reverse_kinematics.hpp"
 
 namespace
 {
-constexpr char expected_exe_sha256[] =
-    "B7DFFE6B27402C7DB6DFD52CF982CD5BF292584138B35E3EB8EFB311814AB3F8";
 constexpr bool native_entity_backend_quarantined = false;
 constexpr bool single_entity_diagnostic = false;
 constexpr bool independent_world_entity_enabled = false;
@@ -40,7 +39,6 @@ constexpr std::size_t maximum_traced_model_paths = 8192;
 constexpr bool lifecycle_hooks_enabled = true;
 constexpr bool model_load_hook_only = true;
 constexpr char accessory_model_path[] = "/model/reverse_assist/accessory_anchor.pmd";
-constexpr std::uintptr_t model_load_rva = 0x015184f0;
 constexpr std::uintptr_t model_activate_rva = 0x015288d0;
 constexpr std::uintptr_t model_transfer_rva = 0x0032cfc0;
 constexpr std::uintptr_t model_parameter_init_rva = 0x0040cc30;
@@ -55,9 +53,6 @@ constexpr std::uintptr_t final_accessory_insert_rva = 0x00537740;
 constexpr std::uintptr_t final_accessory_insert_return_rva = 0x0064a591;
 constexpr std::uintptr_t set_parent_rva = 0x013149c0;
 constexpr std::uintptr_t set_transform_rva = 0x01314a80;
-constexpr std::uintptr_t vehicle_render_dispatch_rva = 0x00772020;
-constexpr std::uintptr_t trailer_visual_update_rva = 0x00614190;
-constexpr std::uintptr_t trailer_render_rva = 0x006148f0;
 // The map file grid is 4000 metres, but Prism's runtime fplacement_t uses
 // 512-metre floating-origin cells. The exact 1.60.1.7 transform helpers
 // reference 512.0f when combining the signed cell indices with local X/Z.
@@ -65,54 +60,6 @@ constexpr float sector_size = 512.0f;
 constexpr std::size_t maximum_entities = single_entity_diagnostic ? 1 : 64;
 constexpr ULONGLONG driving_scene_warmup_ms = 5000;
 constexpr ULONGLONG final_drawable_warmup_ms = 5000;
-
-struct Signature
-{
-    std::uintptr_t rva;
-    std::array<std::uint8_t, 16> bytes;
-};
-
-constexpr std::array signatures{
-    Signature{model_load_rva, {0x40, 0x53, 0x56, 0x41, 0x56, 0x48, 0x83, 0xec,
-                               0x40, 0x80, 0xbc, 0x24, 0x80, 0x00, 0x00, 0x00}},
-    Signature{model_activate_rva, {0x48, 0x89, 0x5c, 0x24, 0x08, 0x57, 0x48, 0x83,
-                                   0xec, 0x20, 0x48, 0x8b, 0x01, 0x48, 0x8b, 0xda}},
-    Signature{model_parameter_init_rva,
-              {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x6c,
-               0x24, 0x18, 0x56, 0x57, 0x41, 0x56, 0x48, 0x83}},
-    Signature{vehicle_accessory_collect_rva,
-              {0x4c, 0x8b, 0xdc, 0x45, 0x88, 0x4b, 0x20, 0x4d,
-               0x89, 0x43, 0x18, 0x49, 0x89, 0x53, 0x10, 0x49}},
-    Signature{vehicle_addon_finalize_rva,
-              {0x4c, 0x89, 0x4c, 0x24, 0x20, 0x4c, 0x89, 0x44,
-               0x24, 0x18, 0x48, 0x89, 0x54, 0x24, 0x10, 0x48}},
-    Signature{render_entry_populate_rva,
-              {0x48, 0x83, 0xec, 0x68, 0x4c, 0x8b, 0xc9, 0x4c,
-               0x8b, 0xc2, 0x48, 0x8d, 0x4a, 0x10, 0x48, 0x8d}},
-    Signature{final_base_model_create_rva,
-              {0x48, 0x89, 0x5c, 0x24, 0x10, 0x48, 0x89, 0x74,
-               0x24, 0x18, 0x48, 0x89, 0x7c, 0x24, 0x20, 0x55}},
-    Signature{final_model_create_rva,
-              {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x6c,
-               0x24, 0x10, 0x48, 0x89, 0x7c, 0x24, 0x18, 0x4c}},
-    Signature{final_accessory_insert_rva,
-              {0x48, 0x89, 0x5c, 0x24, 0x08, 0x57, 0x48, 0x83,
-               0xec, 0x20, 0x48, 0x8b, 0xfa, 0x48, 0x8b, 0xd9}},
-    Signature{set_parent_rva,
-              {0x48, 0x83, 0xec, 0x28, 0x4c, 0x8b, 0xc1, 0x4c,
-               0x8b, 0xca, 0x48, 0x8b, 0x49, 0x40, 0x48, 0x3b}},
-    Signature{set_transform_rva, {0x48, 0x89, 0x5c, 0x24, 0x08, 0x57, 0x48, 0x83,
-                                   0xec, 0x40, 0x48, 0x8b, 0xd9, 0x48, 0x8b, 0xfa}},
-    Signature{vehicle_render_dispatch_rva,
-              {0x40, 0x53, 0x57, 0x48, 0x83, 0xec, 0x28, 0x48,
-               0x8b, 0x42, 0x18, 0x48, 0x8b, 0xda, 0x48, 0x8b}},
-    Signature{trailer_visual_update_rva,
-              {0x48, 0x8b, 0xc4, 0x48, 0x89, 0x70, 0x10, 0x48,
-               0x89, 0x78, 0x18, 0x55, 0x48, 0x8d, 0x68, 0xa1}},
-    Signature{trailer_render_rva,
-              {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
-               0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x30, 0x49}},
-};
 
 #pragma pack(push, 1)
 struct PrismTransform
@@ -240,6 +187,7 @@ struct Entity
 Telemetry telemetry;
 std::mutex telemetry_configuration_mutex;
 Engine engine;
+const reverse_assist::compatibility::BuildProfile *active_build_profile = nullptr;
 std::vector<Entity> entities;
 std::vector<Entity> trailer_entities;
 scs_log_t game_log = nullptr;
@@ -307,13 +255,6 @@ struct VehicleRenderProbeRecord
 std::mutex vehicle_render_probe_mutex;
 std::vector<VehicleRenderProbeRecord> vehicle_render_probe_records;
 std::atomic<std::uint64_t> player_trailer_object{};
-std::atomic<bool> native_marker_visible{};
-std::atomic<float> native_marker_qw{1.0f};
-std::atomic<float> native_marker_qy{};
-std::atomic<float> native_marker_x{};
-std::atomic<float> native_marker_y{0.35f};
-std::atomic<float> native_marker_z{};
-std::atomic<bool> logged_native_marker_takeover{};
 constexpr std::size_t maximum_prediction_frames = 96;
 struct PredictionFrame
 {
@@ -591,59 +532,12 @@ void __fastcall hooked_vehicle_render_dispatch(
     trace_vehicle_render_dispatch(wrapper, render_context, return_address);
 }
 
-bool unsafe_apply_native_marker_target(std::uint64_t trailer)
-{
-    if (!trailer) return false;
-    const bool visible =
-        native_marker_visible.load(std::memory_order_acquire);
-    const float qw = native_marker_qw.load(std::memory_order_relaxed);
-    const float qy = native_marker_qy.load(std::memory_order_relaxed);
-    const float x = native_marker_x.load(std::memory_order_relaxed);
-    const float y = native_marker_y.load(std::memory_order_relaxed);
-    const float z = native_marker_z.load(std::memory_order_relaxed);
-    __try
-    {
-        // The trailer owns a permanent, collisionless
-        // /model/symbol/loading.pmd instance at +0x1110. +0x1120 gates that
-        // instance. +0x10f8 selects the custom local-placement branch used by
-        // the native updater, while +0x1124 contains a quaternion followed by
-        // XYZ. Without +0x10f8 the updater deliberately ignores this transform
-        // and keeps the marker on the trailer's default coupling anchor.
-        if (*reinterpret_cast<const std::uint64_t *>(trailer + 0x1110) == 0)
-            return false;
-        *reinterpret_cast<std::uint8_t *>(trailer + 0x10f8) =
-            visible ? 1 : 0;
-        *reinterpret_cast<std::uint8_t *>(trailer + 0x1120) =
-            visible ? 1 : 0;
-        auto *local = reinterpret_cast<float *>(trailer + 0x1124);
-        local[0] = qw;
-        local[1] = 0.0f;
-        local[2] = qy;
-        local[3] = 0.0f;
-        local[4] = x;
-        local[5] = y;
-        local[6] = z;
-        return true;
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER)
-    {
-        return false;
-    }
-}
-
+// Preserve the game's marker visibility, animation and placement unchanged.
+// Keep this pass-through hook so the verified four-hook build profiles remain valid.
 void __fastcall hooked_trailer_visual_update(std::uint64_t trailer)
 {
     original_trailer_visual_update(trailer);
-    if (trailer ==
-        player_trailer_object.load(std::memory_order_acquire))
-    {
-        if (unsafe_apply_native_marker_target(trailer) &&
-            !logged_native_marker_takeover.exchange(
-                true, std::memory_order_relaxed))
-            log_line("[reverse-entity] Native trailer ground-marker takeover active.");
-    }
 }
-
 bool unsafe_render_prediction_frames(std::uint64_t trailer,
                                      std::uint64_t *render_context,
                                      const PredictionFrameSet *frames)
@@ -1616,11 +1510,14 @@ bool install_model_load_hook()
         MH_RemoveHook(
             reinterpret_cast<LPVOID>(engine.trailer_visual_update));
         MH_RemoveHook(reinterpret_cast<LPVOID>(engine.trailer_render));
-        MH_RemoveHook(reinterpret_cast<LPVOID>(engine.final_base_model_create));
-        MH_RemoveHook(reinterpret_cast<LPVOID>(engine.vehicle_addon_finalize));
-        MH_RemoveHook(reinterpret_cast<LPVOID>(engine.render_entry_populate));
-        MH_RemoveHook(reinterpret_cast<LPVOID>(engine.set_parent));
-        MH_RemoveHook(reinterpret_cast<LPVOID>(engine.set_transform));
+        if constexpr (!model_load_hook_only)
+        {
+            MH_RemoveHook(reinterpret_cast<LPVOID>(engine.final_base_model_create));
+            MH_RemoveHook(reinterpret_cast<LPVOID>(engine.vehicle_addon_finalize));
+            MH_RemoveHook(reinterpret_cast<LPVOID>(engine.render_entry_populate));
+            MH_RemoveHook(reinterpret_cast<LPVOID>(engine.set_parent));
+            MH_RemoveHook(reinterpret_cast<LPVOID>(engine.set_transform));
+        }
         MH_Uninitialize();
         original_model_load = nullptr;
         original_vehicle_render_dispatch = nullptr;
@@ -1630,13 +1527,13 @@ bool install_model_load_hook()
         original_vehicle_addon_finalize = nullptr;
         original_set_parent = nullptr;
         original_set_transform = nullptr;
-        log_line("[reverse-entity] Accessory lifecycle hook installation failed.",
+        log_line("[reverse-entity] Hook installation failed; native backend disabled and telemetry-only mode retained.",
                  SCS_LOG_TYPE_error);
         return false;
     }
     model_load_hook_installed = true;
     if constexpr (model_load_hook_only)
-        log_line("[reverse-entity] Native trailer ground-marker control and read-only probes installed.");
+        log_line("[reverse-entity] Installed 4/4 enabled hooks: model_load, vehicle_render_dispatch, trailer_visual_update, trailer_render.");
     else
         log_line("[reverse-entity] Final vehicle accessory instance hooks installed.");
     return true;
@@ -1650,11 +1547,14 @@ void remove_model_load_hook()
     MH_RemoveHook(reinterpret_cast<LPVOID>(engine.vehicle_render_dispatch));
     MH_RemoveHook(reinterpret_cast<LPVOID>(engine.trailer_visual_update));
     MH_RemoveHook(reinterpret_cast<LPVOID>(engine.trailer_render));
-    MH_RemoveHook(reinterpret_cast<LPVOID>(engine.final_base_model_create));
-    MH_RemoveHook(reinterpret_cast<LPVOID>(engine.vehicle_addon_finalize));
-    MH_RemoveHook(reinterpret_cast<LPVOID>(engine.render_entry_populate));
-    MH_RemoveHook(reinterpret_cast<LPVOID>(engine.set_parent));
-    MH_RemoveHook(reinterpret_cast<LPVOID>(engine.set_transform));
+    if constexpr (!model_load_hook_only)
+    {
+        MH_RemoveHook(reinterpret_cast<LPVOID>(engine.final_base_model_create));
+        MH_RemoveHook(reinterpret_cast<LPVOID>(engine.vehicle_addon_finalize));
+        MH_RemoveHook(reinterpret_cast<LPVOID>(engine.render_entry_populate));
+        MH_RemoveHook(reinterpret_cast<LPVOID>(engine.set_parent));
+        MH_RemoveHook(reinterpret_cast<LPVOID>(engine.set_transform));
+    }
     MH_Uninitialize();
     model_load_hook_installed = false;
     original_model_load = nullptr;
@@ -1692,8 +1592,6 @@ void remove_model_load_hook()
     driving_started_tick.store(0, std::memory_order_relaxed);
     logged_driving_scene_ready.store(false, std::memory_order_relaxed);
     player_trailer_object.store(0, std::memory_order_relaxed);
-    native_marker_visible.store(false, std::memory_order_relaxed);
-    logged_native_marker_takeover.store(false, std::memory_order_relaxed);
     {
         std::lock_guard frame_lock(prediction_frames_mutex);
         prediction_frames = {};
@@ -1796,6 +1694,27 @@ std::filesystem::path executable_path()
     return buffer;
 }
 
+std::size_t executable_image_size(const std::uint8_t *base)
+{
+    if (!base) return 0;
+    __try
+    {
+        const auto *dos = reinterpret_cast<const IMAGE_DOS_HEADER *>(base);
+        if (dos->e_magic != IMAGE_DOS_SIGNATURE || dos->e_lfanew <= 0)
+            return 0;
+        const auto *nt = reinterpret_cast<const IMAGE_NT_HEADERS64 *>(
+            base + static_cast<std::size_t>(dos->e_lfanew));
+        if (nt->Signature != IMAGE_NT_SIGNATURE ||
+            nt->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR64_MAGIC)
+            return 0;
+        return nt->OptionalHeader.SizeOfImage;
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER)
+    {
+        return 0;
+    }
+}
+
 bool initialize_engine()
 {
     const auto executable = executable_path();
@@ -1805,15 +1724,6 @@ bool initialize_engine()
                        "ETS2ReverseEntityModelTrace.log";
     world_probe_path = executable.parent_path().parent_path().parent_path() /
                        "ETS2ReverseWorldDispatchProbe.log";
-    if constexpr (trace_all_model_loads)
-    {
-        std::ofstream trace(model_trace_path, std::ios::trunc);
-        trace << "ETS2 1.60.1.7 native model-load trace\n";
-    }
-    {
-        std::ofstream trace(world_probe_path, std::ios::trunc);
-        trace << "ETS2 1.60.1.7 read-only vehicle world-dispatch probe\n";
-    }
     if (native_entity_backend_quarantined)
     {
         log_line("[reverse-entity] Native entity backend quarantined after heap-corruption detection.",
@@ -1822,27 +1732,76 @@ bool initialize_engine()
     }
 
     const auto digest = sha256_file(executable);
-    if (digest != expected_exe_sha256)
+    engine.base = reinterpret_cast<std::uint8_t *>(GetModuleHandleW(nullptr));
+    const auto image_size = executable_image_size(engine.base);
+    if (!engine.base || image_size == 0)
     {
-        log_line("[reverse-entity] Disabled: eurotrucks2.exe is not the verified 1.60.1.7 build.",
-                 SCS_LOG_TYPE_warning);
+        log_line("[reverse-entity] Compatibility disabled: executable image metadata is unavailable; telemetry-only mode active.",
+                 SCS_LOG_TYPE_error);
+        return false;
+    }
+    const auto signature_reader =
+        [&](std::uintptr_t rva, const std::uint8_t *bytes,
+            std::size_t size)
+    {
+        return rva <= image_size && size <= image_size - rva &&
+               std::memcmp(engine.base + rva, bytes, size) == 0;
+    };
+    bool exact_hash_match = false;
+    std::size_t failed_hook = 0;
+    active_build_profile = reverse_assist::compatibility::select_build_profile(
+        digest, signature_reader, &exact_hash_match, &failed_hook);
+    if (!active_build_profile)
+    {
+        std::ostringstream message;
+        message << "[reverse-entity] Compatibility disabled: no BuildProfile matched sha256="
+                << digest;
+        if (failed_hook <
+            reverse_assist::compatibility::verified_160_1_7_hooks.size())
+            message << " failed-enabled-hook="
+                    << reverse_assist::compatibility::verified_160_1_7_hooks[failed_hook].name;
+        message << "; native hooks skipped, telemetry-only mode active.";
+        log_line(message.str(), SCS_LOG_TYPE_warning);
         return false;
     }
 
-    engine.base = reinterpret_cast<std::uint8_t *>(GetModuleHandleW(nullptr));
-    if (!engine.base) return false;
-    for (const auto &signature : signatures)
+    std::ostringstream compatibility;
+    compatibility << "[reverse-entity] BuildProfile selected: id="
+                  << active_build_profile->id << " game="
+                  << active_build_profile->game_version << " match="
+                  << (exact_hash_match ? "sha256" : "enabled-hook-signatures")
+                  << " sha256=" << digest << " enabled-hooks="
+                  << active_build_profile->enabled_hooks.size();
+    log_line(compatibility.str());
+    for (const auto &hook : active_build_profile->enabled_hooks)
     {
-        if (std::memcmp(engine.base + signature.rva, signature.bytes.data(),
-                        signature.bytes.size()) != 0)
-        {
-            log_line("[reverse-entity] Disabled: native engine signature mismatch.",
-                     SCS_LOG_TYPE_error);
-            return false;
-        }
+        std::ostringstream verified;
+        verified << "[reverse-entity] Enabled hook verified: " << hook.name
+                 << " rva=0x" << std::hex << hook.rva
+                 << " signature-bytes=" << std::dec << hook.signature.size();
+        log_line(verified.str());
     }
 
-    engine.model_load = reinterpret_cast<ModelLoad>(engine.base + model_load_rva);
+    if constexpr (trace_all_model_loads)
+    {
+        std::ofstream trace(model_trace_path, std::ios::trunc);
+        trace << active_build_profile->game_version << " native model-load trace\n";
+    }
+    {
+        std::ofstream trace(world_probe_path, std::ios::trunc);
+        trace << active_build_profile->game_version
+              << " read-only vehicle world-dispatch probe\n";
+    }
+
+    using reverse_assist::compatibility::HookId;
+    const auto hook_rva = [](HookId id) {
+        const auto *hook = reverse_assist::compatibility::find_hook(
+            *active_build_profile, id);
+        return hook ? hook->rva : std::uintptr_t{};
+    };
+
+    engine.model_load = reinterpret_cast<ModelLoad>(
+        engine.base + hook_rva(HookId::model_load));
     engine.model_activate = reinterpret_cast<ModelActivate>(engine.base + model_activate_rva);
     engine.model_transfer = reinterpret_cast<ModelTransfer>(engine.base + model_transfer_rva);
     engine.model_parameter_init =
@@ -1864,14 +1823,15 @@ bool initialize_engine()
     engine.set_transform = reinterpret_cast<SetTransform>(engine.base + set_transform_rva);
     engine.vehicle_render_dispatch =
         reinterpret_cast<VehicleRenderDispatch>(
-            engine.base + vehicle_render_dispatch_rva);
+            engine.base + hook_rva(HookId::vehicle_render_dispatch));
     engine.trailer_visual_update =
         reinterpret_cast<TrailerVisualUpdate>(
-            engine.base + trailer_visual_update_rva);
+            engine.base + hook_rva(HookId::trailer_visual_update));
     engine.trailer_render =
-        reinterpret_cast<TrailerRender>(engine.base + trailer_render_rva);
+        reinterpret_cast<TrailerRender>(
+            engine.base + hook_rva(HookId::trailer_render));
     engine.enabled = true;
-    log_line("[reverse-entity] Verified ETS2 1.60.1.7 native entity backend.");
+    log_line("[reverse-entity] Compatibility checks passed for every enabled hook; native entity backend ready.");
     if constexpr (trace_all_model_loads)
         log_line("[reverse-entity] Model-path tracing enabled; independent render-model pool available.");
     if (single_entity_diagnostic)
@@ -2567,12 +2527,11 @@ void update_vehicle_configuration(
     log_line(message.str());
 }
 
-void update_native_marker_target()
+void update_prediction_frame_targets()
 {
-    // The game-owned trailer marker is now only a lifecycle probe.  Rendering
+    // Prediction rendering
     // uses plugin-owned model instances so the prediction survives detaching
     // the trailer and every sampled pose keeps its own transform.
-    native_marker_visible.store(false, std::memory_order_release);
     {
         std::lock_guard lock(prediction_frames_mutex);
         prediction_frames = {};
@@ -2813,7 +2772,7 @@ void update_native_marker_target()
 
 void update_entities()
 {
-    update_native_marker_target();
+    update_prediction_frame_targets();
     if (!engine.enabled || faulted) return;
     if (!telemetry.driving || !telemetry.truck_valid) return;
 
@@ -3022,7 +2981,6 @@ SCSAPI_VOID event_callback(const scs_event_t event,
             telemetry.truck_wheels = {};
             telemetry.trailer_wheels = {};
         }
-        native_marker_visible.store(false, std::memory_order_release);
         driving_started_tick.store(GetTickCount64(),
                                    std::memory_order_release);
         logged_driving_scene_ready.store(false,
@@ -3030,10 +2988,7 @@ SCSAPI_VOID event_callback(const scs_event_t event,
     }
     else if (event == SCS_TELEMETRY_EVENT_paused)
     {
-        native_marker_visible.store(false, std::memory_order_release);
         destroy_prediction_render_models();
-        unsafe_apply_native_marker_target(
-            player_trailer_object.load(std::memory_order_acquire));
         if (!entities.empty() && telemetry.truck_valid)
         {
             const auto hidden = make_local_transform(0.0, -100.0, 0.0, 0.0);
