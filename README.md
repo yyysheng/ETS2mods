@@ -21,7 +21,7 @@ Expand a game version, mod, then release to view its links.
 
 - [下载 / Download](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-planner-v0.1.0-beta)
 - [源码 / Source](https://github.com/yyysheng/ETS2mods/tree/reverse-planner-v0.1.0-beta/mods/ETS2_Reverse_Planner)
-- Steam Workshop: publishing pending
+- [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3800090083)
 
 </details>
 

@@ -2,7 +2,7 @@
 
 A world-space reverse route planner for **Euro Truck Simulator 2 1.60.x** on Windows x64.
 
-[Repository folder](https://github.com/yyysheng/ETS2mods/tree/main/mods/ETS2_Reverse_Planner) | [GitHub release v0.1.0-beta](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-planner-v0.1.0-beta) | Steam Workshop: publishing pending
+[Repository folder](https://github.com/yyysheng/ETS2mods/tree/main/mods/ETS2_Reverse_Planner) | [GitHub release v0.1.0-beta](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-planner-v0.1.0-beta) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3800090083)
 
 ReversePlanner identifies the active game-native task parking frame and continuously plans an attached trailer's reverse route. It draws two green tractor-tail tracks in the game world and gives steering instructions with arrows beside the cab. It is a driver aid, not autonomous driving.
 
