@@ -74,7 +74,7 @@ Copy-Item -LiteralPath $runtimeSource -Destination $pluginDir -Force
 Copy-Item -LiteralPath $modSource -Destination $modDir -Force
 
 Write-Host ''
-Write-Host 'ETS2 Reverse Posture Assistant upgraded from v0.6.0 to v0.10.9.' -ForegroundColor Green
+Write-Host 'ETS2 Reverse Posture Assistant upgraded from v0.6.0 to v0.10.10.' -ForegroundColor Green
 Write-Host "Legacy Reverse Assistant components were backed up to: $backupDir"
 Write-Host 'dxgi.dll, d3d11.dll, TsMap.dll, Newtonsoft.Json.dll, and libdeflate.dll were left untouched.'
 Write-Host 'This prevents the upgrade from damaging ReShade, Snowymoon, or another mod using those files.'

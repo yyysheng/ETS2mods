@@ -81,9 +81,11 @@ constexpr std::size_t maximum_config_wheels = 32;
 constexpr std::uintptr_t truck_wheel_on_ground_context = 0x1000;
 constexpr std::uintptr_t truck_wheel_lift_context = 0x1100;
 constexpr std::uintptr_t truck_wheel_steering_context = 0x1200;
+constexpr std::uintptr_t truck_wheel_suspension_context = 0x1300;
 constexpr std::uintptr_t trailer_wheel_on_ground_context = 0x2000;
 constexpr std::uintptr_t trailer_wheel_lift_context = 0x2100;
 constexpr std::uintptr_t trailer_wheel_steering_context = 0x2200;
+constexpr std::uintptr_t trailer_wheel_suspension_context = 0x2300;
 
 struct WheelConfiguration
 {
@@ -93,6 +95,8 @@ struct WheelConfiguration
     bool steerable_valid = false;
     bool liftable = false;
     bool liftable_valid = false;
+    float radius = 0.0f;
+    bool radius_valid = false;
 };
 
 struct WheelTelemetry
@@ -103,6 +107,8 @@ struct WheelTelemetry
     bool lift_valid = false;
     float steering = 0.0f;
     bool steering_valid = false;
+    float suspension_deflection = 0.0f;
+    bool suspension_deflection_valid = false;
 };
 
 struct VehicleConfiguration
@@ -2373,6 +2379,9 @@ std::vector<reverse_assist::WheelSpec> configured_wheels(
             wheel.position.z,
             wheel.steerable,
             wheel.steerable_valid};
+        specification.y = wheel.position.y;
+        specification.radius = wheel.radius;
+        specification.radius_known = wheel.radius_valid;
         if (wheel_telemetry)
         {
             const auto &runtime = (*wheel_telemetry)[index];
@@ -2397,10 +2406,52 @@ std::vector<reverse_assist::WheelSpec> configured_wheels(
                     2.0 * reverse_assist::pi;
                 specification.steering_angle_known = true;
             }
+            if (runtime.suspension_deflection_valid)
+            {
+                specification.suspension_deflection =
+                    runtime.suspension_deflection;
+                specification.suspension_deflection_known = true;
+            }
         }
         result.push_back(specification);
     }
     return result;
+}
+
+template <class Geometry>
+reverse_assist::WheelTopologySnapshot<Geometry>
+wheel_topology_candidate(
+    const VehicleConfiguration &configuration,
+    const std::array<WheelTelemetry, maximum_config_wheels> &wheel_telemetry,
+    const Geometry &geometry,
+    const reverse_assist::GroundPlane &ground_plane)
+{
+    reverse_assist::WheelTopologySnapshot<Geometry> candidate{};
+    candidate.geometry = geometry;
+    candidate.ground_plane = ground_plane;
+    const std::size_t count = configuration.wheel_count > 0
+        ? std::min<std::size_t>(configuration.wheel_count,
+                                maximum_config_wheels)
+        : maximum_config_wheels;
+    for (std::size_t index = 0; index < count && index < 64; ++index)
+    {
+        const auto &wheel = configuration.wheels[index];
+        if (!wheel.position_valid) continue;
+        const auto &runtime = wheel_telemetry[index];
+        bool grounded = true;
+        if (runtime.on_ground_valid)
+            grounded = runtime.on_ground;
+        else if (wheel.liftable_valid && wheel.liftable &&
+                 runtime.lift_valid)
+            grounded = runtime.lift < 0.50f;
+        if (grounded)
+            candidate.grounded_mask |= std::uint64_t{1} << index;
+        if (wheel.liftable_valid && wheel.liftable &&
+            runtime.lift_valid && runtime.lift > 0.02f &&
+            runtime.lift < 0.98f)
+            candidate.lift_transition_in_progress = true;
+    }
+    return candidate;
 }
 
 bool is_first_trailer_configuration(const char *id)
@@ -2484,6 +2535,18 @@ void update_vehicle_configuration(
             next.wheel_count = std::max<scs_u32_t>(
                 next.wheel_count, attribute->index + 1);
         }
+        else if (std::strcmp(
+                     attribute->name,
+                     SCS_TELEMETRY_CONFIG_ATTRIBUTE_wheel_radius) == 0 &&
+                 attribute->value.type == SCS_VALUE_TYPE_float &&
+                 attribute->index < maximum_config_wheels)
+        {
+            auto &wheel = next.wheels[attribute->index];
+            wheel.radius = attribute->value.value_float.value;
+            wheel.radius_valid = true;
+            next.wheel_count = std::max<scs_u32_t>(
+                next.wheel_count, attribute->index + 1);
+        }
     }
 
     {
@@ -2502,14 +2565,20 @@ void update_vehicle_configuration(
         const double hook_z = next.hook_valid
             ? static_cast<double>(next.hook.z)
             : std::numeric_limits<double>::quiet_NaN();
+        const double hook_x = next.hook_valid
+            ? static_cast<double>(next.hook.x)
+            : std::numeric_limits<double>::quiet_NaN();
         const auto geometry =
-            reverse_assist::estimate_tractor_spec(wheels, hook_z);
+            reverse_assist::estimate_tractor_spec(
+                wheels, hook_z, hook_x);
         message << "[reverse-entity] Truck geometry: wheels="
                 << wheels.size()
                 << " wheelbase=" << geometry.wheelbase
                 << " length=" << geometry.length
                 << " width=" << geometry.width
-                << " hook-offset=" << geometry.hook_from_rear;
+                << " hook-offset=" << geometry.hook_from_rear
+                << " hook-lateral="
+                << geometry.hook_right_from_rear;
     }
     else
     {
@@ -2540,6 +2609,20 @@ void update_prediction_frame_targets()
         telemetry.gear >= 0)
         return;
 
+    static reverse_assist::StableWheelTopologyFilter<
+        reverse_assist::TractorSpec> truck_topology_filter;
+    static reverse_assist::StableWheelTopologyFilter<
+        reverse_assist::TrailerSpec> trailer_topology_filter;
+    static scs_u32_t previous_truck_wheel_count = 0;
+    static scs_u32_t previous_trailer_wheel_count = 0;
+    static double previous_truck_hook_x =
+        std::numeric_limits<double>::quiet_NaN();
+    static double previous_truck_hook_z =
+        std::numeric_limits<double>::quiet_NaN();
+    static double previous_trailer_hook_z =
+        std::numeric_limits<double>::quiet_NaN();
+    const auto now = GetTickCount64();
+
     const double truck_heading =
         telemetry.truck.orientation.heading * 2.0 * reverse_assist::pi;
     VehicleConfiguration truck_configuration;
@@ -2558,14 +2641,50 @@ void update_prediction_frame_targets()
     const auto truck_wheels =
         configured_wheels(truck_configuration,
                           &truck_wheel_telemetry);
+    const double truck_pitch =
+        telemetry.truck.orientation.pitch * 2.0 * reverse_assist::pi;
+    const double truck_roll =
+        telemetry.truck.orientation.roll * 2.0 * reverse_assist::pi;
     const double truck_hook_z = truck_configuration.hook_valid
         ? static_cast<double>(truck_configuration.hook.z)
         : std::numeric_limits<double>::quiet_NaN();
-    const auto tractor_geometry =
+    const double truck_hook_x = truck_configuration.hook_valid
+        ? static_cast<double>(truck_configuration.hook.x)
+        : std::numeric_limits<double>::quiet_NaN();
+    const auto raw_tractor_geometry =
         reverse_assist::estimate_tractor_spec(
-            truck_wheels, truck_hook_z);
+            truck_wheels, truck_hook_z, truck_hook_x);
+    const auto raw_truck_ground_plane =
+        reverse_assist::estimate_ground_plane(
+            truck_wheels, truck_pitch, truck_roll);
+    if (previous_truck_wheel_count != truck_configuration.wheel_count ||
+        (!std::isfinite(previous_truck_hook_x) !=
+             !std::isfinite(truck_hook_x)) ||
+        (!std::isfinite(previous_truck_hook_z) !=
+             !std::isfinite(truck_hook_z)) ||
+        (std::isfinite(previous_truck_hook_x) &&
+         std::abs(previous_truck_hook_x - truck_hook_x) > 0.01) ||
+        (std::isfinite(previous_truck_hook_z) &&
+         std::abs(previous_truck_hook_z - truck_hook_z) > 0.01))
+        truck_topology_filter.reset();
+    previous_truck_wheel_count = truck_configuration.wheel_count;
+    previous_truck_hook_x = truck_hook_x;
+    previous_truck_hook_z = truck_hook_z;
+    truck_topology_filter.update(
+        wheel_topology_candidate(
+            truck_configuration, truck_wheel_telemetry,
+            raw_tractor_geometry, raw_truck_ground_plane), now);
+    const auto &stable_truck = truck_topology_filter.valid()
+        ? truck_topology_filter.stable()
+        : wheel_topology_candidate(
+            truck_configuration, truck_wheel_telemetry,
+            raw_tractor_geometry, raw_truck_ground_plane);
+    const auto tractor_geometry = stable_truck.geometry;
+    const auto truck_ground_plane = stable_truck.ground_plane;
 
     double trailer_heading = truck_heading;
+    reverse_assist::GroundPlane trailer_ground_plane =
+        truck_ground_plane;
     std::vector<reverse_assist::TrailerSpec> trailers;
     if (telemetry.trailer_connected && telemetry.trailer_valid)
     {
@@ -2578,20 +2697,64 @@ void update_prediction_frame_targets()
         const auto trailer_wheels =
             configured_wheels(trailer_configuration,
                               &trailer_wheel_telemetry);
+        const double trailer_pitch =
+            telemetry.trailer.orientation.pitch * 2.0 *
+            reverse_assist::pi;
+        const double trailer_roll =
+            telemetry.trailer.orientation.roll * 2.0 *
+            reverse_assist::pi;
         if (!trailer_wheels.empty() &&
             trailer_configuration.hook_valid)
         {
-            trailers.push_back(
+            const double trailer_hook_z =
+                trailer_configuration.hook.z;
+            const auto raw_trailer_geometry =
                 reverse_assist::estimate_trailer_spec(
-                    relative_heading,
-                    trailer_configuration.hook.z,
-                    trailer_wheels));
+                    relative_heading, trailer_hook_z,
+                    trailer_wheels);
+            auto raw_trailer_ground_plane =
+                reverse_assist::estimate_ground_plane(
+                    trailer_wheels, trailer_pitch, trailer_roll);
+            // A single-axle trailer cannot determine longitudinal grade from
+            // its own tyre line. Reuse the tractor tyre plane for only the
+            // under-constrained direction, never the suspension-tilted body.
+            if (!raw_trailer_ground_plane.right_fitted)
+                raw_trailer_ground_plane.slope_right =
+                    truck_ground_plane.slope_right;
+            if (!raw_trailer_ground_plane.rearward_fitted)
+                raw_trailer_ground_plane.slope_rearward =
+                    truck_ground_plane.slope_rearward;
+            if (previous_trailer_wheel_count !=
+                    trailer_configuration.wheel_count ||
+                !std::isfinite(previous_trailer_hook_z) ||
+                std::abs(previous_trailer_hook_z - trailer_hook_z) > 0.01)
+                trailer_topology_filter.reset();
+            previous_trailer_wheel_count =
+                trailer_configuration.wheel_count;
+            previous_trailer_hook_z = trailer_hook_z;
+            const auto trailer_candidate = wheel_topology_candidate(
+                trailer_configuration, trailer_wheel_telemetry,
+                raw_trailer_geometry, raw_trailer_ground_plane);
+            trailer_topology_filter.update(trailer_candidate, now);
+            const auto &stable_trailer = trailer_topology_filter.valid()
+                ? trailer_topology_filter.stable()
+                : trailer_candidate;
+            trailers.push_back(stable_trailer.geometry);
+            trailer_ground_plane = stable_trailer.ground_plane;
         }
         else
         {
+            trailer_topology_filter.reset();
             trailers.push_back(
                 {relative_heading, 7.2, 3.0, 2.55});
         }
+    }
+    else
+    {
+        trailer_topology_filter.reset();
+        previous_trailer_wheel_count = 0;
+        previous_trailer_hook_z =
+            std::numeric_limits<double>::quiet_NaN();
     }
     const auto prediction = reverse_assist::predict_reverse_boxes(
         telemetry.steering,
@@ -2599,10 +2762,13 @@ void update_prediction_frame_targets()
         tractor_geometry.length,
         tractor_geometry.width,
         trailers,
-        0.0, tractor_geometry.rear_axle_z,
+        tractor_geometry.rear_axle_x,
+        tractor_geometry.rear_axle_z,
         tractor_geometry.center_from_rear,
         5.0, 0.05, 0.25,
-        tractor_geometry.hook_from_rear);
+        tractor_geometry.hook_from_rear,
+        tractor_geometry.hook_right_from_rear,
+        tractor_geometry.front_axle_steering);
 
     struct BodyTrack
     {
@@ -2664,16 +2830,11 @@ void update_prediction_frame_targets()
                 const double body_local_z =
                     anchor_dx * std::sin(anchor_heading) +
                     anchor_dz * std::cos(anchor_heading);
-                const double pitch =
-                    anchor.orientation.pitch * 2.0 *
-                    reverse_assist::pi;
-                const double roll =
-                    anchor.orientation.roll * 2.0 *
-                    reverse_assist::pi;
+                const auto &ground_plane = is_tractor
+                    ? truck_ground_plane : trailer_ground_plane;
                 point.y = anchor.position.y + 0.35 +
-                    reverse_assist::body_plane_height(
-                        body_local_x, body_local_z,
-                        pitch, roll);
+                    reverse_assist::ground_plane_height(
+                        body_local_x, body_local_z, ground_plane);
             };
         apply_body_plane(boundary.left);
         apply_body_plane(boundary.right);
@@ -2942,6 +3103,12 @@ SCSAPI_VOID channel_callback(const scs_string_t, const scs_u32_t,
             wheel.steering = value->value_float.value;
             wheel.steering_valid = true;
         }
+        else if (field == 3 &&
+                 value->type == SCS_VALUE_TYPE_float)
+        {
+            wheel.suspension_deflection = value->value_float.value;
+            wheel.suspension_deflection_valid = true;
+        }
         return true;
     };
     if (update_wheel(truck_wheel_on_ground_context,
@@ -2950,12 +3117,16 @@ SCSAPI_VOID channel_callback(const scs_string_t, const scs_u32_t,
                      telemetry.truck_wheels, 1) ||
         update_wheel(truck_wheel_steering_context,
                      telemetry.truck_wheels, 2) ||
+        update_wheel(truck_wheel_suspension_context,
+                     telemetry.truck_wheels, 3) ||
         update_wheel(trailer_wheel_on_ground_context,
                      telemetry.trailer_wheels, 0) ||
         update_wheel(trailer_wheel_lift_context,
                      telemetry.trailer_wheels, 1) ||
         update_wheel(trailer_wheel_steering_context,
-                     telemetry.trailer_wheels, 2))
+                     telemetry.trailer_wheels, 2) ||
+        update_wheel(trailer_wheel_suspension_context,
+                     telemetry.trailer_wheels, 3))
         return;
 }
 
@@ -3083,6 +3254,10 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version,
             index, SCS_VALUE_TYPE_float,
             truck_wheel_steering_context + index);
         wheel_channels += register_indexed_channel(
+            api, SCS_TELEMETRY_TRUCK_CHANNEL_wheel_susp_deflection,
+            index, SCS_VALUE_TYPE_float,
+            truck_wheel_suspension_context + index);
+        wheel_channels += register_indexed_channel(
             api, SCS_TELEMETRY_TRAILER_CHANNEL_wheel_on_ground,
             index, SCS_VALUE_TYPE_bool,
             trailer_wheel_on_ground_context + index);
@@ -3094,6 +3269,10 @@ SCSAPI_RESULT scs_telemetry_init(const scs_u32_t version,
             api, SCS_TELEMETRY_TRAILER_CHANNEL_wheel_steering,
             index, SCS_VALUE_TYPE_float,
             trailer_wheel_steering_context + index);
+        wheel_channels += register_indexed_channel(
+            api, SCS_TELEMETRY_TRAILER_CHANNEL_wheel_susp_deflection,
+            index, SCS_VALUE_TYPE_float,
+            trailer_wheel_suspension_context + index);
     }
     log_line("[reverse-entity] Per-wheel telemetry channels registered: " +
              std::to_string(wheel_channels));

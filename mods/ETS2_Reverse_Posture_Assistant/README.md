@@ -3,7 +3,7 @@
 A world-space reverse posture and trajectory assistant for verified
 **Euro Truck Simulator 2 1.60.x** Windows x64 builds.
 
-[Repository folder](https://github.com/yyysheng/ETS2mods/tree/main/mods/ETS2_Reverse_Posture_Assistant) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3776052935) | [GitHub release v0.10.9](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.10.9) | [Previous v0.6.0 release](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.6.0)
+[Repository folder](https://github.com/yyysheng/ETS2mods/tree/main/mods/ETS2_Reverse_Posture_Assistant) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3776052935) | [GitHub release v0.10.10](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.10.10) | [Previous v0.10.9 release](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.10.9)
 
 When reverse gear is selected, the plug-in predicts tractor and trailer posture from official
 telemetry and creates collisionless frame models directly in the game world. The frames are normal
@@ -18,6 +18,8 @@ buffer, constant buffer, or post-process overlay is read or modified.
 - Trailer articulation and future posture prediction.
 - Separate blue tractor and orange trailer swept-area boundaries over a fixed 5 m path.
 - Ground-contact-aware virtual axles for liftable and steerable tractor/trailer axles.
+- Ground slope fitted from tyre contact geometry instead of suspension-sensitive
+  chassis pitch and roll.
 - Collisionless low-profile line entities placed on the predicted ground path.
 - Automatic display only while reverse gear is selected.
 - Visible through normal game rendering from exterior, interior, free, and mirror views.
@@ -27,31 +29,33 @@ buffer, constant buffer, or post-process overlay is read or modified.
   changed enabled hook keeps telemetry available but skips all native hooks.
 - No ReShade, `dxgi.dll`, `d3d11.dll`, or graphics API dependency.
 
-## v0.10.9 update
+## v0.10.10 update
 
-Restores the original trailer guide marker. Update both the mod content and runtime DLL, then restart ETS2. Disable older local copies; do not enable standalone and Workshop copies together. See [release notes](RELEASE_NOTES_v0.10.9.md).
+Improves short-horizon articulated prediction and fixes false guide slope when
+front/rear or left/right suspension heights differ on level ground. See
+[release notes](RELEASE_NOTES_v0.10.10.md).
 
 ## Installation
 
 ### Full standalone package
 
-1. Download the `ETS2_Reverse_Posture_Assistant_v0.10.9_Full.zip` release package.
+1. Download the `ETS2_Reverse_Posture_Assistant_v0.10.10_Full.zip` release package.
 2. Extract it and run `Install-Full.bat`.
 3. Enable **ETS2 Reverse Posture Assistant** in the ETS2 Mod Manager.
 
 ### Steam Workshop package
 
 1. Subscribe to the [Steam Workshop item](https://steamcommunity.com/sharedfiles/filedetails/?id=3776052935).
-2. Download the `ETS2_Reverse_Posture_Assistant_v0.10.9_Runtime_for_Workshop.zip` release package.
+2. Download the `ETS2_Reverse_Posture_Assistant_v0.10.10_Runtime_for_Workshop.zip` release package.
 3. Extract it and run `Install-Runtime-Only.bat`.
 
 The Workshop cannot install the telemetry plug-in into the game directory, so the GitHub runtime package is required.
 
 ### Upgrade from v0.6.0
 
-1. Download `ETS2_Reverse_Posture_Assistant_v0.10.9_Upgrade_from_v0.6.0.zip`.
+1. Download `ETS2_Reverse_Posture_Assistant_v0.10.10_Upgrade_from_v0.6.0.zip`.
 2. Exit ETS2, extract the package, and run `Upgrade-From-v0.6.0.bat`.
-3. The installer backs up and disables the old Reverse Assistant runtime, then installs v0.10.9.
+3. The installer backs up and disables the old Reverse Assistant runtime, then installs v0.10.10.
 
 The upgrade does not modify or remove `dxgi.dll`, `d3d11.dll`, or ambiguous shared
 libraries. This allows Snowymoon, ReShade, and other graphics mods to keep their own proxy DLL.
@@ -63,13 +67,16 @@ libraries. This allows Snowymoon, ReShade, and other graphics mods to keep their
 
 ## 中文说明
 
-**欧卡 2 倒车姿态助手** v0.10.9 使用多版本 `BuildProfile` 适配经验证的 Euro Truck Simulator 2 1.60.x 构建。仅校验本版实际启用的四个 Hook；构建不匹配时会跳过全部原生 Hook，保留遥测注册并写入明确诊断日志。
+**欧卡 2 倒车姿态助手** v0.10.10 使用多版本 `BuildProfile` 适配经验证的 Euro Truck Simulator 2 1.60.x 构建。仅校验本版实际启用的四个 Hook；构建不匹配时会跳过全部原生 Hook，保留遥测注册并写入明确诊断日志。
 
 主要特点：
 
 - 实时预测车头和挂车倒车轨迹。
 - 蓝色车头扫掠边界与橙色挂车扫掠边界分别显示，固定预测 5 米。
 - 根据车轮实际接地和转向状态适配提升桥、随动桥以及不同轴距车型。
+- 坡度改由接地轮胎连线拟合，不再把前后或左右悬挂高度差误判为道路坡度。
+- 使用实际前轮角、横向鞍座偏移与挂车等效轴转角进行短程铰接外推。
+- 与独立 Reverse Planner 并存，不改其 DLL、Hook 或绿色引导资源。
 - 仅在倒挡时显示，不影响原车娱乐屏。
 - 不抓取摄像头、渲染过程、深度或常量缓冲数据。
 - 框线是 Prism3D 世界实体，各种正常视角看到的是同一组对象。

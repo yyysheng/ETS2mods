@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
+#include <cstdint>
 #include <limits>
 #include <vector>
 
@@ -36,6 +37,11 @@ struct WheelSpec
     bool on_ground_known = false;
     double steering_angle = 0.0;
     bool steering_angle_known = false;
+    double y = 0.0;
+    double radius = 0.0;
+    bool radius_known = false;
+    double suspension_deflection = 0.0;
+    bool suspension_deflection_known = false;
 };
 
 struct TractorSpec
@@ -44,13 +50,18 @@ struct TractorSpec
     double length = 7.0;
     double width = 2.55;
     double center_from_rear = -2.4;
+    double rear_axle_x = 0.0;
     double rear_axle_z = 0.0;
     double hook_from_rear = 0.0;
+    double hook_right_from_rear = 0.0;
+    double front_axle_steering =
+        std::numeric_limits<double>::quiet_NaN();
 };
 
 inline TractorSpec estimate_tractor_spec(
     const std::vector<WheelSpec> &wheels,
-    double hook_z = std::numeric_limits<double>::quiet_NaN())
+    double hook_z = std::numeric_limits<double>::quiet_NaN(),
+    double hook_x = std::numeric_limits<double>::quiet_NaN())
 {
     TractorSpec result;
     if (wheels.size() < 2) return result;
@@ -62,8 +73,11 @@ inline TractorSpec estimate_tractor_spec(
     double first_nonsteer_z =
         std::numeric_limits<double>::infinity();
     double steer_z_sum = 0.0;
+    double steer_tangent_sum = 0.0;
     double rear_z_sum = 0.0;
+    double rear_x_sum = 0.0;
     std::size_t steer_count = 0;
+    std::size_t measured_steer_count = 0;
     std::size_t rear_count = 0;
     const bool have_grounded_wheel =
         std::any_of(wheels.begin(), wheels.end(),
@@ -98,6 +112,14 @@ inline TractorSpec estimate_tractor_spec(
              wheel.z < first_nonsteer_z - 0.20))
         {
             steer_z_sum += wheel.z;
+            if (wheel.steering_angle_known)
+            {
+                steer_tangent_sum += std::tan(std::clamp(
+                    wheel.steering_angle,
+                    -60.0 * pi / 180.0,
+                    60.0 * pi / 180.0));
+                ++measured_steer_count;
+            }
             ++steer_count;
         }
         else if (wheel.steerable_known)
@@ -105,6 +127,7 @@ inline TractorSpec estimate_tractor_spec(
             // A steering tag axle behind the first fixed axle still belongs
             // to the rear support group.  Its lift state determines whether
             // it contributes to the current virtual rear axle.
+            rear_x_sum += wheel.x;
             rear_z_sum += wheel.z;
             ++rear_count;
         }
@@ -117,8 +140,12 @@ inline TractorSpec estimate_tractor_spec(
         front_axle_z = steer_z_sum /
             static_cast<double>(steer_count);
     if (rear_count > 0)
+    {
+        result.rear_axle_x = rear_x_sum /
+            static_cast<double>(rear_count);
         effective_rear_axle_z = rear_z_sum /
             static_cast<double>(rear_count);
+    }
     else
     {
         for (const auto &wheel : wheels)
@@ -130,6 +157,10 @@ inline TractorSpec estimate_tractor_spec(
         effective_rear_axle_z = max_z;
 
     result.rear_axle_z = effective_rear_axle_z;
+    if (measured_steer_count > 0)
+        result.front_axle_steering = std::atan(
+            steer_tangent_sum /
+            static_cast<double>(measured_steer_count));
     result.wheelbase = std::clamp(
         std::abs(effective_rear_axle_z - front_axle_z),
         2.4, 6.8);
@@ -154,6 +185,9 @@ inline TractorSpec estimate_tractor_spec(
     if (std::isfinite(hook_z))
         result.hook_from_rear = std::clamp(
             hook_z - effective_rear_axle_z, -1.5, 2.5);
+    if (std::isfinite(hook_x))
+        result.hook_right_from_rear = std::clamp(
+            hook_x - result.rear_axle_x, -1.5, 1.5);
     return result;
 }
 
@@ -302,6 +336,196 @@ inline double body_plane_height(double local_x,
            local_z * std::tan(pitch);
 }
 
+struct GroundPlane
+{
+    double slope_right = 0.0;
+    double slope_rearward = 0.0;
+    bool wheel_fitted = false;
+    bool right_fitted = false;
+    bool rearward_fitted = false;
+};
+
+// Recover the road plane from actual grounded-wheel centres.  The vehicle
+// placement pitch/roll contains both road attitude and suspension-induced
+// body attitude.  Adding each wheel's suspension displacement reconstructs
+// the wheel-centre line, so unequal front/rear suspension height on level
+// ground no longer tilts the guide.  The fitted intercept is deliberately
+// discarded: callers keep their established render clearance and use only
+// the tyre-derived gradients.
+inline GroundPlane estimate_ground_plane(
+    const std::vector<WheelSpec> &wheels,
+    double body_pitch,
+    double body_roll)
+{
+    constexpr double maximum_slope = 35.0 * pi / 180.0;
+    GroundPlane result{
+        std::tan(std::clamp(body_roll, -maximum_slope, maximum_slope)),
+        -std::tan(std::clamp(body_pitch, -maximum_slope, maximum_slope)),
+        false, false, false};
+
+    struct Sample { double x; double z; double h; };
+    std::vector<Sample> samples;
+    samples.reserve(wheels.size());
+    for (const auto &wheel : wheels)
+    {
+        if (wheel.on_ground_known && !wheel.on_ground) continue;
+        if (!wheel.suspension_deflection_known) continue;
+        double contact_height = body_plane_height(
+            wheel.x, wheel.z, body_pitch, body_roll) + wheel.y +
+            wheel.suspension_deflection;
+        if (wheel.radius_known) contact_height -= wheel.radius;
+        if (std::isfinite(contact_height))
+            samples.push_back({wheel.x, wheel.z, contact_height});
+    }
+    if (samples.size() < 2) return result;
+
+    double mean_x = 0.0, mean_z = 0.0, mean_h = 0.0;
+    for (const auto &sample : samples)
+    {
+        mean_x += sample.x;
+        mean_z += sample.z;
+        mean_h += sample.h;
+    }
+    const double count = static_cast<double>(samples.size());
+    mean_x /= count;
+    mean_z /= count;
+    mean_h /= count;
+
+    double xx = 0.0, xz = 0.0, zz = 0.0;
+    double xh = 0.0, zh = 0.0;
+    for (const auto &sample : samples)
+    {
+        const double x = sample.x - mean_x;
+        const double z = sample.z - mean_z;
+        const double h = sample.h - mean_h;
+        xx += x * x;
+        xz += x * z;
+        zz += z * z;
+        xh += x * h;
+        zh += z * h;
+    }
+
+    const double determinant = xx * zz - xz * xz;
+    constexpr double rank_epsilon = 1e-8;
+    if (determinant > rank_epsilon)
+    {
+        result.slope_right = (xh * zz - zh * xz) / determinant;
+        result.slope_rearward = (zh * xx - xh * xz) / determinant;
+        result.wheel_fitted = true;
+        result.right_fitted = true;
+        result.rearward_fitted = true;
+    }
+    else if (xx > zz && xx > rank_epsilon)
+    {
+        result.slope_right = xh / xx;
+        result.wheel_fitted = true;
+        result.right_fitted = true;
+    }
+    else if (zz > rank_epsilon)
+    {
+        result.slope_rearward = zh / zz;
+        result.wheel_fitted = true;
+        result.rearward_fitted = true;
+    }
+
+    const double maximum_gradient = std::tan(maximum_slope);
+    result.slope_right = std::clamp(
+        result.slope_right, -maximum_gradient, maximum_gradient);
+    result.slope_rearward = std::clamp(
+        result.slope_rearward, -maximum_gradient, maximum_gradient);
+    return result;
+}
+
+inline double ground_plane_height(double local_x,
+                                  double local_z,
+                                  const GroundPlane &plane)
+{
+    return local_x * plane.slope_right +
+           local_z * plane.slope_rearward;
+}
+
+template <class Geometry>
+struct WheelTopologySnapshot
+{
+    std::uint64_t grounded_mask = 0;
+    Geometry geometry{};
+    GroundPlane ground_plane{};
+    bool lift_transition_in_progress = false;
+};
+
+template <class Geometry>
+class StableWheelTopologyFilter
+{
+public:
+    bool update(const WheelTopologySnapshot<Geometry> &candidate,
+                std::uint64_t now_ms,
+                std::uint64_t settle_ms = 400)
+    {
+        if (candidate.grounded_mask == 0) return valid_;
+        if (!valid_)
+        {
+            if (candidate.lift_transition_in_progress) return false;
+            commit(candidate);
+            return true;
+        }
+        if (candidate.grounded_mask == stable_.grounded_mask &&
+            !candidate.lift_transition_in_progress)
+        {
+            stable_ = candidate;
+            pending_valid_ = false;
+            return true;
+        }
+        if (candidate.lift_transition_in_progress)
+        {
+            pending_valid_ = false;
+            return true;
+        }
+        if (!pending_valid_ ||
+            pending_.grounded_mask != candidate.grounded_mask)
+        {
+            pending_ = candidate;
+            pending_since_ms_ = now_ms;
+            pending_valid_ = true;
+            return true;
+        }
+        pending_ = candidate;
+        if (now_ms - pending_since_ms_ >= settle_ms)
+        {
+            commit(pending_);
+            pending_valid_ = false;
+        }
+        return true;
+    }
+
+    bool valid() const { return valid_; }
+    const WheelTopologySnapshot<Geometry> &stable() const
+    {
+        return stable_;
+    }
+    void reset()
+    {
+        valid_ = false;
+        pending_valid_ = false;
+        stable_ = {};
+        pending_ = {};
+        pending_since_ms_ = 0;
+    }
+
+private:
+    void commit(const WheelTopologySnapshot<Geometry> &candidate)
+    {
+        stable_ = candidate;
+        stable_.lift_transition_in_progress = false;
+        valid_ = true;
+    }
+
+    bool valid_ = false;
+    bool pending_valid_ = false;
+    WheelTopologySnapshot<Geometry> stable_{};
+    WheelTopologySnapshot<Geometry> pending_{};
+    std::uint64_t pending_since_ms_ = 0;
+};
+
 struct Prediction
 {
     std::vector<GroundBox> boxes;
@@ -375,7 +599,10 @@ inline Prediction predict_reverse_boxes(double steering_input,
                                         double distance = 12.0,
                                         double integration_step = 0.10,
                                         double box_spacing = 1.0,
-                                        double tractor_hitch_from_rear = 0.0)
+                                        double tractor_hitch_from_rear = 0.0,
+                                        double tractor_hitch_right_from_rear = 0.0,
+                                        double measured_front_steer_angle =
+                                            std::numeric_limits<double>::quiet_NaN())
 {
     Prediction result;
     wheelbase = std::clamp(wheelbase, 2.4, 6.8);
@@ -385,7 +612,10 @@ inline Prediction predict_reverse_boxes(double steering_input,
     integration_step = std::clamp(integration_step, 0.04, 0.25);
     box_spacing = std::clamp(box_spacing, integration_step, 3.0);
 
-    const double steer_angle = std::clamp(steering_input, -1.0, 1.0) * 38.0 * pi / 180.0;
+    const double steer_angle = std::isfinite(measured_front_steer_angle)
+        ? std::clamp(measured_front_steer_angle,
+                     -60.0 * pi / 180.0, 60.0 * pi / 180.0)
+        : std::clamp(steering_input, -1.0, 1.0) * 38.0 * pi / 180.0;
     const double curvature = std::tan(steer_angle) / wheelbase;
 
     Pose tractor{rear_axle_x, rear_axle_z, 0.0};
@@ -396,6 +626,10 @@ inline Prediction predict_reverse_boxes(double steering_input,
         tractor_hitch_from_rear;
     hitch.z += std::cos(tractor.heading) *
         tractor_hitch_from_rear;
+    hitch.x += std::cos(tractor.heading) *
+        tractor_hitch_right_from_rear;
+    hitch.z -= std::sin(tractor.heading) *
+        tractor_hitch_right_from_rear;
     for (const TrailerSpec &trailer : trailers)
     {
         Pose axle = trailer_axle_from_hitch(hitch, trailer.heading, trailer.axle_to_hitch);
@@ -444,11 +678,21 @@ inline Prediction predict_reverse_boxes(double steering_input,
         previous_parent.z +=
             std::cos(previous_tractor.heading) *
             tractor_hitch_from_rear;
+        previous_parent.x +=
+            std::cos(previous_tractor.heading) *
+            tractor_hitch_right_from_rear;
+        previous_parent.z -=
+            std::sin(previous_tractor.heading) *
+            tractor_hitch_right_from_rear;
         Pose next_parent = tractor;
         next_parent.x += std::sin(tractor.heading) *
             tractor_hitch_from_rear;
         next_parent.z += std::cos(tractor.heading) *
             tractor_hitch_from_rear;
+        next_parent.x += std::cos(tractor.heading) *
+            tractor_hitch_right_from_rear;
+        next_parent.z -= std::sin(tractor.heading) *
+            tractor_hitch_right_from_rear;
         for (std::size_t i = 0; i < trailers.size(); ++i)
         {
             Pose &axle = trailer_axles[i];

@@ -53,3 +53,4 @@ v0.10.10 优化固定 5 米的车头/单挂短程倒车外推，并修复平地�
 - Reverse Planner 是独立 mod，本次没有修改其源码、DLL、Hook 或绿色引导资源。
 
 本版已完成 Release x64 构建、BuildProfileTests、KinematicsTests、模组内容检查及 Reverse Planner 双 DLL 兼容回归。游戏内视觉验收仍需在 ETS2 1.60.1.7 中完成。
+

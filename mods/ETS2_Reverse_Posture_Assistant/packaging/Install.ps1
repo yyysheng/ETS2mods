@@ -65,7 +65,7 @@ if (-not $RuntimeOnly) {
 }
 
 Write-Host ''
-Write-Host 'ETS2 Reverse Posture Assistant v0.10.9 installed successfully.' -ForegroundColor Green
+Write-Host 'ETS2 Reverse Posture Assistant v0.10.10 installed successfully.' -ForegroundColor Green
 Write-Host "Game directory: $gameRoot"
 Write-Host 'This build uses an SCS telemetry plug-in and native world entities.'
 Write-Host 'dxgi.dll and d3d11.dll were not read, replaced, renamed, or removed.'

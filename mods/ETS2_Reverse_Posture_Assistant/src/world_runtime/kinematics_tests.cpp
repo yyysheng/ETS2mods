@@ -373,6 +373,89 @@ int main()
     assert(body_plane_height(2.0, 0.0, 0.0, 5.0 * pi / 180.0) >
            0.0);
 
+    // The road plane must follow grounded tyre centres, not chassis attitude.
+    // A 5-degree body pitch cancelled by unequal front/rear suspension is a
+    // level road and must produce a level guide.
+    const double suspension_pitch = 5.0 * pi / 180.0;
+    std::vector<WheelSpec> level_suspension_wheels;
+    for (const double z : {-2.0, 2.0})
+        for (const double x : {-1.0, 1.0})
+        {
+            WheelSpec wheel;
+            wheel.x = x;
+            wheel.z = z;
+            wheel.on_ground = true;
+            wheel.on_ground_known = true;
+            wheel.y = 0.50;
+            wheel.radius = 0.50;
+            wheel.radius_known = true;
+            wheel.suspension_deflection =
+                z * std::tan(suspension_pitch);
+            wheel.suspension_deflection_known = true;
+            level_suspension_wheels.push_back(wheel);
+        }
+    const auto level_tyre_plane = estimate_ground_plane(
+        level_suspension_wheels, suspension_pitch, 0.0);
+    assert(level_tyre_plane.wheel_fitted);
+    assert(std::abs(level_tyre_plane.slope_right) < 1e-10);
+    assert(std::abs(level_tyre_plane.slope_rearward) < 1e-10);
+
+    // The same estimator retains genuine grade after removing body/suspension
+    // separation. A lifted non-contact wheel must not contaminate the fit.
+    auto graded_wheels = level_suspension_wheels;
+    constexpr double real_grade = 0.08;
+    for (auto &wheel : graded_wheels)
+        wheel.suspension_deflection += real_grade * wheel.z;
+    WheelSpec lifted_outlier = graded_wheels.front();
+    lifted_outlier.z = 7.0;
+    lifted_outlier.suspension_deflection = 8.0;
+    lifted_outlier.on_ground = false;
+    graded_wheels.push_back(lifted_outlier);
+    const auto graded_tyre_plane = estimate_ground_plane(
+        graded_wheels, suspension_pitch, 0.0);
+    assert(std::abs(graded_tyre_plane.slope_rearward - real_grade) <
+           1e-10);
+
+    // ETS2 changes lift masks one tyre at a time. Intermediate masks are held
+    // until the final support topology has remained stable for 400 ms.
+    StableWheelTopologyFilter<TrailerSpec> topology_filter;
+    WheelTopologySnapshot<TrailerSpec> eight_wheels;
+    eight_wheels.grounded_mask = 0xff;
+    eight_wheels.geometry.axle_to_hitch = 8.57329;
+    assert(topology_filter.update(eight_wheels, 0));
+    auto four_wheels = eight_wheels;
+    four_wheels.grounded_mask = 0x3c;
+    four_wheels.geometry.axle_to_hitch = 8.57861;
+    assert(topology_filter.update(four_wheels, 100));
+    assert(topology_filter.update(four_wheels, 499));
+    assert(topology_filter.stable().grounded_mask == 0xff);
+    assert(topology_filter.update(four_wheels, 500));
+    assert(topology_filter.stable().grounded_mask == 0x3c);
+
+    // A measured front-wheel angle supersedes the generic 38-degree steering
+    // map, and a lateral fifth-wheel offset participates in rigid hitch motion.
+    const Prediction measured_steer = predict_reverse_boxes(
+        0.0, 3.8, 7.0, 2.55, {}, 0.0, 0.0, -2.4,
+        5.0, 0.05, 0.25, 0.0, 0.0, 12.0 * pi / 180.0);
+    const Prediction zero_steer = predict_reverse_boxes(
+        0.0, 3.8, 7.0, 2.55, {}, 0.0, 0.0, -2.4,
+        5.0, 0.05, 0.25);
+    assert(std::abs(normalize_angle(
+               measured_steer.boxes.back().pose.heading -
+               zero_steer.boxes.back().pose.heading)) > 0.1);
+
+    const TrailerSpec offset_test_trailer{
+        18.0 * pi / 180.0, 7.8, 2.5, 2.55, 0.0};
+    const Prediction centred_hitch = predict_reverse_boxes(
+        0.45, 3.8, 7.0, 2.55, {offset_test_trailer},
+        0.0, 0.0, -2.4, 5.0, 0.05, 0.25, -0.8, 0.0);
+    const Prediction lateral_hitch = predict_reverse_boxes(
+        0.45, 3.8, 7.0, 2.55, {offset_test_trailer},
+        0.0, 0.0, -2.4, 5.0, 0.05, 0.25, -0.8, 0.25);
+    assert(std::abs(normalize_angle(
+               centred_hitch.boxes.back().pose.heading -
+               lateral_hitch.boxes.back().pose.heading)) > 1e-4);
+
     std::cout << "reverse kinematics tests passed: "
               << articulated.boxes.size()
               << " boxes, limited max steps "

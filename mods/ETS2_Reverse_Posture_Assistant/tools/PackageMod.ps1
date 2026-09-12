@@ -9,7 +9,7 @@ if (Get-ChildItem -LiteralPath (Join-Path $mod 'model') -Recurse -File |
 }
 $release = Join-Path $root 'build/release'
 New-Item -ItemType Directory -Path $release -Force | Out-Null
-$archive = Join-Path $release 'ETS2_Reverse_Posture_Assistant_v0.10.9.scs'
+$archive = Join-Path $release 'ETS2_Reverse_Posture_Assistant_v0.10.10.scs'
 if (Test-Path -LiteralPath $archive) { Remove-Item -LiteralPath $archive }
 # Create archive names with forward slashes for the game resource filesystem.
 $zip = [IO.Compression.ZipFile]::Open($archive, 'Create')

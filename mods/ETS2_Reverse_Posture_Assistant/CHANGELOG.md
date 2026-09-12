@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.10.10 - 2026-09-11
+
+- Replaced chassis-pitch/roll guide height with a grounded-tyre plane fitted
+  from wheel positions, radii and live suspension deflection.
+- Added actual front-wheel steering, lateral fifth-wheel offset and independent
+  trailer equivalent-axle steering to the short-horizon predictor.
+- Debounced liftable-axle support topology for 400 ms and commits wheelbase,
+  hitch distance, tyre plane and body envelope atomically.
+- Preserved the independent Reverse Planner DLL, hook ownership and model
+  namespace; no Reverse Planner source or asset is modified by this release.
+
 ## 0.10.9 - 2026-09-05
 
 - Restored the base-game trailer guide marker by removing the loading model override.
