@@ -1,3 +1,9 @@
+[h1]Hotfix / 热修复[/h1]
+[list]
+[*]Fixed severe stuttering and game hangs caused by stale task targets after a job or scene change. / 修复任务或场景变化后旧目标导致的严重卡顿与游戏无响应。
+[*]Stale targets beyond the 50 m telemetry radius are now deleted, and stationary/moving replanning load is bounded. / 现在会删除超出 50 米遥测范围的旧目标，并限制静止与移动状态下的重规划负载。
+[/list]
+
 [h1]v0.1.0-beta — ReversePlanner initial beta / 首个测试版[/h1]
 [b]The native runtime from GitHub is required. / 必须同时安装 GitHub 原生运行组件。[/b]
 

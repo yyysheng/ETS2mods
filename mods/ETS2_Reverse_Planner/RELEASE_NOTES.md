@@ -1,5 +1,7 @@
 # v0.1.0-beta
 
+Hotfix: stale task targets left behind by job or scene changes are now rejected and deleted outside the 50 m telemetry radius. Curve sampling and stationary/moving replanning are bounded to prevent severe stuttering and game hangs.
+
 Initial public beta of ReversePlanner for verified Euro Truck Simulator 2 1.60.x Windows x64 builds.
 
 - Locks the unique active game-native task parking frame.
