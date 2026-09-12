@@ -684,6 +684,10 @@ void update_prediction_frame_targets()
     static stage0::Pose2 failed_target_pose{};
     static double failed_axle_to_hitch = 0.0;
     static double failed_axle_steering = 0.0;
+    static bool successful_pose_valid = false;
+    static stage0::Pose2 successful_tractor_pose{};
+    static stage0::Pose2 successful_trailer_pose{};
+    static stage0::Pose2 successful_target_pose{};
     const auto clear_frames = [&] {
         std::lock_guard lock(prediction_frames_mutex);
         prediction_frames = {};
@@ -712,6 +716,7 @@ void update_prediction_frame_targets()
         steering_correction=0.0;
         required_steering_valid=false;
         failed_pose_valid=false;
+        successful_pose_valid=false;
     }
 
     // A disconnected interval is an identity boundary even when the next
@@ -737,6 +742,7 @@ void update_prediction_frame_targets()
         steering_correction = 0.0;
         required_steering_valid = false;
         failed_pose_valid = false;
+        successful_pose_valid = false;
         return;
     }
     // Product scope: detached tractor-to-kingpin guidance is intentionally
@@ -750,6 +756,7 @@ void update_prediction_frame_targets()
         steering_correction = 0.0;
         required_steering_valid = false;
         failed_pose_valid = false;
+        successful_pose_valid = false;
         return;
     }
 
@@ -934,6 +941,7 @@ void update_prediction_frame_targets()
     stage1a::PathSample live_parking_pose{};
     bool task_frame_overlap = false;
     bool target_available = true;
+    bool target_out_of_local_range = false;
     {
         if (seed.mode != stage1a::PlannerMode::trailer_to_parking_target)
             target_available = false;
@@ -1008,6 +1016,16 @@ void update_prediction_frame_targets()
 
         live_parking_pose.trailer_position = live_trailer_axle;
         live_parking_pose.trailer_heading = trailer_front_heading;
+        if (target_available && stage1a::length(stage1a::subtract(
+                seed.target.position, live_trailer_axle)) >
+                stage1a::maximum_planning_chord_m)
+        {
+            // The native telemetry scan is deliberately local. A farther
+            // fixed seed survived a scene/job transition and is not evidence
+            // that a task guide is currently present.
+            target_available = false;
+            target_out_of_local_range = true;
+        }
         if (target_available)
         {
             task_frame_overlap = stage1a::parking_guidance_phase(
@@ -1145,6 +1163,43 @@ void update_prediction_frame_targets()
 
     if (!target_available)
     {
+        if (target_out_of_local_range)
+        {
+            clear_frames();
+            failure_started_tick=0;
+            failed_pose_valid=false;
+            successful_pose_valid=false;
+            // Remove the whole captured-state bundle. Merely rejecting it in
+            // memory would allow the obsolete absolute world coordinate to
+            // resurrect after the next game restart.
+            std::error_code remove_path_error;
+            std::error_code remove_diagnostics_error;
+            std::error_code remove_obstacles_error;
+            const bool removed_path=std::filesystem::remove(
+                path_file,remove_path_error);
+            std::filesystem::remove(
+                diagnostics_file,remove_diagnostics_error);
+            std::filesystem::remove(
+                obstacles_file,remove_obstacles_error);
+            seed.valid=false;
+            logged_seed_failure=true;
+            if (entering_reverse || now-last_failure_log_tick>=2000)
+            {
+                last_failure_log_tick=now;
+                if (removed_path && !remove_path_error &&
+                    !remove_diagnostics_error && !remove_obstacles_error)
+                    log_line("[reverse-planner] Stale task target deleted: "
+                             "outside the 50 m local telemetry radius; route, "
+                             "warning markers, diagnostics and obstacle "
+                             "snapshot cleared.",SCS_LOG_TYPE_warning);
+                else
+                    log_line("[reverse-planner] Stale task target disabled but "
+                             "one or more state files could not be deleted; "
+                             "no planning will run until a new verified scan.",
+                             SCS_LOG_TYPE_error);
+            }
+            return;
+        }
         // Once a trailer is attached, an unavailable task-frame contract is
         // actionable: after the same one-second persistence gate, show X
         // instead of leaving the driver with a silently blank display.
@@ -1191,21 +1246,33 @@ void update_prediction_frame_targets()
                 arrows.frames[index];
     };
     const bool replan_due = entering_reverse ||
-                            now-last_replan_tick>=100;
+                            now-last_replan_tick>=200;
     if (!replan_due)
     {
         // Arrow transforms follow the cab at telemetry frame rate while the
-        // expensive full route remains on its bounded 100 ms cadence.
+        // expensive full route remains on its bounded 200 ms cadence.
         refresh_arrow_suffix();
         return;
     }
     last_replan_tick=now;
 
     const auto pose_near=[](const stage0::Pose2 &a,const stage0::Pose2 &b) {
-        return stage1a::length(stage1a::subtract(a.position,b.position))<0.025&&
+        return stage1a::length(stage1a::subtract(a.position,b.position))<0.10&&
                std::abs(stage0::wrap_angle(
-                   a.heading_rad-b.heading_rad))<0.15*stage0::pi/180.0;
+                   a.heading_rad-b.heading_rad))<0.50*stage0::pi/180.0;
     };
+    const bool repeated_successful_pose = successful_pose_valid &&
+        !seed_changed &&
+        pose_near(request.tractor_start,successful_tractor_pose) &&
+        pose_near(request.subject_start,successful_trailer_pose) &&
+        pose_near(request.target,successful_target_pose);
+    if (repeated_successful_pose)
+    {
+        // The full route is steering-input independent. Preserve it while the
+        // vehicle pose is effectively unchanged and update only cab arrows.
+        refresh_arrow_suffix();
+        return;
+    }
     const bool repeated_failed_pose = failed_pose_valid && !seed_changed &&
         pose_near(request.tractor_start,failed_tractor_pose) &&
         pose_near(request.subject_start,failed_trailer_pose) &&
@@ -1286,6 +1353,10 @@ void update_prediction_frame_targets()
     }
     failed_pose_valid=false;
     failure_started_tick = 0;
+    successful_pose_valid=true;
+    successful_tractor_pose=request.tractor_start;
+    successful_trailer_pose=request.subject_start;
+    successful_target_pose=request.target;
 
     steering_correction = stage1a::steering_correction_rad(
         plan, request.geometry, telemetry.steering);

@@ -20,6 +20,12 @@ constexpr double articulation_hard_limit_rad = 70.0 * stage0::pi / 180.0;
 constexpr double articulation_soft_rad = 45.0 * stage0::pi / 180.0;
 constexpr double articulation_high_rad = 55.0 * stage0::pi / 180.0;
 constexpr double default_sample_spacing_m = 0.10;
+// Stage 0 only perceives task guides inside the 50 m local telemetry bubble.
+// A farther target is necessarily stale (usually a seed retained across a
+// teleport/job change) and must never enter the combinatorial curve search.
+constexpr double maximum_planning_chord_m = 50.0;
+constexpr double maximum_candidate_curve_length_m = 80.0;
+constexpr int maximum_arc_length_samples = 1200;
 
 enum class PlannerMode
 {
@@ -770,7 +776,9 @@ inline std::vector<double> arc_length_parameters(const Curve &curve,
     std::vector<double> parameters;
     if (!(total_length > 1e-6) || !std::isfinite(total_length)) return parameters;
     spacing = std::clamp(spacing, 0.04, 0.25);
-    const int steps = std::max(1, static_cast<int>(std::ceil(total_length / spacing)));
+    const int steps = std::clamp(
+        static_cast<int>(std::ceil(total_length / spacing)),
+        1, maximum_arc_length_samples);
     parameters.reserve(static_cast<std::size_t>(steps) + 1);
     std::size_t upper = 1;
     for (int index = 0; index <= steps; ++index)
@@ -1265,6 +1273,11 @@ inline PlanResult evaluate_candidate(const PlanRequest &request,
     double total_length{};
     const auto parameters = arc_length_parameters(curve, request.sample_spacing_m,
                                                    total_length);
+    if (total_length > maximum_candidate_curve_length_m)
+    {
+        result.reason = "PATH_LENGTH_LIMIT_EXCEEDED";
+        return result;
+    }
     if (parameters.size() < 2)
     {
         result.reason = "DEGENERATE_CURVE";
@@ -1712,6 +1725,11 @@ inline PlanResult plan(const PlanRequest &request)
         best.reason="TARGET_TOO_CLOSE_FOR_FIXED_PATH";
         return best;
     }
+    if (chord>maximum_planning_chord_m)
+    {
+        best.reason="TARGET_OUT_OF_LOCAL_TELEMETRY_RANGE";
+        return best;
+    }
     const double beta=request.mode==PlannerMode::trailer_to_parking_target
         ? std::clamp(request.geometry.trailer_axle_steering_rad,
             -60.0*stage0::pi/180.0,60.0*stage0::pi/180.0)
@@ -1897,7 +1915,16 @@ inline PlanResult plan_parking_terminal_region(
 {
     PlanRequest nominal=base_request;
     nominal.target=parking_entry_pose(live,frame,base_request.geometry,
-                                      0.0,0.0,0.0);
+                                       0.0,0.0,0.0);
+    if (length(subtract(nominal.target.position,
+                        base_request.subject_start.position))>
+        maximum_planning_chord_m)
+    {
+        PlanResult rejected;
+        rejected.mode=base_request.mode;
+        rejected.reason="TARGET_OUT_OF_LOCAL_TELEMETRY_RANGE";
+        return rejected;
+    }
     nominal.allow_steering_profile_fallback=false;
     auto result=plan(nominal);
     int work=result.candidate_count;

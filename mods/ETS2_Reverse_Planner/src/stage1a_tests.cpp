@@ -710,6 +710,36 @@ int main()
         assert(filter.stable().grounded_mask==0xff);
     }
 
+    // X: an absolute target retained across a teleport is rejected before any
+    // candidate enumeration or terminal-checkpoint expansion can begin.
+    {
+        auto far=request(PlannerMode::trailer_to_parking_target,
+                         {{0,8},0},{{0,-6400},0});
+        far.subject_start={{0,0},0};
+        PathSample live{};
+        live.tractor_position=far.tractor_start.position;
+        live.tractor_heading=far.tractor_start.heading_rad;
+        live.trailer_position=far.subject_start.position;
+        live.trailer_heading=far.subject_start.heading_rad;
+        const auto rejected=plan_parking_terminal_region(
+            far,live,far.target);
+        assert(!rejected.found);
+        assert(rejected.candidate_count==0);
+        assert(rejected.reason=="TARGET_OUT_OF_LOCAL_TELEMETRY_RANGE");
+    }
+
+    // Y: even malformed long Bezier handles cannot create an unbounded sample
+    // vector before candidate rejection.
+    {
+        const CubicBezier huge{{0,0},{10000,0},{-10000,-1},{0,-2}};
+        double total_length=0.0;
+        const auto parameters=arc_length_parameters(
+            huge,default_sample_spacing_m,total_length);
+        assert(total_length>maximum_candidate_curve_length_m);
+        assert(parameters.size()<=
+               static_cast<std::size_t>(maximum_arc_length_samples+1));
+    }
+
     std::cout << "stage1a tests passed: A straight, B offset, C aligned trailer, "
                  "D offset trailer, E 70deg hard limit, F mirror, "
                  "G attached-only product mode, "
@@ -722,5 +752,6 @@ int main()
                  "R constant-beta path contract, S stable lift topology, "
                  "T live white-frame steering-profile fallback, "
                  "U mid-route terminal region, V continuous arrow angle, "
-                 "W steering-independent route boundary\n";
+                 "W steering-independent route boundary, "
+                 "X stale-target hard gate, Y bounded arc samples\n";
 }
