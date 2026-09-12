@@ -6,11 +6,11 @@ Each mod is isolated under `mods/` with its own source, documentation, packaging
 
 ## Mods
 
-| Mod | Game version | Source | Download | Workshop |
+| Game version / 游戏版本 | Mod name / Mod 名称 | Mod version / Mod 版本（下载） | Source / 源码 | Workshop / 创意工坊 |
 | --- | --- | --- | --- | --- |
-| ETS2 Reverse Posture Assistant v0.10.9 | 1.60.* | [Source code](https://github.com/yyysheng/ETS2mods/tree/reverse-posture-assistant-v0.10.9/mods/ETS2_Reverse_Posture_Assistant) | [v0.10.9](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.10.9) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3776052935) |
-| ETS2 Reverse Posture Assistant v0.10.7 | 1.60.* | [Source code](https://github.com/yyysheng/ETS2mods/tree/reverse-posture-assistant-v0.10.7/mods/ETS2_Reverse_Posture_Assistant) | [v0.10.7](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.10.7) | — |
-| ETS2 Reverse Posture Assistant | 1.60.* | [Project folder](mods/ETS2_Reverse_Posture_Assistant) | [v0.6.0](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.6.0) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3767153599) |
+| 1.60.* | ETS2 Reverse Posture Assistant | [v0.10.9](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.10.9) | [Source code](https://github.com/yyysheng/ETS2mods/tree/reverse-posture-assistant-v0.10.9/mods/ETS2_Reverse_Posture_Assistant) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3776052935) |
+| 1.60.* | ETS2 Reverse Posture Assistant | [v0.10.7](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.10.7) | [Source code](https://github.com/yyysheng/ETS2mods/tree/reverse-posture-assistant-v0.10.7/mods/ETS2_Reverse_Posture_Assistant) | — |
+| 1.60.* | ETS2 Reverse Posture Assistant | [v0.6.0](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.6.0) | [Project folder](mods/ETS2_Reverse_Posture_Assistant) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3767153599) |
 
 ## 中文
 
