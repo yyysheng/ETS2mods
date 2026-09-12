@@ -1,0 +1,63 @@
+[h1]v0.1.0-beta — ReversePlanner initial beta / 首个测试版[/h1]
+[b]The native runtime from GitHub is required. / 必须同时安装 GitHub 原生运行组件。[/b]
+
+[h1]English[/h1]
+ReversePlanner identifies the active game-native task parking frame and continuously plans a reverse route for the attached trailer. It draws two green tracks following the tractor's rear corners: the first 7 m is solid and the remaining planned route is dashed. Steering arrows beside the cab update continuously.
+
+[b]Features in v0.1.0-beta[/b]
+[list]
+[*]Guides an attached trailer to the unique active task parking frame.
+[*]Uses measured tractor wheelbase, fifth-wheel offset, trailer axle geometry, lift state and steerable axle angle.
+[*]Shows smooth left/right/reverse arrows beside the cab and a red X only after route failure persists for one second.
+[*]Uses a 70-degree articulation hard limit and validates tractor/trailer contours.
+[*]Runs beside Reverse Posture Assistant v0.10.10 through a cooperative hook sidecar.
+[*]Uses no ReShade add-on, camera capture, mirror capture, depth buffer or graphics proxy DLL.
+[/list]
+
+[b]Installation[/b]
+1. Exit ETS2 and subscribe to this Workshop item.
+2. Download v0.1.0-beta Runtime for Workshop, extract it and run Install-Runtime-Only.bat.
+[url=https://github.com/yyysheng/ETS2mods/releases/download/reverse-planner-v0.1.0-beta/ETS2_Reverse_Planner_v0.1.0-beta_Runtime_for_Workshop.zip]Download Runtime for Workshop v0.1.0-beta[/url]
+3. Enable this Workshop item in the Mod Manager and restart the game.
+
+[b]A Workshop subscription alone cannot install the required DLL.[/b]
+For standalone installation, use the Full package instead of subscribing; do not enable both copies:
+[url=https://github.com/yyysheng/ETS2mods/releases/tag/reverse-planner-v0.1.0-beta]v0.1.0-beta downloads and release notes[/url]
+If Steam hides the link, search GitHub for yyysheng/ETS2mods and open Releases.
+
+Compatibility: ETS2 1.60.*, Windows x64, with a verified native hook layout. ETS2 1.60.1.7 was checked locally. This release does not claim 1.61 compatibility.
+
+[b]Beta notice[/b]
+This is a driver aid, not autonomous driving. Detached tractor-to-trailer guidance is intentionally disabled. General traffic and building perception is incomplete, so a green route is not a collision-free guarantee.
+
+[h1]中文[/h1]
+ReversePlanner 会识别当前任务的游戏原生停车框，并为已连接挂车持续规划倒车路线。两条绿色轨迹跟随车头尾部左右角：前 7 米为实线，后续完整推算路线为虚线；车头两侧方向箭头持续更新。
+
+[b]v0.1.0-beta 功能[/b]
+[list]
+[*]仅引导已连接挂车进入唯一活动任务停车框。
+[*]根据实际车头轴距、鞍座偏移、挂车轴组、提升状态和可转向轴角度进行适配。
+[*]车头两侧显示平滑左转、右转或继续倒车箭头；持续无解一秒后才显示红色 X。
+[*]使用 70 度铰接硬限制，并检查车头与挂车自身轮廓。
+[*]通过协作式 Hook 与 Reverse Posture Assistant v0.10.10 共存。
+[*]不使用 ReShade Add-on，不读取摄像头、后视镜、深度缓冲，也不安装图形代理 DLL。
+[/list]
+
+[b]安装[/b]
+1. 完全退出欧卡 2，并订阅本工坊条目。
+2. 下载 v0.1.0-beta Runtime for Workshop，解压后运行 Install-Runtime-Only.bat。
+[url=https://github.com/yyysheng/ETS2mods/releases/download/reverse-planner-v0.1.0-beta/ETS2_Reverse_Planner_v0.1.0-beta_Runtime_for_Workshop.zip]下载 v0.1.0-beta 工坊运行组件[/url]
+3. 在模组管理器中启用本条目并重新启动游戏。
+
+[b]仅订阅工坊无法安装必需的 DLL。[/b]
+独立安装请使用 Full 完整包，无需再订阅工坊；不要同时启用两份资源。
+[url=https://github.com/yyysheng/ETS2mods/releases/tag/reverse-planner-v0.1.0-beta]v0.1.0-beta 下载与发布说明[/url]
+如 Steam 隐藏链接，请前往 GitHub 搜索 yyysheng/ETS2mods 并打开 Releases。
+
+兼容范围：ETS2 1.60.*、Windows x64，且原生 Hook 布局通过校验。本机已验证 1.60.1.7，本版不声明支持 1.61。
+
+[b]Beta 提示[/b]
+本模组仅提供驾驶辅助，不会自动控制车辆。车头脱离挂车时刻意保持静默。当前不能完整识别全部交通与建筑障碍，绿色路线不代表绝对无碰撞。
+
+[h1]Other information / 其他信息[/h1]
+[url=https://github.com/yyysheng/ETS2mods/tree/main/mods/ETS2_Reverse_Planner]Source code and documentation / 源码与说明[/url]

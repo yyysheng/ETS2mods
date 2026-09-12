@@ -1,0 +1,12 @@
+effect : "eut2.dif.lum.rfx" {
+	additional_ambient : 1.000000
+	diffuse : { 0.006995 , 1.000000 , 0.016807 }
+	luminance_night : 4.000000
+	luminance_output : 600.000000
+	reflection : 0.000000
+	shininess : 8.000000
+	specular : { 0.000000 , 0.000000 , 0.000000 }
+	texture : "texture_base" {
+		source : "/model/reverse_planer/guide_gren.tobj"
+	}
+}

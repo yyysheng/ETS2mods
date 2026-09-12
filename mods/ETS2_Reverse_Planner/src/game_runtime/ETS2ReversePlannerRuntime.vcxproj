@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64"><Configuration>Release</Configuration><Platform>x64</Platform></ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <ProjectGuid>{71D03C02-6EC9-4B68-B5CA-A1D19B9C18D1}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ETS2ReversePlannerRuntime</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType><UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset><CharacterSet>Unicode</CharacterSet><WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets"><Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" /></ImportGroup>
+  <PropertyGroup>
+    <OutDir>$(ProjectDir)..\..\build\game_runtime\</OutDir><IntDir>$(ProjectDir)obj\</IntDir>
+    <TargetName>ETS2ReversePlannerRuntime</TargetName><TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel><Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;UNICODE;_UNICODE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\upstream;$(ProjectDir)..\..\third_party\scs-sdk-plugin\scs_sdk\include;$(ProjectDir)..\..\third_party\minhook\include;$(ProjectDir)..\..\third_party\minhook\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary><LanguageStandard>stdcpp20</LanguageStandard><ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link><SubSystem>Windows</SubSystem><OptimizeReferences>true</OptimizeReferences><EnableCOMDATFolding>true</EnableCOMDATFolding><AdditionalDependencies>bcrypt.lib;shell32.lib;ole32.lib;%(AdditionalDependencies)</AdditionalDependencies><ModuleDefinitionFile>ETS2ReversePlannerRuntime.def</ModuleDefinitionFile></Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="generated\reverse_planner_game_runtime.generated.cpp" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\minhook\src\buffer.c" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\minhook\src\hook.c" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\minhook\src\trampoline.c" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\minhook\src\hde\hde64.c" />
+    <None Include="ETS2ReversePlannerRuntime.def" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

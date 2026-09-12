@@ -1,0 +1,7 @@
+ReversePlanner v0.1.0-beta for Euro Truck Simulator 2 1.60.x.
+
+Identifies the active game-native task parking frame and continuously plans an attached trailer's reverse route. Two green tracks follow the tractor's rear corners: 7 m solid, then dashed. Cab-side arrows indicate steering correction; a red X appears only after route failure persists for one second.
+
+The Workshop package also requires the native runtime from the GitHub release. This beta is a driver aid, not autonomous driving. Detached tractor guidance is disabled, and incomplete environment perception means a route is not a collision-free guarantee.
+
+ReversePlanner v0.1.0-beta，适用于欧卡 2 1.60.x。识别当前任务停车框，为已连接挂车持续规划倒车路线。绿色双线前 7 米为实线，后续为虚线；车头两侧箭头提示方向，持续无解一秒后显示红色 X。工坊版本仍需安装 GitHub Release 中的原生运行组件。

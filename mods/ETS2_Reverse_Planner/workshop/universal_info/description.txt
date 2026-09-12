@@ -1,0 +1,3 @@
+ReversePlanner currently supports verified Euro Truck Simulator 2 1.60.x Windows x64 builds. Install the native runtime from the GitHub release.
+
+ReversePlanner 当前支持经验证的欧卡 2 1.60.x Windows x64 构建，并需要安装 GitHub Release 中的原生运行组件。

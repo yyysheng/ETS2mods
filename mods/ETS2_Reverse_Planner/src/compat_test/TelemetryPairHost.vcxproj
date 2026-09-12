@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations"><ProjectConfiguration Include="Release|x64"><Configuration>Release</Configuration><Platform>x64</Platform></ProjectConfiguration></ItemGroup>
+  <PropertyGroup Label="Globals"><VCProjectVersion>18.0</VCProjectVersion><ProjectGuid>{E811D294-D604-477B-87E1-8B0D3352229F}</ProjectGuid><Keyword>Win32Proj</Keyword><WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion></PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration"><ConfigurationType>Application</ConfigurationType><UseDebugLibraries>false</UseDebugLibraries><PlatformToolset>v145</PlatformToolset><CharacterSet>Unicode</CharacterSet></PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup><OutDir>$(ProjectDir)..\..\build\compat_test\</OutDir><IntDir>$(ProjectDir)obj\telemetry_host\</IntDir><TargetName>TelemetryPairHost</TargetName></PropertyGroup>
+  <ItemDefinitionGroup><ClCompile><WarningLevel>Level4</WarningLevel><Optimization>MaxSpeed</Optimization><AdditionalIncludeDirectories>$(ProjectDir)..\..\third_party\scs-sdk-plugin\scs_sdk\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories><RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary><LanguageStandard>stdcpp20</LanguageStandard></ClCompile><Link><SubSystem>Console</SubSystem></Link></ItemDefinitionGroup>
+  <ItemGroup><ClCompile Include="telemetry_pair_host.cpp" /></ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

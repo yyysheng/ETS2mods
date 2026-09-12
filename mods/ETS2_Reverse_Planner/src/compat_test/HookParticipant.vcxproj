@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Legacy|x64"><Configuration>Legacy</Configuration><Platform>x64</Platform></ProjectConfiguration>
+    <ProjectConfiguration Include="Planner|x64"><Configuration>Planner</Configuration><Platform>x64</Platform></ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals"><VCProjectVersion>18.0</VCProjectVersion><ProjectGuid>{56E704E0-FAD0-4D9D-8758-A7463B599690}</ProjectGuid><Keyword>Win32Proj</Keyword><WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion></PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration"><ConfigurationType>DynamicLibrary</ConfigurationType><UseDebugLibraries>false</UseDebugLibraries><PlatformToolset>v145</PlatformToolset><CharacterSet>Unicode</CharacterSet></PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup><OutDir>$(ProjectDir)..\..\build\compat_test\</OutDir><IntDir>$(ProjectDir)obj\$(Configuration)\</IntDir><TargetName>$(Configuration)HookClient</TargetName></PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile><WarningLevel>Level4</WarningLevel><Optimization>MaxSpeed</Optimization><PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions><AdditionalIncludeDirectories>$(ProjectDir)..\..\third_party\minhook\include;$(ProjectDir)..\..\third_party\minhook\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories><RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary><LanguageStandard>stdcpp20</LanguageStandard></ClCompile>
+    <Link><SubSystem>Windows</SubSystem></Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="hook_participant.cpp" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\minhook\src\buffer.c" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\minhook\src\hook.c" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\minhook\src\trampoline.c" />
+    <ClCompile Include="$(ProjectDir)..\..\third_party\minhook\src\hde\hde64.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

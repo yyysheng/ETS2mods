@@ -1,0 +1,12 @@
+SiiNunit
+{
+package_version_info : .universal {
+ package_name: "universal_info"
+ informational: true
+}
+
+package_version_info : .v160 {
+ package_name: "160_content"
+ compatible_versions[]: "1.60.*"
+}
+}

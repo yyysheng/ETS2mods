@@ -1,0 +1,13 @@
+/build/
+/src/obj*/
+/src/**/obj*/
+/third_party/
+**/160_content/
+*.zip
+*.scs
+*.dll
+*.exe
+*.pdb
+*.lib
+*.exp
+*.log

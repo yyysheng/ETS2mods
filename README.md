@@ -14,6 +14,20 @@ Expand a game version, mod, then release to view its links.
 <summary>游戏版本 1.60.*</summary>
 
 <details>
+<summary>ReversePlanner</summary>
+
+<details>
+<summary>v0.1.0-beta</summary>
+
+- [下载 / Download](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-planner-v0.1.0-beta)
+- [源码 / Source](https://github.com/yyysheng/ETS2mods/tree/reverse-planner-v0.1.0-beta/mods/ETS2_Reverse_Planner)
+- Steam Workshop: publishing pending
+
+</details>
+
+</details>
+
+<details>
 <summary>ETS2 Reverse Posture Assistant</summary>
 
 <details>
