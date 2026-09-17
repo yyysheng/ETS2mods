@@ -1,4 +1,8 @@
-# ETS2 Reverse Posture Assistant v0.10.10
+# ETS2 Reverse Posture Assistant v0.11.0
+
+See [v0.11.0 release notes](RELEASE_NOTES_v0.11.0.md). The following is the previous v0.10.10 release history.
+
+## Previous v0.10.10 release
 
 This release improves the five-metre short-horizon tractor/trailer prediction
 and fixes false guide slope caused by unequal suspension height on level ground.

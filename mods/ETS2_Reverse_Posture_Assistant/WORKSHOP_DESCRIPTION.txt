@@ -1,61 +1,61 @@
-[h1]v0.10.10 — Tyre-based slope and prediction update / 轮胎坡度与预测算法更新[/h1]
+[h1]v0.11.0 — ETS2 1.61.x compatibility / 欧卡 2 1.61.x 适配[/h1]
 [b]Please update both the Workshop content and the native runtime. / 请同时更新工坊资源与运行组件。[/b]
 
 [h1]English[/h1]
 Reverse Posture Assistant adds world-space reverse guidance: two blue tractor boundaries and two orange trailer boundaries over a fixed 5 m prediction path. The curves follow steering and articulation, using wheel contact, lift state and steerable axle angles. Prediction lines appear only in reverse gear and hide while paused.
 
-[b]What changed in v0.10.10[/b]
+[b]What changed in v0.11.0[/b]
 [list]
-[*]Fits road pitch/roll from grounded tyre geometry, so unequal suspension height on level ground no longer tilts the guide.
-[*]Uses measured front-wheel angle, lateral fifth-wheel offset and independent trailer equivalent-axle steering.
-[*]Debounces lift/lower transitions for 400 ms and commits the stable axle geometry atomically.
-[*]Keeps the v0.10.9 original trailer-marker restoration and verified 1.60 hook safety checks.
-[*]Remains compatible with the separate Reverse Planner; this update does not modify its DLL, hooks or green guide resources.
+[*]Adds ETS2 1.61.x package compatibility; native rendering was verified with the 1.61.1.0 Steam public executable.
+[*]Updates the four native hook locations and model-creation helpers for the verified 1.61.1.0 build.
+[*]Keeps the v0.10.10 tyre-ground slope fit, measured steering and articulated five-metre prediction.
+[*]Preserves the original game trailer marker and safe telemetry-only fallback for unverified executable builds.
+[*]Keeps Reverse Planner separate; its green route guide needs its own 1.61 runtime update.
 [/list]
 
 [b]Installation / upgrade[/b]
 1. Exit ETS2 and let Steam download this item's latest content.
-2. Download v0.10.10 Runtime for Workshop, extract it and run Install-Runtime-Only.bat.
-[url=https://github.com/yyysheng/ETS2mods/releases/download/reverse-posture-assistant-v0.10.10/ETS2_Reverse_Posture_Assistant_v0.10.10_Runtime_for_Workshop.zip]Download Runtime for Workshop v0.10.10[/url]
-3. Enable this Workshop item in the Mod Manager. Disable older local copies of Reverse Posture Assistant so they cannot override the restored game marker. Restart the game.
+2. Download v0.11.0 Runtime for Workshop, extract it and run Install-Runtime-Only.bat.
+[url=https://github.com/yyysheng/ETS2mods/releases/download/reverse-posture-assistant-v0.11.0/ETS2_Reverse_Posture_Assistant_v0.11.0_Runtime_for_Workshop.zip]Download Runtime for Workshop v0.11.0[/url]
+3. Enable this Workshop item in the Mod Manager. Disable older local copies of Reverse Posture Assistant, then restart the game.
 
-[b]A Workshop subscription alone cannot install the required DLL. Updating the DLL alone cannot remove the old marker override in an outdated mod package.[/b]
+[b]A Workshop subscription alone cannot install the required DLL. Update the runtime DLL and Workshop content together.[/b]
 For standalone installation, use the Full package instead of subscribing; do not enable both copies:
-[url=https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.10.10]v0.10.10 downloads and release notes[/url]
+[url=https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.11.0]v0.11.0 downloads and release notes[/url]
 If Steam hides the link, search GitHub for yyysheng/ETS2mods and open Releases.
 
-Compatibility: ETS2 1.60.*, Windows x64, with a verified native hook layout. ETS2 1.60.1.7 was checked locally. This release does not claim 1.61 compatibility. No camera, mirror, depth-buffer or rendered-image capture; no bundled dxgi.dll or d3d11.dll. No Reverse Assist Anchor accessory installation is required.
+Compatibility: ETS2 1.61.* and 1.60.*, Windows x64. Native rendering on 1.61 is verified for the exact 1.61.1.0 Steam public executable; other unverified builds safely use telemetry-only mode. No camera, mirror, depth-buffer or rendered-image capture; no bundled dxgi.dll or d3d11.dll. No Reverse Assist Anchor accessory installation is required.
 
 [h1]中文[/h1]
 倒车姿态助手直接在游戏世界中显示两条蓝色车头边界与两条橙色挂车边界，固定预测倒车前方 5 米的扫掠范围。轨迹随方向盘、车头与挂车夹角变化，并考虑实际车轮接地、提升状态和可转向挂车轴。预测线仅在倒挡时显示，暂停时隐藏。
 
-[b]v0.10.10 更新[/b]
+[b]v0.11.0 更新[/b]
 [list]
-[*]坡度改由接地轮胎几何拟合；平地前后或左右悬挂高度不同时，轨迹线不再被车身姿态带斜。
-[*]使用实际前轮角、横向鞍座偏移及挂车独立等效轴转角。
-[*]提升/落轴接地状态稳定 400 ms 后再原子提交轮组几何，避免动画过程抽动。
-[*]保留 v0.10.9 的原游戏挂车指引框修复和已验证的 1.60 Hook 安全检查。
-[*]继续兼容独立 Reverse Planner；本次不修改其 DLL、Hook 或绿色引导资源。
+[*]新增欧卡 2 1.61.x 模组包兼容范围；原生绘制已验证 1.61.1.0 Steam 正式版。
+[*]更新 1.61.1.0 的四个原生 Hook 及模型创建辅助函数入口。
+[*]保留 v0.10.10 的轮胎接地坡度拟合、实际前轮角及固定 5 米铰接轨迹预测。
+[*]保留原游戏挂车标记；未验证的游戏构建会安全降级为仅遥测模式。
+[*]Reverse Planner 保持独立，其绿色路线需要单独更新 1.61 运行组件。
 [/list]
 
 [b]安装与升级[/b]
 1. 完全退出欧卡 2，等待 Steam 更新此工坊条目的资源。
-2. 下载 v0.10.10 Runtime for Workshop，解压后运行 Install-Runtime-Only.bat。
-[url=https://github.com/yyysheng/ETS2mods/releases/download/reverse-posture-assistant-v0.10.10/ETS2_Reverse_Posture_Assistant_v0.10.10_Runtime_for_Workshop.zip]下载 v0.10.10 工坊运行组件[/url]
-3. 在模组管理器中启用此条目，停用旧版本地倒车姿态助手，避免旧包继续覆盖原生指引框。重新启动游戏。
+2. 下载 v0.11.0 Runtime for Workshop，解压后运行 Install-Runtime-Only.bat。
+[url=https://github.com/yyysheng/ETS2mods/releases/download/reverse-posture-assistant-v0.11.0/ETS2_Reverse_Posture_Assistant_v0.11.0_Runtime_for_Workshop.zip]下载 v0.11.0 工坊运行组件[/url]
+3. 在模组管理器中启用此条目，停用旧版本地倒车姿态助手，然后重新启动游戏。
 
-[b]工坊订阅无法自动安装 DLL；只更新 DLL 也无法移除旧 mod 包里的指引模型覆盖。两部分必须一起更新。[/b]
+[b]工坊订阅无法自动安装 DLL；运行组件与工坊资源需要同时更新。[/b]
 独立安装请下载 Full 完整包，无需再订阅工坊；不要同时启用本地版与工坊版。
-[url=https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.10.10]v0.10.10 下载与更新说明[/url]
+[url=https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.11.0]v0.11.0 下载与更新说明[/url]
 如 Steam 隐藏链接，请前往 GitHub 搜索 yyysheng/ETS2mods 并打开 Releases。
 
-兼容范围：ETS2 1.60.*、Windows x64，且原生 Hook 布局通过校验。本机已校验 1.60.1.7，本版不声明支持 1.61。不抓取摄像头、后视镜、深度或渲染图像，不附带 dxgi.dll 或 d3d11.dll。不需要安装 Reverse Assist Anchor 挂件。
+兼容范围：ETS2 1.61.* 与 1.60.*、Windows x64。1.61 原生绘制目前精确验证 1.61.1.0 Steam 正式版；其他未验证构建会安全降级为仅遥测模式。不抓取摄像头、后视镜、深度或渲染图像，不附带 dxgi.dll 或 d3d11.dll。不需要安装 Reverse Assist Anchor 挂件。
 
 [h1]Other information / 其他信息[/h1]
 American Truck Simulator version / 美卡版本：
 https://steamcommunity.com/sharedfiles/filedetails/?id=3792042919
-v0.11.0 is planned for ETS2 1.61; older game versions such as 1.59 are outside the current support scope.
-v0.11.0 计划随 ETS2 1.61 更新；当前不支持 1.59 等更旧游戏版本。
+Older game versions such as 1.59 are outside the current support scope.
+当前不支持 1.59 等更旧游戏版本。
 国内用户反馈也可通过抖音号：zhs_flute。
 
 [url=https://github.com/yyysheng/ETS2mods/tree/main/mods/ETS2_Reverse_Posture_Assistant]Source code and documentation / 源码与说明[/url]

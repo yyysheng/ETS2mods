@@ -7,9 +7,9 @@ if (Get-ChildItem -LiteralPath (Join-Path $mod 'model') -Recurse -File |
     Where-Object { $_.FullName -match '[\\/]symbol[\\/]' }) {
     throw 'Base-game symbol overrides are forbidden in the release package.'
 }
-$release = Join-Path $root 'build/release'
+$release = Join-Path $root 'build/release_v0.11.0_final'
 New-Item -ItemType Directory -Path $release -Force | Out-Null
-$archive = Join-Path $release 'ETS2_Reverse_Posture_Assistant_v0.10.10.scs'
+$archive = Join-Path $release 'ETS2_Reverse_Posture_Assistant_v0.11.0.scs'
 if (Test-Path -LiteralPath $archive) { Remove-Item -LiteralPath $archive }
 # Create archive names with forward slashes for the game resource filesystem.
 $zip = [IO.Compression.ZipFile]::Open($archive, 'Create')

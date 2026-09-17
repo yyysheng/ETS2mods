@@ -55,18 +55,32 @@ if (-not (Test-Path -LiteralPath $runtimeSource)) { throw "Runtime file is missi
 
 New-Item -ItemType Directory -Path $modDir,(Join-Path $gameBin 'plugins') -Force | Out-Null
 
-Copy-Item -LiteralPath $runtimeSource `
-    -Destination (Join-Path $gameBin 'plugins') -Force
-
-if (-not $RuntimeOnly) {
-    $modSource = Join-Path $packageRoot 'mod\ETS2_Reverse_Posture_Assistant_1.60.scs'
-    if (-not (Test-Path -LiteralPath $modSource)) { throw "Mod file is missing: $modSource" }
-    Copy-Item -LiteralPath $modSource -Destination $modDir -Force
+$backupDir = Join-Path $gameBin ('reverse_assist_backup\v0.11.0_' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
+New-Item -ItemType Directory -Path $backupDir -Force | Out-Null
+$installedRuntime = Join-Path $gameBin 'plugins\ETS2ReverseEntityRuntime.dll'
+if (Test-Path -LiteralPath $installedRuntime) {
+    Copy-Item -LiteralPath $installedRuntime -Destination $backupDir
 }
 
+if (-not $RuntimeOnly) {
+    $modSource = Join-Path $packageRoot 'mod\ETS2_Reverse_Posture_Assistant_1.61.scs'
+    if (-not (Test-Path -LiteralPath $modSource)) { throw "Mod file is missing: $modSource" }
+    foreach ($oldName in @('ETS2_DAF_Reverse_Assist_Screen_1.60.scs',
+                           'ETS2_Reverse_Posture_Assistant_1.60.scs',
+                           'ETS2_Reverse_Posture_Assistant_1.61.scs')) {
+        $oldPath = Join-Path $modDir $oldName
+        if (Test-Path -LiteralPath $oldPath) {
+            Move-Item -LiteralPath $oldPath -Destination $backupDir
+        }
+    }
+}
+Copy-Item -LiteralPath $runtimeSource -Destination $installedRuntime -Force
+if (-not $RuntimeOnly) { Copy-Item -LiteralPath $modSource -Destination $modDir }
+
 Write-Host ''
-Write-Host 'ETS2 Reverse Posture Assistant v0.10.10 installed successfully.' -ForegroundColor Green
+Write-Host 'ETS2 Reverse Posture Assistant v0.11.0 installed successfully.' -ForegroundColor Green
 Write-Host "Game directory: $gameRoot"
+Write-Host "Previous Reverse Posture Assistant files: $backupDir"
 Write-Host 'This build uses an SCS telemetry plug-in and native world entities.'
 Write-Host 'dxgi.dll and d3d11.dll were not read, replaced, renamed, or removed.'
 if (-not $RuntimeOnly) { Write-Host 'Enable the mod in the ETS2 Mod Manager before driving.' }

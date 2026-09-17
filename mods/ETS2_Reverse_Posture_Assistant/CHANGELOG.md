@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.0 - 2026-09-17
+
+- Added the exact ETS2 1.61.1.0 Steam executable profile and relocated four
+  native hooks plus model creation helpers.
+- Kept the 1.60 profiles and 0.10.10 trajectory and tyre-ground geometry.
+- Added 1.61 package compatibility; the 1.61.1.0 public build passed in-game acceptance.
+- Left the independent Reverse Planner mod untouched.
+
 ## 0.10.10 - 2026-09-11
 
 - Replaced chassis-pitch/roll guide height with a grounded-tyre plane fitted

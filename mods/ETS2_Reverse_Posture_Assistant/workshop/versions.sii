@@ -9,4 +9,9 @@ package_version_info : .v160 {
  package_name: "160_content"
  compatible_versions[]: "1.60.*"
 }
+
+package_version_info : .v161 {
+ package_name: "161_content"
+ compatible_versions[]: "1.61.*"
+}
 }

@@ -1,3 +1,3 @@
-This informational package indicates that ETS2 Reverse Posture Assistant currently supports Euro Truck Simulator 2 1.60 only.
+This informational package indicates that ETS2 Reverse Posture Assistant supports verified Euro Truck Simulator 2 1.60 and 1.61 builds only.
 
-此信息包用于提示：ETS2 Reverse Posture Assistant 当前仅支持 Euro Truck Simulator 2 1.60。
+此信息包用于提示：ETS2 Reverse Posture Assistant 当前仅支持经过验证的 Euro Truck Simulator 2 1.60 和 1.61 构建。

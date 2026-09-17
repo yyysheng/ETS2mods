@@ -11,6 +11,24 @@ Each mod is isolated under `mods/` with its own source, documentation, packaging
 Expand a game version, mod, then release to view its links.
 
 <details>
+<summary>游戏版本 1.61.x</summary>
+
+<details>
+<summary>ETS2 Reverse Posture Assistant</summary>
+
+<details>
+<summary>v0.11.0</summary>
+
+- [下载 / Download](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v0.11.0)
+- [源码 / Source](https://github.com/yyysheng/ETS2mods/tree/reverse-posture-assistant-v0.11.0/mods/ETS2_Reverse_Posture_Assistant)
+- [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3776052935)
+
+</details>
+
+</details>
+
+</details>
+<details>
 <summary>游戏版本 1.60.*</summary>
 
 <details>
