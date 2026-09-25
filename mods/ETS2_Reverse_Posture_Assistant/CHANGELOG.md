@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.1 - 2026-09-25
+
+- Added the exact ETS2 1.61.1.1 Steam executable profile and its relocated
+  native hook and scene-node helper entries.
+- Retained the verified 1.61.1.0 and 1.60 profiles plus the v0.10.10
+  trajectory and tyre-ground geometry.
+- Left the independent Reverse Planner mod untouched.
+
 ## 0.11.0 - 2026-09-17
 
 - Added the exact ETS2 1.61.1.0 Steam executable profile and relocated four

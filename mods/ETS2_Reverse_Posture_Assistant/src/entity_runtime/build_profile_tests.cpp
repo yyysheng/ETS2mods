@@ -57,6 +57,9 @@ int main(int argc, char **argv)
     for (const auto &hook : verified_160_1_7_hooks)
         std::copy(hook.signature.begin(), hook.signature.end(),
                   image.begin() + hook.rva);
+    for (const auto &hook : verified_161_1_1_hooks)
+        std::copy(hook.signature.begin(), hook.signature.end(),
+                  image.begin() + hook.rva);
     for (const auto &hook : verified_161_1_0_hooks)
         std::copy(hook.signature.begin(), hook.signature.end(),
                   image.begin() + hook.rva);
@@ -70,26 +73,30 @@ int main(int argc, char **argv)
     bool exact = false;
     std::size_t failed = 99;
     const auto *public_build = select_build_profile(
-        build_profiles[1].executable_sha256, reader, &exact, &failed);
-    assert(public_build == &build_profiles[1]);
+        build_profiles[2].executable_sha256, reader, &exact, &failed);
+    assert(public_build == &build_profiles[2]);
     assert(exact);
 
     const auto *new_public_build = select_build_profile(
         build_profiles[0].executable_sha256, reader, &exact, &failed);
     assert(new_public_build == &build_profiles[0] && exact);
 
+    const auto *previous_public_build = select_build_profile(
+        build_profiles[1].executable_sha256, reader, &exact, &failed);
+    assert(previous_public_build == &build_profiles[1] && exact);
+
     // A second binary digest is supported by the separately declared
     // signature-compatible profile when all enabled hooks remain verified.
     const auto *compatible_build = select_build_profile(
         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         reader, &exact, &failed);
-    assert(compatible_build == &build_profiles[2]);
+    assert(compatible_build == &build_profiles[3]);
     assert(!exact);
 
     // Bytes at an old, inactive lifecycle helper are intentionally irrelevant.
     image[0x015288d0] ^= 0xff;
     compatible_build = select_build_profile("SECOND-BUILD", reader, &exact, &failed);
-    assert(compatible_build == &build_profiles[2]);
+    assert(compatible_build == &build_profiles[3]);
 
     // Any mismatch in an actually enabled hook causes safe rejection.
     const auto &required = verified_160_1_7_hooks[2];
@@ -97,7 +104,7 @@ int main(int argc, char **argv)
     assert(select_build_profile("UNSUPPORTED", reader, &exact, &failed) == nullptr);
     assert(failed == 2);
 
-    std::cout << "build profile tests passed: 1.60 and 1.61 exact profiles + compatible profile; "
+    std::cout << "build profile tests passed: 1.60, 1.61.1.0, 1.61.1.1 exact profiles + compatible profile; "
                  "inactive hook ignored; required mismatch rejected\n";
 
     if (argc == 3)
@@ -122,11 +129,11 @@ int main(int argc, char **argv)
             0x48, 0x8b, 0x8e, 0xc8, 0x00, 0x00, 0x00};
         const std::array<std::uint8_t, 6> virtual_render{
             0xff, 0x90, 0x00, 0x03, 0x00, 0x00};
-        assert(file_signature_matches(executable, 0x00798651,
+        assert(file_signature_matches(executable, 0x00798801,
                                       trailer_member.data(), trailer_member.size()));
-        assert(file_signature_matches(executable, 0x0079866a,
+        assert(file_signature_matches(executable, 0x0079881a,
                                       virtual_render.data(), virtual_render.size()));
-        assert(file_signature_matches(executable, 0x007986fb,
+        assert(file_signature_matches(executable, 0x007988ab,
                                       virtual_render.data(), virtual_render.size()));
         std::cout << "installed executable verified: " << argv[1]
                   << "; exact=" << exact_file->id
