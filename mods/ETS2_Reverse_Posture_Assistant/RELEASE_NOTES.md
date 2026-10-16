@@ -1,6 +1,6 @@
-# ETS2 Reverse Posture Assistant v0.11.1
+# ETS2 Reverse Posture Assistant v0.11.2
 
-See [v0.11.1 release notes](RELEASE_NOTES_v0.11.1.md). The following is the previous v0.10.10 release history.
+See [v0.11.2 release notes](RELEASE_NOTES_v0.11.2.md). Previous releases remain in their versioned notes.
 
 ## Previous v0.10.10 release
 

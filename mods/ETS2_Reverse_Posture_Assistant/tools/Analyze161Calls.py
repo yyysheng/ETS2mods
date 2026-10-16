@@ -1,4 +1,4 @@
-"""Read-only helper for inspecting call sites in the installed 1.61.1.1 executable."""
+"""Read-only helper for inspecting the installed 1.61.1.9 executable."""
 
 from collections import Counter
 from pathlib import Path
@@ -27,7 +27,7 @@ def main(path: Path) -> None:
                 return raw + rva - start
         raise ValueError(hex(rva))
 
-    model_load = 0x015D99F0
+    model_load = 0x015DB820
     text_section = next(row for row in sections if row[0] == ".text")
     _, text_rva, _, text_raw, text_size = text_section
     text = data[text_raw:text_raw + text_size]
@@ -50,7 +50,7 @@ def main(path: Path) -> None:
             if inst.mnemonic == "call" and inst.op_str.startswith("0x"):
                 targets.append((inst.address, int(inst.op_str, 16)))
         print(hex(caller), " ".join(f"{a:x}->{t:x}" for a, t in targets))
-    for target in (0x41CC20, 0x13CC810, 0x13CC750):
+    for target in (0x33CC00, 0x41CCB0, 0x13CE640, 0x13CE580):
         hits = []
         for offset in range(len(text) - 5):
             if text[offset] == 0xE8 and text_rva + offset + 5 + struct.unpack_from("<i", text, offset + 1)[0] == target:
@@ -69,15 +69,16 @@ def main(path: Path) -> None:
         code = data[file_offset(begin):file_offset(end)]
         calls = [int(insn.op_str, 16) for insn in decoder.disasm(code, begin)
                  if insn.mnemonic == "call" and insn.op_str.startswith("0x")]
-        if 0x41CC20 in calls and 0x13CBD60 in calls:
+        if 0x41CCB0 in calls and 0x13CE640 in calls:
             print("parameter+transform", hex(begin), [hex(x) for x in calls])
-    for start, end in ((0x975AD0, 0x975DE5), (0x16C4A43, 0x16C4AFE), (0x629310, 0x629642)):
+    for start, end in ((0x798B30, 0x798D2F), (0x637940, 0x6379CA),
+                       (0x6380B0, 0x638249)):
         print("\nFunction", hex(start))
         code = data[file_offset(start):file_offset(end)]
         for insn in decoder.disasm(code, start):
             if insn.mnemonic == "call":
                 print(f"{insn.address:08x} {insn.mnemonic:8} {insn.op_str}")
-    for start, end in ((0x15E14B0, 0x15E1540), (0x975B70, 0x975C25)):
+    for start, end in ((0x13CE580, 0x13CE63F), (0x13CE640, 0x13CE6FE)):
         print("\nDetail", hex(start))
         for insn in decoder.disasm(data[file_offset(start):file_offset(end)], start):
             print(f"{insn.address:08x} {insn.mnemonic:8} {insn.op_str}")

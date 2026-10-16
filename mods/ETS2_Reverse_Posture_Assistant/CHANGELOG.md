@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.11.2 - 2026-10-16
+
+- Added an exact ETS2 1.61.1.9 Steam executable profile with relocated hooks,
+  model ownership/parameter helpers and scene-node helper signatures.
+- Kept all 1.61 profiles hash-bound and fail-closed to telemetry-only mode on
+  any active hook or helper mismatch.
+- Retained the v0.10.10 trajectory and tyre-ground geometry; left the separate
+  Reverse Planner mod untouched.
+- Retained the exact-build fail-closed behavior and telemetry-only fallback.
+
 ## 0.11.1 - 2026-09-25
 
 - Added the exact ETS2 1.61.1.1 Steam executable profile and its relocated

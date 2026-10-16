@@ -53,19 +53,9 @@ constexpr std::uintptr_t final_accessory_insert_rva = 0x00537740;
 constexpr std::uintptr_t final_accessory_insert_return_rva = 0x0064a591;
 constexpr std::uintptr_t set_parent_rva = 0x013149c0;
 constexpr std::uintptr_t set_transform_rva = 0x01314a80;
-// 1.61.1.0 public executable: these helpers are reached by the model creation
-// sequence. The activation helper is intentionally not called until its 1.61
-// implementation is confirmed; render-only models are submitted explicitly.
-constexpr std::uintptr_t model_transfer_161_rva = 0x0033cb90;
-constexpr std::uintptr_t model_parameter_init_161_rva = 0x0041cc20;
-constexpr std::uintptr_t set_parent_161_rva = 0x013cbca0;
-constexpr std::uintptr_t set_transform_161_rva = 0x013cbd60;
-// 1.61.1.1 keeps the model transfer and parameter-init helpers in place, but
-// its scene-node helper block moved by 0xAB0 bytes.
-constexpr std::uintptr_t model_transfer_161_1_1_rva = 0x0033cb90;
-constexpr std::uintptr_t model_parameter_init_161_1_1_rva = 0x0041cc20;
-constexpr std::uintptr_t set_parent_161_1_1_rva = 0x013cc750;
-constexpr std::uintptr_t set_transform_161_1_1_rva = 0x013cc810;
+// 1.61 helper locations and signatures are stored with each exact executable
+// profile. The activation helper remains unused; render-only models are
+// submitted explicitly.
 // The map file grid is 4000 metres, but Prism's runtime fplacement_t uses
 // 512-metre floating-origin cells. The exact 1.60.1.7 transform helpers
 // reference 512.0f when combining the signed cell indices with local X/Z.
@@ -1784,26 +1774,17 @@ bool initialize_engine()
         return false;
     }
     const bool is_161 = active_build_profile->game_version.rfind("1.61.", 0) == 0;
-    const bool is_161_1_1 = active_build_profile->game_version == "1.61.1.1";
-    const auto model_transfer_161_compat_rva =
-        is_161_1_1 ? model_transfer_161_1_1_rva : model_transfer_161_rva;
-    const auto model_parameter_init_161_compat_rva =
-        is_161_1_1 ? model_parameter_init_161_1_1_rva : model_parameter_init_161_rva;
-    const auto set_parent_161_compat_rva =
-        is_161_1_1 ? set_parent_161_1_1_rva : set_parent_161_rva;
-    const auto set_transform_161_compat_rva =
-        is_161_1_1 ? set_transform_161_1_1_rva : set_transform_161_rva;
-    if (is_161 &&
-        !(signature_reader(model_transfer_161_compat_rva,
-                           reinterpret_cast<const std::uint8_t *>("\x48\x89\x5c\x24\x08\x48\x89\x74"), 8) &&
-          signature_reader(model_parameter_init_161_compat_rva,
-                           reinterpret_cast<const std::uint8_t *>("\x48\x89\x5c\x24\x08\x48\x89\x6c"), 8) &&
-          signature_reader(set_parent_161_compat_rva,
-                           reinterpret_cast<const std::uint8_t *>("\x48\x83\xec\x28\x4c\x8b\xc1"), 7) &&
-          signature_reader(set_transform_161_compat_rva,
-                           reinterpret_cast<const std::uint8_t *>("\x48\x89\x5c\x24\x08\x57\x48\x83"), 8)))
+    std::size_t failed_helper = 0;
+    if (is_161 && !reverse_assist::compatibility::engine_helper_signatures_match(
+                       *active_build_profile, signature_reader,
+                       &failed_helper))
     {
-        log_line("[reverse-entity] Compatibility disabled: 1.61 model helpers changed; telemetry-only mode active.", SCS_LOG_TYPE_warning);
+        const auto &helper = active_build_profile->engine_helpers[failed_helper];
+        std::ostringstream message;
+        message << "[reverse-entity] Compatibility disabled: 1.61 helper signature changed at "
+                << helper.name << " rva=0x" << std::hex << helper.rva
+                << "; telemetry-only mode active.";
+        log_line(message.str(), SCS_LOG_TYPE_warning);
         return false;
     }
 
@@ -1845,10 +1826,20 @@ bool initialize_engine()
     engine.model_load = reinterpret_cast<ModelLoad>(
         engine.base + hook_rva(HookId::model_load));
     engine.model_activate = is_161 ? nullptr : reinterpret_cast<ModelActivate>(engine.base + model_activate_rva);
+    const auto engine_helper_rva = [&](reverse_assist::compatibility::EngineHelperId id,
+                                      std::uintptr_t legacy_rva) {
+        if (!is_161) return legacy_rva;
+        const auto *helper = reverse_assist::compatibility::find_engine_helper(
+            *active_build_profile, id);
+        return helper ? helper->rva : std::uintptr_t{};
+    };
+    using reverse_assist::compatibility::EngineHelperId;
     engine.model_transfer = reinterpret_cast<ModelTransfer>(
-        engine.base + (is_161 ? model_transfer_161_compat_rva : model_transfer_rva));
-    engine.model_parameter_init =
-        reinterpret_cast<ModelParameterInit>(engine.base + (is_161 ? model_parameter_init_161_compat_rva : model_parameter_init_rva));
+        engine.base + engine_helper_rva(EngineHelperId::model_transfer,
+                                        model_transfer_rva));
+    engine.model_parameter_init = reinterpret_cast<ModelParameterInit>(
+        engine.base + engine_helper_rva(EngineHelperId::model_parameter_init,
+                                        model_parameter_init_rva));
     engine.vehicle_accessory_collect =
         reinterpret_cast<VehicleAccessoryCollect>(
             engine.base + vehicle_accessory_collect_rva);
@@ -1862,8 +1853,12 @@ bool initialize_engine()
         engine.base + final_model_create_rva);
     engine.final_accessory_insert = reinterpret_cast<FinalAccessoryInsert>(
         engine.base + final_accessory_insert_rva);
-    engine.set_parent = reinterpret_cast<SetParent>(engine.base + (is_161 ? set_parent_161_compat_rva : set_parent_rva));
-    engine.set_transform = reinterpret_cast<SetTransform>(engine.base + (is_161 ? set_transform_161_compat_rva : set_transform_rva));
+    engine.set_parent = reinterpret_cast<SetParent>(
+        engine.base + engine_helper_rva(EngineHelperId::set_parent,
+                                        set_parent_rva));
+    engine.set_transform = reinterpret_cast<SetTransform>(
+        engine.base + engine_helper_rva(EngineHelperId::set_transform,
+                                        set_transform_rva));
     engine.vehicle_render_dispatch =
         reinterpret_cast<VehicleRenderDispatch>(
             engine.base + hook_rva(HookId::vehicle_render_dispatch));

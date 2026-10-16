@@ -55,7 +55,7 @@ if (-not (Test-Path -LiteralPath $runtimeSource)) { throw "Runtime file is missi
 
 New-Item -ItemType Directory -Path $modDir,(Join-Path $gameBin 'plugins') -Force | Out-Null
 
-$backupDir = Join-Path $gameBin ('reverse_assist_backup\v0.11.1_' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
+$backupDir = Join-Path $gameBin ('reverse_assist_backup\v0.11.2_' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
 New-Item -ItemType Directory -Path $backupDir -Force | Out-Null
 $installedRuntime = Join-Path $gameBin 'plugins\ETS2ReverseEntityRuntime.dll'
 if (Test-Path -LiteralPath $installedRuntime) {
@@ -78,7 +78,7 @@ Copy-Item -LiteralPath $runtimeSource -Destination $installedRuntime -Force
 if (-not $RuntimeOnly) { Copy-Item -LiteralPath $modSource -Destination $modDir }
 
 Write-Host ''
-Write-Host 'ETS2 Reverse Posture Assistant v0.11.1 installed successfully.' -ForegroundColor Green
+Write-Host 'ETS2 Reverse Posture Assistant v0.11.2 installed successfully.' -ForegroundColor Green
 Write-Host "Game directory: $gameRoot"
 Write-Host "Previous Reverse Posture Assistant files: $backupDir"
 Write-Host 'This build uses an SCS telemetry plug-in and native world entities.'
