@@ -52,7 +52,7 @@ bool file_signature_matches(const std::vector<std::uint8_t> &file,
 
 int main(int argc, char **argv)
 {
-    constexpr std::size_t image_size = 0x01600000;
+    constexpr std::size_t image_size = 0x01800000;
     std::vector<std::uint8_t> image(image_size, 0xcc);
     for (const auto &profile : build_profiles)
     {

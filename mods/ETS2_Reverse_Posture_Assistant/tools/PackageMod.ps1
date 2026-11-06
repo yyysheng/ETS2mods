@@ -1,15 +1,16 @@
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $root = Split-Path -Parent $PSScriptRoot
+$version = 'v1.62.0'
 $mod = Join-Path $root 'src/mod'
 # Reject stale converted test assets before they can shadow the base game.
 if (Get-ChildItem -LiteralPath (Join-Path $mod 'model') -Recurse -File |
     Where-Object { $_.FullName -match '[\\/]symbol[\\/]' }) {
     throw 'Base-game symbol overrides are forbidden in the release package.'
 }
-$release = Join-Path $root 'build/release_v0.11.2'
+$release = Join-Path $root "build/release_$version"
 New-Item -ItemType Directory -Path $release -Force | Out-Null
-$archive = Join-Path $release 'ETS2_Reverse_Posture_Assistant_v0.11.2.scs'
+$archive = Join-Path $release "ETS2_Reverse_Posture_Assistant_$version.scs"
 if (Test-Path -LiteralPath $archive) { Remove-Item -LiteralPath $archive }
 # Create archive names with forward slashes for the game resource filesystem.
 $zip = [IO.Compression.ZipFile]::Open($archive, 'Create')

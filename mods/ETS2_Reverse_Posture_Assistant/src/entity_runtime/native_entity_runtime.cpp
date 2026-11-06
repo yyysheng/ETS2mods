@@ -53,7 +53,7 @@ constexpr std::uintptr_t final_accessory_insert_rva = 0x00537740;
 constexpr std::uintptr_t final_accessory_insert_return_rva = 0x0064a591;
 constexpr std::uintptr_t set_parent_rva = 0x013149c0;
 constexpr std::uintptr_t set_transform_rva = 0x01314a80;
-// 1.61 helper locations and signatures are stored with each exact executable
+// 1.61 and 1.62 helper locations and signatures are stored with each exact executable
 // profile. The activation helper remains unused; render-only models are
 // submitted explicitly.
 // The map file grid is 4000 metres, but Prism's runtime fplacement_t uses
@@ -1773,15 +1773,18 @@ bool initialize_engine()
         log_line(message.str(), SCS_LOG_TYPE_warning);
         return false;
     }
-    const bool is_161 = active_build_profile->game_version.rfind("1.61.", 0) == 0;
+    const bool has_profile_engine_helpers =
+        active_build_profile->engine_helpers[0].rva != 0;
     std::size_t failed_helper = 0;
-    if (is_161 && !reverse_assist::compatibility::engine_helper_signatures_match(
-                       *active_build_profile, signature_reader,
-                       &failed_helper))
+    if (has_profile_engine_helpers &&
+        !reverse_assist::compatibility::engine_helper_signatures_match(
+            *active_build_profile, signature_reader, &failed_helper))
     {
         const auto &helper = active_build_profile->engine_helpers[failed_helper];
         std::ostringstream message;
-        message << "[reverse-entity] Compatibility disabled: 1.61 helper signature changed at "
+        message << "[reverse-entity] Compatibility disabled: "
+                << active_build_profile->game_version
+                << " helper signature changed at "
                 << helper.name << " rva=0x" << std::hex << helper.rva
                 << "; telemetry-only mode active.";
         log_line(message.str(), SCS_LOG_TYPE_warning);
@@ -1825,10 +1828,12 @@ bool initialize_engine()
 
     engine.model_load = reinterpret_cast<ModelLoad>(
         engine.base + hook_rva(HookId::model_load));
-    engine.model_activate = is_161 ? nullptr : reinterpret_cast<ModelActivate>(engine.base + model_activate_rva);
+    engine.model_activate = has_profile_engine_helpers
+        ? nullptr
+        : reinterpret_cast<ModelActivate>(engine.base + model_activate_rva);
     const auto engine_helper_rva = [&](reverse_assist::compatibility::EngineHelperId id,
                                       std::uintptr_t legacy_rva) {
-        if (!is_161) return legacy_rva;
+        if (!has_profile_engine_helpers) return legacy_rva;
         const auto *helper = reverse_assist::compatibility::find_engine_helper(
             *active_build_profile, id);
         return helper ? helper->rva : std::uintptr_t{};

@@ -1,0 +1,214 @@
+SiiNunit
+{
+ui::window : _nameless.063ae3791 {
+ window_handler: null
+ clip_children: false
+ keep_aspect: none
+ user_string_data: ""
+ first_direction_focus_id: 0
+ fitting: false
+ my_children: 3
+ my_children[0]: _nameless.18ac.da40
+ my_children[1]: _nameless.a8f.f870
+ my_children[2]: _nameless._.revpose
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 0
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: null
+}
+
+ui::group : _nameless.18ac.da40 {
+ fitting: false
+ my_children: 6
+ my_children[0]: _nameless._.bare_map
+ my_children[1]: _nameless._.speed.limit
+ my_children[2]: _nameless._.bg_top
+ my_children[3]: _nameless._.bg_bottom
+ my_children[4]: _nameless._.clock
+ my_children[5]: _nameless._.bckg
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 100
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+
+ui::text : _nameless._.bare_map {
+ text: "<img src=/material/ui/dashboard/bare_map.mat left=0.125 right=0.875 bottom=0.35388 top=0.6811 xscale=stretch yscale=stretch>"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 656
+ coords_b: 106
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.18ac.da40
+}
+
+ui::text_common : _nameless._.speed.limit {
+ value: 110
+ look_template: txt.daf_2021.gpsspdlimit
+ text: ""
+ coords_l: 1168
+ coords_r: 1268
+ coords_t: 648
+ coords_b: 548
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1610
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.18ac.da40
+}
+
+ui::text : _nameless._.bg_top {
+ text: "<img src=/material/ui/dashboard/daf_2021/display_over.mat top=0.7553 bottom=0.8529 right=0.8797 xscale=stretch yscale=stretch>"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 656
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.18ac.da40
+}
+
+ui::text : _nameless._.bg_bottom {
+ text: "<img src=/material/ui/dashboard/daf_2021/display_over.mat top=0.8529 bottom=1 right=0.8797 xscale=stretch yscale=stretch>"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 106
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.18ac.da40
+}
+
+ui::text_common : _nameless._.clock {
+ value: "23:59"
+ look_template: txt.daf_2021.gpstime
+ text: ""
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 656
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1050
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.18ac.da40
+}
+
+ui::text : _nameless._.bckg {
+ text: "<img src=/material/ui/white.mat color=FF101010 xscale=stretch yscale=stretch>"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 656
+ coords_b: 106
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.18ac.da40
+}
+
+ui::group : _nameless.a8f.f870 {
+ fitting: false
+ my_children: 1
+ my_children[0]: _nameless.18bd.a3c0
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 200
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+
+ui::text : _nameless.18bd.a3c0 {
+ text: "<img src=/material/ui/white.mat color=ff000000 xscale=stretch yscale=stretch >"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.a8f.f870
+}
+
+
+ui::text_common : _nameless._.revpose {
+ value: "R"
+ look_template: txt.revpose.gear_page
+ text: ""
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1380
+ layer: 50
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+}

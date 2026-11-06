@@ -1,0 +1,8 @@
+effect : "ui.rfx" {
+	texture : "texture" {
+		source : "clear.tobj"
+		u_address : clamp
+		v_address : clamp
+		mip_filter : none
+	}
+}

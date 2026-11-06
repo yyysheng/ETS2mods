@@ -1,0 +1,313 @@
+SiiNunit
+{
+ui::window : _nameless.063ae3791 {
+ window_handler: null
+ clip_children: false
+ keep_aspect: none
+ user_string_data: ""
+ first_direction_focus_id: 0
+ fitting: false
+ my_children: 4
+ my_children[0]: _nameless._.shared
+ my_children[1]: _nameless._.display1
+ my_children[2]: _nameless._.display2
+ my_children[3]: _nameless._.revpose
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 0
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: null
+}
+
+ui::group : _nameless._.shared {
+ fitting: false
+ my_children: 2
+ my_children[0]: _nameless._.bcg_top
+ my_children[1]: _nameless._.clock
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 950
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+
+ui::text : _nameless._.bcg_top {
+ text: "<color value=FF0D0D0D><img src=/material/ui/white.mat xscale=stretch yscale=stretch>"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 60
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.shared
+}
+
+ui::text_common : _nameless._.clock {
+ value: "23:59"
+ look_template: txt.vlv_fh_2024.ic_wvalbc
+ text: ""
+ coords_l: 8
+ coords_r: 145
+ coords_t: 47
+ coords_b: 3
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1050
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.shared
+}
+
+ui::group : _nameless._.display1 {
+ fitting: false
+ my_children: 8
+ my_children[0]: _nameless._.bare_map
+ my_children[1]: _nameless._.search
+ my_children[2]: _nameless._.zoom
+ my_children[3]: _nameless._.bluetooth
+ my_children[4]: _nameless._.signal
+ my_children[5]: _nameless._.settings
+ my_children[6]: _nameless._.notification
+ my_children[7]: _nameless._.driver
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 100
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+
+ui::text : _nameless._.bare_map {
+ text: "<color value=FF5B5651><img src=/material/ui/white.mat xscale=stretch yscale=stretch><ret><color value=FFFFFFFF><img src=/material/ui/dashboard/bare_map.mat left=0 right=0.75 bottom=0.3066 top=0.6933 xscale=stretch yscale=stretch>"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 60
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text : _nameless._.search {
+ text: "<color value=FF080808>\r\n<img src=/material/ui/dashboard/volvo_fh_2024/display.mat width=50 yscale=stretch left=0.375 right=0.40625 top=0.875 bottom=0.9375>\r\n<img src=/material/ui/dashboard/volvo_fh_2024/display.mat width=400 yscale=stretch left=0.40625 right=0.40625 top=0.875 bottom=0.9375>\r\n<img src=/material/ui/dashboard/volvo_fh_2024/display.mat width=50 yscale=stretch left=0.40625 right=0.4375 top=0.875 bottom=0.9375>\r\n<color value=FFFFA254>\r\n<ret><offset hshift=30 vshift=30><img src=/material/ui/dashboard/volvo_fh_2024/display.mat width=40 height=40 left=0.4375 right=0.5 top=0.875 bottom=0.9375>\r\n<ret><offset hshift=430 vshift=30><img src=/material/ui/dashboard/volvo_fh_2024/display.mat width=40 height=40 left=0.4375 right=0.5 top=0.8125 bottom=0.875>\r\n<color value=FF888888>\r\n<ret><offset hshift=90 vshift=32><font face=/font/db_normal.font xscale=2 yscale=2>Search</font>\r\n"
+ coords_l: 20
+ coords_r: 520
+ coords_t: 698
+ coords_b: 598
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.zoom {
+ value: "left=0.4375 right=0.5 top=0.75 bottom=0.8125"
+ look_template: txt.vlv_fh_2024.sid_btnc
+ text: ""
+ coords_l: 1170
+ coords_r: 1270
+ coords_t: 438
+ coords_b: 338
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.bluetooth {
+ value: "30|left=0.5 right=0.5625 top=0.875 bottom=0.9375"
+ look_template: txt.vlv_fh_2024.sid_btnstb
+ text: ""
+ coords_l: 648
+ coords_r: 776
+ coords_t: 60
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.signal {
+ value: "30|left=0.5 right=0.5625 top=0.8125 bottom=0.875"
+ look_template: txt.vlv_fh_2024.sid_btnstb
+ text: ""
+ coords_l: 748
+ coords_r: 876
+ coords_t: 60
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.settings {
+ value: "30|left=0.5 right=0.5625 top=0.75 bottom=0.8125"
+ look_template: txt.vlv_fh_2024.sid_btnstb
+ text: ""
+ coords_l: 848
+ coords_r: 976
+ coords_t: 60
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.notification {
+ value: "30|left=0.4375 right=0.5 top=0.9375 bottom=1"
+ look_template: txt.vlv_fh_2024.sid_btnstb
+ text: ""
+ coords_l: 948
+ coords_r: 1076
+ coords_t: 60
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text : _nameless._.driver {
+ text: "<color value=FF323030>\r\n<align hstyle=center vstyle=center>\r\n<img src=/material/ui/dashboard/volvo_fh_2024/display.mat left=0.375 right=0.40625 top=0.9375 bottom=1 width=30 height=60>\r\n<img src=/material/ui/dashboard/volvo_fh_2024/display.mat left=0.40625 right=0.40625 top=0.9375 bottom=1 width=140 height=60>\r\n<img src=/material/ui/dashboard/volvo_fh_2024/display.mat right=0.375 left=0.40625 top=0.9375 bottom=1 width=30 height=60>\r\n</align>\r\n<ret><color value=FFB2B2B2>\r\n<align hstyle=center vstyle=center><font face=/font/db_normal_2024.font xscale=2 yscale=2>Driver 1</font></align>"
+ coords_l: 1054
+ coords_r: 1280
+ coords_t: 60
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::group : _nameless._.display2 {
+ fitting: false
+ my_children: 1
+ my_children[0]: _nameless.18bd.a3c0
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 200
+ layer: 4
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+
+ui::text : _nameless.18bd.a3c0 {
+ text: "<img src=/material/ui/white.mat color=ff000000 xscale=stretch yscale=stretch >"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display2
+}
+
+
+ui::text_common : _nameless._.revpose {
+ value: "R"
+ look_template: txt.revpose.gear_page
+ text: ""
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1380
+ layer: 50
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+}

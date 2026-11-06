@@ -1,0 +1,12 @@
+effect : "eut2.lamp.rfx" {
+	additional_ambient : 0.000000
+	diffuse : { 0.000000 , 0.000000 , 0.000000 }
+	shininess : 0.000000
+	specular : { 0.000000 , 0.000000 , 0.000000 }
+	texture : "texture_base" {
+		source : "/model/reverse_assist/guide_color.tobj"
+	}
+	texture : "texture_mask" {
+		source : "/model/reverse_assist/guide_mask.tobj"
+	}
+}

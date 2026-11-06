@@ -1,0 +1,626 @@
+SiiNunit
+{
+ui::window : _nameless.063ae3791 {
+ window_handler: null
+ clip_children: false
+ keep_aspect: none
+ user_string_data: ""
+ first_direction_focus_id: 0
+ fitting: false
+ my_children: 5
+ my_children[0]: _nameless._.shared
+ my_children[1]: _nameless._.display1
+ my_children[2]: _nameless._.display2
+ my_children[3]: _nameless._.display3
+ my_children[4]: _nameless._.revpose
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 0
+ layer: 0
+ tab: -1
+ pointer: -1
+ my_parent: null
+}
+
+ui::group : _nameless._.shared {
+ fitting: false
+ my_children: 3
+ my_children[0]: _nameless._.bcg_top
+ my_children[1]: _nameless._.bcg_right
+ my_children[2]: _nameless._.clock
+ coords_l: 0
+ coords_r: 128
+ coords_t: 720
+ coords_b: 660
+ area_l: 0
+ area_r: 128
+ area_t: 720
+ area_b: 660
+ id: 950
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+
+ui::text : _nameless._.bcg_top {
+ text: "<color value=FF0A0A0A><img src=/material/ui/white.mat xscale=stretch yscale=stretch>\r\n<color value=FFBBBBBB>\r\n<ret><align hstyle=center>\r\n<offset vshift=18><img src=/material/ui/white.mat width=60 height=4><br>\r\n<offset vshift=2><img src=/material/ui/white.mat width=60 height=4><br>\r\n<offset vshift=2><img src=/material/ui/white.mat width=60 height=4>\r\n</align>\r\n<color value=FF5F4457>\r\n<ret><offset hshift=850>\r\n<img src=/material/ui/dashboard/renault_etech_t/display.mat height=58 width=68 left=0.9375 right=1 top=0.380859375 bottom=0.431640625>\r\n<img src=/material/ui/dashboard/renault_etech_t/display.mat height=58 width=50 right=1 left=1 top=0.380859375 bottom=0.431640625>\r\n<img src=/material/ui/dashboard/renault_etech_t/display.mat height=58 width=68 right=0.9375 left=1 top=0.380859375 bottom=0.431640625>\r\n<color value=FFFFFFFF>\r\n<ret><offset hshift=870 vshift=12><img src=/material/ui/dashboard/renault_etech_t/display.mat height=36 width=36 left=0.5 right=0.5625 top=0.9375 bottom=1>\r\n<offset hshift=15 vshift=6><font face=/font/db_din_pro_medium.font xscale=1.5 yscale=1.5>Driver</font>"
+ coords_l: 0
+ coords_r: 1170
+ coords_t: 720
+ coords_b: 660
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.shared
+}
+
+ui::text : _nameless._.bcg_right {
+ text: "<color value=FF0A0A0A><img src=/material/ui/white.mat xscale=stretch yscale=stretch>\r\n<ret><color value=FF3311FF><img src=/material/ui/dashboard/renault_etech_t/display.mat yscale=stretch width=12 left=0.892578125 right=0.8984375 top=0.3798828125 bottom=0.568359375>\r\n<color value=FFFFFFFF>\r\n<ret><offset hshift=10 vshift=12>\r\n<img src=/material/ui/dashboard/renault_etech_t/display.mat height=30 width=30 left=0.5 right=0.5625 top=0.875 bottom=0.9375>\r\n<offset hshift=4 vshift=3><font face=/font/db_din_pro_medium.font xscale=1.3 yscale=1.5>22,0\xc2\xb0</font>\r\n<ret><offset vshift=80 hshift=4>\r\n<align hstyle=center>\r\n<img src=/material/ui/dashboard/renault_etech_t/display.mat height=60 width=60 left=0.1875 right=0.25 top=0.8125 bottom=0.875>\r\n<br><offset vshift=52><img src=/material/ui/dashboard/renault_etech_t/display.mat height=60 width=60 left=0.1875 right=0.25 top=0.75 bottom=0.8125>\r\n<br><offset vshift=52><img src=/material/ui/dashboard/renault_etech_t/display.mat height=60 width=60 left=0.25 right=0.3125 top=0.9375 bottom=1>\r\n<br><offset vshift=52><img src=/material/ui/dashboard/renault_etech_t/display.mat height=60 width=60 left=0.25 right=0.3125 top=0.875 bottom=0.9375>\r\n<br><offset vshift=52><img src=/material/ui/dashboard/renault_etech_t/display.mat height=60 width=60 left=0.25 right=0.3125 top=0.75 bottom=0.8125>\r\n<br><offset vshift=52><img src=/material/ui/dashboard/renault_etech_t/display.mat height=60 width=60 left=0.25 right=0.3125 top=0.8125 bottom=0.875>\r\n</align>\r\n"
+ coords_l: 1170
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.shared
+}
+
+ui::text_common : _nameless._.clock {
+ value: "23:59"
+ look_template: txt.renault_et_t.ic_wvalbc
+ text: ""
+ coords_l: 0
+ coords_r: 137
+ coords_t: 704
+ coords_b: 660
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1050
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.shared
+}
+
+ui::group : _nameless._.display1 {
+ fitting: false
+ my_children: 21
+ my_children[0]: _nameless._.trip_bcg
+ my_children[1]: _nameless._.trip_btn1
+ my_children[2]: _nameless._.trip_btn2
+ my_children[3]: _nameless._.trip_btn3
+ my_children[4]: _nameless._.back_ico
+ my_children[5]: _nameless._.overv_ico
+ my_children[6]: _nameless._.t1detail_ico
+ my_children[7]: _nameless._.tripd_ico
+ my_children[8]: _nameless._.tripd
+ my_children[9]: _nameless._.tript_ico
+ my_children[10]: _nameless._.tript
+ my_children[11]: _nameless._.regen_ico
+ my_children[12]: _nameless._.regen
+ my_children[13]: _nameless._.econsum_ico
+ my_children[14]: _nameless._.econsum
+ my_children[15]: _nameless._.avgspd_ico
+ my_children[16]: _nameless._.avgspd
+ my_children[17]: _nameless._.ptoc_ico
+ my_children[18]: _nameless._.ptoc
+ my_children[19]: _nameless._.avgcons
+ my_children[20]: _nameless._.instcons
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 100
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+
+ui::text : _nameless._.trip_bcg {
+ text: "<color value=FF101010><img src=/material/ui/white.mat xscale=stretch yscale=stretch>\r\n<color value=55FFFFFF>\r\n<ret><offset vshift=88><img src=/material/ui/dashboard/renault_etech_t/display.mat xscale=stretch height=12 left=0.125 right=0.3125 top=0.642578125 bottom=0.6474609375>\r\n<color value=FF702419>\r\n<ret><offset vshift=160 hshift=50><img src=/material/ui/dashboard/renault_etech_t/display.mat width=350 height=350 left=0.9375 right=1 top=0.4375 bottom=0.5>\r\n<color value=FFFF8558>\r\n<ret><offset vshift=250 hshift=185><img src=/material/ui/dashboard/renault_etech_t/display.mat width=80 height=80 left=0.5 right=0.5625 top=0.8125 bottom=0.875>\r\n<ret><offset vshift=130><align hstyle=center><font face=/font/db_din_pro_medium.font xscale=1.4 yscale=1.3>TRIP COMPUTER 1</font></align>\r\n<color value=FFFFFFFF>\r\n<ret><offset vshift=160 hshift=50><img src=/material/ui/dashboard/renault_etech_t/display.mat width=350 height=350 left=0.8125 right=1 top=0.8125 bottom=1>\r\n<ret><offset vshift=280 hshift=215><font face=/font/db_din_pro_medium.font xscale=1.3 yscale=1.2>T1</font>\r\n<ret><offset vshift=355 hshift=156><img src=/material/ui/dashboard/renault_etech_t/display.mat width=50 height=50 left=0.3125 right=0.375 top=0.8125 bottom=0.875>\r\n<ret><offset vshift=576 hshift=130><img src=/material/ui/dashboard/renault_etech_t/display.mat width=30 height=30 left=0.5 right=0.5625 top=0.75 bottom=0.8125>"
+ coords_l: 0
+ coords_r: 1170
+ coords_t: 660
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.trip_btn1 {
+ value: "FF3D242D|85|50|Set as Primary"
+ look_template: txt.renault_et_t.sid_rbtn
+ text: ""
+ coords_l: 713
+ coords_r: 950
+ coords_t: 648
+ coords_b: 578
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.trip_btn2 {
+ value: "FF975D60|85|0|Pause"
+ look_template: txt.renault_et_t.sid_rbtn
+ text: ""
+ coords_l: 945
+ coords_r: 1161
+ coords_t: 648
+ coords_b: 578
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.trip_btn3 {
+ value: "FF6B4245|85|0|Reset"
+ look_template: txt.renault_et_t.sid_rbtn
+ text: ""
+ coords_l: 126
+ coords_r: 324
+ coords_t: 169
+ coords_b: 99
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text : _nameless._.back_ico {
+ text: "<color value=FFFFFFFF><img src=/material/ui/dashboard/renault_etech_t/display.mat xscale=stretch yscale=stretch left=0.4375 right=0.5 top=0.75 bottom=0.8125>"
+ coords_l: 62
+ coords_r: 92
+ coords_t: 627
+ coords_b: 597
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text : _nameless._.overv_ico {
+ text: "<color value=150000FF><img src=/material/ui/dashboard/renault_etech_t/display.mat xscale=stretch height=96 left=0.895996094 right=0.895996094 top=0.380859375 bottom=0.4755859375>\r\n<color value=FF3333FF><ret><align vstyle=bottom><img src=/material/ui/dashboard/renault_etech_t/display.mat xscale=stretch height=12 left=0.17625 right=0.25125 top=0.642578125 bottom=0.6474609375></align>\r\n<color value=FFFFFFFF>\r\n<ret><offset vshift=10><align hstyle=center>\r\n<img src=/material/ui/dashboard/renault_etech_t/display.mat height=50 width=50 left=0.4375 right=0.5 top=0.875 bottom=0.9375>\r\n<br><font face=/font/db_din_pro_medium.font xscale=1.3 yscale=1.2>Overview</font>\r\n</align>"
+ coords_l: 142
+ coords_r: 279
+ coords_t: 660
+ coords_b: 560
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text : _nameless._.t1detail_ico {
+ text: "<color value=FFFFFFFF>\r\n<ret><offset vshift=10><align hstyle=center>\r\n<img src=/material/ui/dashboard/renault_etech_t/display.mat height=50 width=50 left=0.4375 right=0.5 top=0.8125 bottom=0.875>\r\n<br><font face=/font/db_din_pro_medium.font xscale=1.3 yscale=1.2>T1 Details</font>\r\n</align>"
+ coords_l: 305
+ coords_r: 442
+ coords_t: 660
+ coords_b: 560
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.tripd_ico {
+ value: "left=0.375 right=0.4375 top=0.9375 bottom=1|Trip Distance"
+ look_template: txt.renault_et_t.sid_tico
+ text: ""
+ coords_l: 445
+ coords_r: 747
+ coords_t: 447
+ coords_b: 385
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.tripd {
+ value: "2155|km"
+ look_template: txt.renault_et_t.sid_ttxt2
+ text: ""
+ coords_l: 445
+ coords_r: 747
+ coords_t: 459
+ coords_b: 420
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1210
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.tript_ico {
+ value: "left=0.375 right=0.4375 top=0.875 bottom=0.9375|Trip Time"
+ look_template: txt.renault_et_t.sid_tico
+ text: ""
+ coords_l: 445
+ coords_r: 747
+ coords_t: 313
+ coords_b: 251
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.tript {
+ value: "21:15"
+ look_template: txt.renault_et_t.sid_ttxt
+ text: ""
+ coords_l: 445
+ coords_r: 747
+ coords_t: 325
+ coords_b: 286
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1390
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.regen_ico {
+ value: "left=0.3125 right=0.375 top=0.75 bottom=0.8125|Energy<br>Regenerated"
+ look_template: txt.renault_et_t.sid_tico
+ text: ""
+ coords_l: 445
+ coords_r: 747
+ coords_t: 170
+ coords_b: &42a1ffff
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.regen {
+ value: "35|kWh"
+ look_template: txt.renault_et_t.sid_ttxt2
+ text: ""
+ coords_l: 445
+ coords_r: 747
+ coords_t: 182
+ coords_b: 143
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1680
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.econsum_ico {
+ value: "left=0.375 right=0.4375 top=0.8125 bottom=0.875|Energy<br>Consumed"
+ look_template: txt.renault_et_t.sid_tico
+ text: ""
+ coords_l: 776
+ coords_r: 1091
+ coords_t: 447
+ coords_b: 359
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.econsum {
+ value: "190|kWh"
+ look_template: txt.renault_et_t.sid_ttxt2
+ text: ""
+ coords_l: 776
+ coords_r: 1091
+ coords_t: 459
+ coords_b: 420
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1500
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.avgspd_ico {
+ value: "left=0.4375 right=0.5 top=0.9375 bottom=1|Average speed"
+ look_template: txt.renault_et_t.sid_tico
+ text: ""
+ coords_l: 776
+ coords_r: 1091
+ coords_t: 313
+ coords_b: 251
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.avgspd {
+ value: "21|km/h"
+ look_template: txt.renault_et_t.sid_ttxt2
+ text: ""
+ coords_l: 776
+ coords_r: 1091
+ coords_t: 325
+ coords_b: 286
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1400
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.ptoc_ico {
+ value: "left=0.375 right=0.4375 top=0.75 bottom=0.8125|PTO Energy<br>Consumed"
+ look_template: txt.renault_et_t.sid_tico
+ text: ""
+ coords_l: 776
+ coords_r: 1091
+ coords_t: 170
+ coords_b: &42a1ffff
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.ptoc {
+ value: "0|kWh"
+ look_template: txt.renault_et_t.sid_ttxt2
+ text: ""
+ coords_l: 776
+ coords_r: 1091
+ coords_t: 182
+ coords_b: 143
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.avgcons {
+ value: "898.0|kWh/100km"
+ look_template: txt.renault_et_t.sid_constxt
+ text: ""
+ coords_l: 160
+ coords_r: 396
+ coords_t: 303
+ coords_b: 215
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1170
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::text_common : _nameless._.instcons {
+ value: "368.8|kWh/100km"
+ look_template: txt.renault_et_t.sid_iconstxt
+ text: ""
+ coords_l: 174
+ coords_r: 481
+ coords_t: 83
+ coords_b: 42
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1160
+ layer: 2
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display1
+}
+
+ui::group : _nameless._.display2 {
+ fitting: false
+ my_children: 1
+ my_children[0]: _nameless._.bare_map
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 200
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+
+ui::text : _nameless._.bare_map {
+ text: "<color value=FF261D19><img src=/material/ui/white.mat xscale=stretch yscale=stretch><ret><color value=FFFFFFFF><img src=/material/ui/dashboard/bare_map.mat left=0.125 right=0.875 bottom=0.2583 top=0.7417 xscale=stretch yscale=stretch>"
+ coords_l: 0
+ coords_r: 1170
+ coords_t: 660
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 1
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display2
+}
+
+ui::group : _nameless._.display3 {
+ fitting: false
+ my_children: 1
+ my_children[0]: _nameless.18bd.a3c0
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 0
+ area_r: 1280
+ area_t: 720
+ area_b: 0
+ id: 300
+ layer: 4
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+
+ui::text : _nameless.18bd.a3c0 {
+ text: "<img src=/material/ui/white.mat color=ff000000 xscale=stretch yscale=stretch >"
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 0
+ layer: 3
+ tab: -1
+ pointer: -1
+ my_parent: _nameless._.display3
+}
+
+
+ui::text_common : _nameless._.revpose {
+ value: "R"
+ look_template: txt.revpose.gear_page
+ text: ""
+ coords_l: 0
+ coords_r: 1280
+ coords_t: 720
+ coords_b: 0
+ area_l: 1
+ area_r: 0
+ area_t: 0
+ area_b: 1
+ id: 1380
+ layer: 50
+ tab: -1
+ pointer: -1
+ my_parent: _nameless.063ae3791
+}
+}

@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.62.0 - 2026-11-06
+
+- Added an exact SHA-256-bound native profile for ETS2 1.62.1.0 Steam public.
+- Added profile-specific checks and RVAs for the four hooks and four active
+  model lifecycle helpers used by the native world-entity runtime.
+- Kept unknown 1.62 builds fail-closed in telemetry-only mode and retained the
+  supported 1.61.x and 1.60.x profiles.
+- Started the game-aligned mod version scheme: releases use `v1.62.x` from this
+  version onward.
+
 ## 0.11.2 - 2026-10-16
 
 - Added an exact ETS2 1.61.1.9 Steam executable profile with relocated hooks,

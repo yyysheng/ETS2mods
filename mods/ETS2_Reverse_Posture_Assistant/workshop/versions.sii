@@ -14,4 +14,9 @@ package_version_info : .v161 {
  package_name: "161_content"
  compatible_versions[]: "1.61.*"
 }
+
+package_version_info : .v162 {
+ package_name: "162_content"
+ compatible_versions[]: "1.62.*"
+}
 }

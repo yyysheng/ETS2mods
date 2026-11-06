@@ -1,0 +1,14 @@
+SiiNunit
+{
+accessory_addon_int_data : revassist.man.tgx_euro6.toyhang
+{
+	name: "Reverse Assist Anchor"
+	price: 1
+	unlock: 0
+	icon: "truck/upgrade/interior_decors/toyhang/airship_gy"
+	part_type: aftermarket
+
+	interior_model: "/model/reverse_assist/accessory_anchor.pmd"
+	exterior_model: "/model/reverse_assist/accessory_anchor.pmd"
+}
+}
