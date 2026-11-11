@@ -1,11 +1,11 @@
 # Changelog
 
-## 1.62.1 - 2026-11-11
+## 1.62.2.1 - 2026-11-11
 
 - Added an exact SHA-256-bound native profile for ETS2 1.62.2.1 Steam public.
 - Verified the four enabled hook signatures, four active model-lifecycle helper
   signatures, and the vehicle render dispatch structure in the installed binary.
-- Retained the exact ETS2 1.62.1.0 profile and supported 1.61.x and 1.60.x builds.
+- Retained the exact ETS2 1.62.1.0 profile and verified 1.61.1.0, 1.61.1.1, 1.61.1.9 and 1.60.1.7 profiles plus the 1.60.1.7 hook-layout fallback.
 
 ## 1.62.0 - 2026-11-06
 

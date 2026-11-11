@@ -1,6 +1,6 @@
 # Building from source
 
-The native entity build targets verified Euro Truck Simulator 2 `1.60.x`, exact
+The native entity build targets verified Euro Truck Simulator 2 exact `1.60.1.7` and builds matching its verified hook layout, exact
 `1.61.1.0`, exact `1.61.1.1`, exact `1.61.1.9`, and exact `1.62.1.0` and
 `1.62.2.1` Windows x64 executables through `src/entity_runtime/build_profiles.hpp`.
 
@@ -26,7 +26,7 @@ The compiled telemetry plug-in and packaged `.scs` archive are distributed in Gi
 
 ## 中文
 
-新运行时通过多版本 `BuildProfile` 面向经验证的 ETS2 1.60.x、1.61.1.0、
+新运行时通过多版本 `BuildProfile` 面向经验证的 ETS2 1.60.1.7 与已验证 Hook 布局匹配的 1.60 构建、1.61.1.0、
 1.61.1.1、1.61.1.9、1.62.1.0 和 1.62.2.1 Windows x64 构建。1.61 与 1.62 配置会校验模型所有权、参数初始化、
 父节点和姿态变换辅助函数入口；任一活动 Hook 或辅助函数不匹配时均跳过全部原生 Hook，
 安全降级到仅遥测模式。两个 1.62 构建均使用独立的精确配置。

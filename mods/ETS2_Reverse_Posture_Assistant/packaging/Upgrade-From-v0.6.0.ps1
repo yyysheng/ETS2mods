@@ -49,7 +49,7 @@ $gameBin = Join-Path $gameRoot 'bin\win_x64'
 $pluginDir = Join-Path $gameBin 'plugins'
 $modDir = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'Euro Truck Simulator 2\mod'
 $runtimeSource = Join-Path $packageRoot 'runtime\ETS2ReverseEntityRuntime.dll'
-$modSource = Join-Path $packageRoot 'mod\ETS2_Reverse_Posture_Assistant_1.62.scs'
+$modSource = Join-Path $packageRoot 'mod\ETS2_Reverse_Posture_Assistant_1.62.2.1.scs'
 if (-not (Test-Path -LiteralPath $runtimeSource)) { throw "Runtime file is missing: $runtimeSource" }
 if (-not (Test-Path -LiteralPath $modSource)) { throw "Mod file is missing: $modSource" }
 
@@ -73,7 +73,9 @@ foreach ($legacyFile in $legacyFiles) {
 foreach ($oldName in @('ETS2_DAF_Reverse_Assist_Screen_1.60.scs',
                        'ETS2_Reverse_Posture_Assistant_1.60.scs',
                        'ETS2_Reverse_Posture_Assistant_1.61.scs',
-                       'ETS2_Reverse_Posture_Assistant_1.62.scs')) {
+                       'ETS2_Reverse_Posture_Assistant_1.62.scs',
+                       'ETS2_Reverse_Posture_Assistant_1.62.1.scs',
+                       'ETS2_Reverse_Posture_Assistant_1.62.2.1.scs')) {
     $oldPath = Join-Path $modDir $oldName
     if (Test-Path -LiteralPath $oldPath) {
         Move-Item -LiteralPath $oldPath -Destination $backupDir
@@ -84,7 +86,7 @@ Copy-Item -LiteralPath $runtimeSource -Destination $pluginDir -Force
 Copy-Item -LiteralPath $modSource -Destination $modDir -Force
 
 Write-Host ''
-Write-Host 'ETS2 Reverse Posture Assistant upgraded from v0.6.0 to v1.62.1.' -ForegroundColor Green
+Write-Host 'ETS2 Reverse Posture Assistant upgraded from v0.6.0 to v1.62.2.1.' -ForegroundColor Green
 Write-Host "Legacy Reverse Assistant components were backed up to: $backupDir"
 Write-Host 'dxgi.dll, d3d11.dll, TsMap.dll, Newtonsoft.Json.dll, and libdeflate.dll were left untouched.'
 Write-Host 'This prevents the upgrade from damaging ReShade, Snowymoon, or another mod using those files.'

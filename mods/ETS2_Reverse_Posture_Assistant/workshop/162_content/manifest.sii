@@ -1,7 +1,7 @@
 SiiNunit
 {
 mod_package : .package_name {
- package_version: "1.62.1"
+ package_version: "1.62.2.1"
  author: "yyysheng"
  category[]: "interior"
  icon: "mod_icon.jpg"
