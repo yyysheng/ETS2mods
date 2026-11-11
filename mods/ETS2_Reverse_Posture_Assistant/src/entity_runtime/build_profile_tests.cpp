@@ -91,6 +91,28 @@ int main(int argc, char **argv)
         build_profiles[2].executable_sha256, reader, &exact, &failed);
     assert(earlier_public_build == &build_profiles[2] && exact);
 
+    const auto find_profile = [](std::string_view game_version) {
+        const auto found = std::find_if(
+            build_profiles.begin(), build_profiles.end(),
+            [&](const BuildProfile &profile) {
+                return profile.game_version == game_version;
+            });
+        return found == build_profiles.end() ? nullptr : &*found;
+    };
+    const auto *previous_162_public_build = find_profile("1.62.1.0");
+    assert(previous_162_public_build != nullptr);
+    const auto *selected_previous_162_build = select_build_profile(
+        previous_162_public_build->executable_sha256, reader, &exact, &failed);
+    assert(selected_previous_162_build == previous_162_public_build && exact);
+    assert(engine_helper_signatures_match(*selected_previous_162_build, reader));
+
+    const auto *current_162_public_build = find_profile("1.62.2.1");
+    assert(current_162_public_build != nullptr);
+    const auto *selected_current_162_build = select_build_profile(
+        current_162_public_build->executable_sha256, reader, &exact, &failed);
+    assert(selected_current_162_build == current_162_public_build && exact);
+    assert(engine_helper_signatures_match(*selected_current_162_build, reader));
+
     // A second binary digest is supported by the separately declared
     // signature-compatible profile when all enabled hooks remain verified.
     const auto *compatible_build = select_build_profile(
@@ -116,7 +138,8 @@ int main(int argc, char **argv)
     assert(!engine_helper_signatures_match(build_profiles[0], reader, &failed));
     assert(failed == 2);
 
-    std::cout << "build profile tests passed: 1.60, 1.61.1.0, 1.61.1.1, 1.61.1.9 exact profiles + compatible profile; "
+    std::cout << "build profile tests passed: 1.60, 1.61.1.0, 1.61.1.1, 1.61.1.9, "
+                 "1.62.1.0, 1.62.2.1 exact profiles + compatible profile; "
                  "inactive hook ignored; required hook/helper mismatches rejected\n";
 
     if (argc == 3)
@@ -131,21 +154,23 @@ int main(int argc, char **argv)
                 std::size_t size) {
                 return file_signature_matches(executable, rva, bytes, size);
             };
+        const auto *expected_profile = find_profile("1.62.2.1");
+        assert(expected_profile != nullptr);
         const auto *exact_file = select_build_profile(
             argv[2], file_reader, &exact, &failed);
-        assert(exact_file == &build_profiles[0] && exact);
+        assert(exact_file == expected_profile && exact);
         assert(engine_helper_signatures_match(*exact_file, file_reader));
-        // The selected entry must dispatch both trailer and tractor virtual
-        // render methods at the relocated offsets in 1.61.1.9.
+        // The 1.62.2.1 vehicle dispatch must retain the trailer member and
+        // virtual render slots used to draw both vehicle types.
         const std::array<std::uint8_t, 7> trailer_member{
             0x48, 0x8b, 0x8e, 0xc8, 0x00, 0x00, 0x00};
         const std::array<std::uint8_t, 6> virtual_render{
             0xff, 0x90, 0x00, 0x03, 0x00, 0x00};
-        assert(file_signature_matches(executable, 0x00798c11,
+        assert(file_signature_matches(executable, 0x00784201,
                                       trailer_member.data(), trailer_member.size()));
-        assert(file_signature_matches(executable, 0x00798c2a,
+        assert(file_signature_matches(executable, 0x0078421a,
                                       virtual_render.data(), virtual_render.size()));
-        assert(file_signature_matches(executable, 0x00798cbb,
+        assert(file_signature_matches(executable, 0x007842ab,
                                       virtual_render.data(), virtual_render.size()));
         std::cout << "installed executable verified: " << argv[1]
                   << "; exact=" << exact_file->id

@@ -128,6 +128,31 @@ constexpr std::array verified_162_1_0_engine_helpers{
                      16},
 };
 
+// Installed Steam public ETS2 1.62.2.1 build (commit
+// 4c8b31398d9e255afb851981f4bb9eaee7c3791b). All four active model-lifecycle
+// helpers were signature-checked in the installed executable.
+constexpr std::array verified_162_2_1_engine_helpers{
+    EngineHelperSpec{EngineHelperId::model_transfer, "model_transfer",
+                     0x00345f00,
+                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
+                      0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x20, 0x48},
+                     16},
+    EngineHelperSpec{EngineHelperId::model_parameter_init,
+                     "model_parameter_init", 0x00426a60,
+                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x6c,
+                      0x24, 0x18, 0x56, 0x57, 0x41, 0x56, 0x48, 0x83},
+                     16},
+    EngineHelperSpec{EngineHelperId::set_parent, "set_parent", 0x01401ee0,
+                     {0x48, 0x83, 0xec, 0x28, 0x4c, 0x8b, 0xc1, 0x4c,
+                      0x8b, 0xca, 0x48, 0x8b, 0x49, 0x40, 0x48, 0x3b},
+                     16},
+    EngineHelperSpec{EngineHelperId::set_transform, "set_transform",
+                     0x01401fa0,
+                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x57, 0x48, 0x83,
+                      0xec, 0x40, 0x48, 0x8b, 0xd9, 0x48, 0x8b, 0xfa},
+                     16},
+};
+
 constexpr std::array<EngineHelperSpec, 4> no_engine_helpers{};
 
 constexpr std::array verified_160_1_7_hooks{
@@ -266,6 +291,29 @@ constexpr std::array build_profiles{
                       0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x30, 0x49}},
         },
         verified_162_1_0_engine_helpers,
+    },
+    BuildProfile{
+        "ets2-1.62.2.1-steam-public-4c8b31398d9e",
+        "1.62.2.1",
+        "8F17D3505C2E6C25A93F38A1119FFBBCCFBA6A3BE2EDDA3771E0186276AD9434",
+        false,
+        std::array{
+            HookSpec{HookId::model_load, "model_load", 0x0160efe0,
+                     {0x40, 0x53, 0x56, 0x41, 0x56, 0x48, 0x83, 0xec,
+                      0x40, 0x80, 0xbc, 0x24, 0x80, 0x00, 0x00, 0x00}},
+            HookSpec{HookId::vehicle_render_dispatch,
+                     "vehicle_render_dispatch", 0x00784120,
+                     {0x48, 0x89, 0x74, 0x24, 0x20, 0x57, 0x48, 0x83,
+                      0xec, 0x20, 0x48, 0x8b, 0x42, 0x18, 0x48, 0x8b}},
+            HookSpec{HookId::trailer_visual_update,
+                     "trailer_visual_update", 0x0062c5a0,
+                     {0x48, 0x8b, 0xc4, 0x48, 0x89, 0x70, 0x10, 0x48,
+                      0x89, 0x78, 0x18, 0x55, 0x48, 0x8d, 0x68, 0xa1}},
+            HookSpec{HookId::trailer_render, "trailer_render", 0x0062cd10,
+                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
+                      0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x30, 0x49}},
+        },
+        verified_162_2_1_engine_helpers,
     },
 };
 
