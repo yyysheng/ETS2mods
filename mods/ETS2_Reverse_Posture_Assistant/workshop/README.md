@@ -2,7 +2,7 @@
 
 This directory contains the SCS Workshop Uploader version map and its universal informational fallback package.
 
-The v1.62.3.2 upload root contains versions.sii, 162_content and universal_info.
+The v1.62.3.3 upload root contains versions.sii, 162_content and universal_info.
 Select the extracted Workshop_Content package in SCS Workshop Uploader.
 Use ../assets/workshop_cover_640x360.jpg as the preview image.
 

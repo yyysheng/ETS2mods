@@ -1,2 +1,2 @@
-倒车姿态助手 v1.62.3.2，适用于 ETS2 1.62.3.2 Steam Windows x64。请配套安装 v1.62.3.2 原生遥测 DLL。
-Reverse Posture Assistant v1.62.3.2 for ETS2 1.62.3.2 Steam Windows x64. Requires the matching native telemetry DLL.
+倒车姿态助手 v1.62.3.3，适用于 ETS2 1.62.3.3 Steam Windows x64。请配套安装 v1.62.3.3 原生遥测 DLL。
+Reverse Posture Assistant v1.62.3.3 for ETS2 1.62.3.3 Steam Windows x64. Requires the matching native telemetry DLL.

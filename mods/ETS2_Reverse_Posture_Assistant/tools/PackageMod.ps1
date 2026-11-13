@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $root = Split-Path -Parent $PSScriptRoot
-$version = 'v1.62.3.2'
+$version = 'v1.62.3.3'
 $mod = Join-Path $root 'src/mod'
 # Reject stale converted test assets before they can shadow the base game.
 if (Get-ChildItem -LiteralPath (Join-Path $mod 'model') -Recurse -File |

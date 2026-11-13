@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     assert(exact);
     assert(engine_helper_signatures_match(current_build, reader));
     assert(select_build_profile(
-        "8F17D3505C2E6C25A93F38A1119FFBBCCFBA6A3BE2EDDA3771E0186276AD9434",
+        "6690F7ADEE3EB1701C798DCA812F180B6737B83B43F4D2E48722C42F64979812",
         reader, &exact, &failed) == nullptr);
     assert(!exact);
 
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
         image[rva] ^= 0xff;
     }
 
-    std::cout << "build profile tests passed: exact 1.62.3.2; previous digest rejected; "
+    std::cout << "build profile tests passed: exact 1.62.3.3; previous digest rejected; "
                  "all hook and helper mismatches detected\n";
 
     if (argc == 3)
@@ -114,17 +114,17 @@ int main(int argc, char **argv)
             argv[2], file_reader, &exact, &failed);
         assert(exact_file == &current_build && exact);
         assert(engine_helper_signatures_match(*exact_file, file_reader));
-        // The 1.62.3.2 vehicle dispatch must retain the trailer member and
+        // The 1.62.3.3 vehicle dispatch must retain the trailer member and
         // virtual render slots used to draw both vehicle types.
         const std::array<std::uint8_t, 7> trailer_member{
             0x48, 0x8b, 0x8e, 0xc8, 0x00, 0x00, 0x00};
         const std::array<std::uint8_t, 6> virtual_render{
             0xff, 0x90, 0x00, 0x03, 0x00, 0x00};
-        assert(file_signature_matches(executable, 0x00784221,
+        assert(file_signature_matches(executable, 0x00784251,
                                       trailer_member.data(), trailer_member.size()));
-        assert(file_signature_matches(executable, 0x0078423a,
+        assert(file_signature_matches(executable, 0x0078426a,
                                       virtual_render.data(), virtual_render.size()));
-        assert(file_signature_matches(executable, 0x007842cb,
+        assert(file_signature_matches(executable, 0x007842fb,
                                       virtual_render.data(), virtual_render.size()));
         std::cout << "installed executable verified: " << argv[1]
                   << "; exact=" << exact_file->id

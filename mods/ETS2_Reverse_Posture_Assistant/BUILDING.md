@@ -1,6 +1,6 @@
 # Building from source
 
-The native entity build targets ETS2 1.62.3.2 Steam Windows x64 via the exact executable profile in `src/entity_runtime/build_profiles.hpp`.
+The native entity build targets ETS2 1.62.3.3 Steam Windows x64 via the exact executable profile in `src/entity_runtime/build_profiles.hpp`.
 
 ## Requirements
 
@@ -18,4 +18,4 @@ The native entity build targets ETS2 1.62.3.2 Steam Windows x64 via the exact ex
 4. Copy the resulting PMD/PMG and automat material into `src/mod`; include the generated DDS/TOBJ but no PMC.
 5. Run `tools/PackageMod.ps1` to validate and package `src/mod`; place the DLL in `bin/win_x64/plugins`. Never package base-game `model/symbol` overrides.
 
-The runtime checks the executable SHA-256 and verifies all four hook and four lifecycle helper signatures before installing native hooks. A mismatch leaves the plug-in in telemetry-only mode.
+The runtime checks the executable SHA-256 and verifies four render hook signatures, the quit-command hook signature, and four lifecycle helper signatures before installing native hooks. A mismatch leaves the plug-in in telemetry-only mode.

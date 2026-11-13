@@ -1,8 +1,8 @@
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 & (Join-Path $PSScriptRoot 'PackageMod.ps1')
-$version = 'v1.62.3.2'
-$gameVersion = '1.62.3.2'
+$version = 'v1.62.3.3'
+$gameVersion = '1.62.3.3'
 $modRelease = Join-Path $root "build/release_$version"
 $release = Join-Path $root "build/release_${version}_final"
 $runtime = Join-Path $root 'build/entity_runtime/ETS2ReverseEntityRuntime.dll'
@@ -13,7 +13,7 @@ foreach ($variant in @('Full', 'Runtime_for_Workshop')) {
     New-Item -ItemType Directory -Path $stage,"$stage/runtime","$stage/installer" | Out-Null
     Copy-Item -LiteralPath $runtime -Destination "$stage/runtime"
     Copy-Item -LiteralPath "$root/packaging/Install.ps1" -Destination "$stage/installer"
-    Copy-Item -LiteralPath "$root/README.md","$root/RELEASE_NOTES_v1.62.3.2.md","$root/LICENSE","$root/THIRD_PARTY_NOTICES.md" -Destination $stage
+    Copy-Item -LiteralPath "$root/README.md","$root/RELEASE_NOTES_v1.62.3.3.md","$root/LICENSE","$root/THIRD_PARTY_NOTICES.md" -Destination $stage
     Copy-Item -LiteralPath "$root/licenses" -Destination $stage -Recurse
     if ($variant -eq 'Runtime_for_Workshop') {
         Copy-Item -LiteralPath "$root/packaging/Install-Runtime-Only.bat" -Destination $stage
