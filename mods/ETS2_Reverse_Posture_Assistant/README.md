@@ -1,11 +1,8 @@
 # ETS2 Reverse Posture Assistant
 
-A world-space reverse posture and trajectory assistant for **Euro Truck
-Simulator 2 1.62.2.1, 1.62.1.0, 1.61.1.0, 1.61.1.1, 1.61.1.9 and 1.60.1.7**
-Windows x64 builds. Other 1.60 builds use native rendering only if all enabled
-hooks match the verified 1.60.1.7 layout.
+A world-space reverse posture and trajectory assistant for **Euro Truck Simulator 2 1.62.3.2** on Windows x64.
 
-[Repository folder](https://github.com/yyysheng/ETS2mods/tree/main/mods/ETS2_Reverse_Posture_Assistant) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3776052935) | [v1.62.2.1 release notes](RELEASE_NOTES_v1.62.2.1.md) | [Previous GitHub release v1.62.0](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v1.62.0)
+[Repository folder](https://github.com/yyysheng/ETS2mods/tree/main/mods/ETS2_Reverse_Posture_Assistant) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3776052935) | [v1.62.3.2 release notes](RELEASE_NOTES_v1.62.3.2.md) | [Previous GitHub release v1.62.0](https://github.com/yyysheng/ETS2mods/releases/tag/reverse-posture-assistant-v1.62.0)
 
 When reverse gear is selected, the plug-in predicts tractor and trailer posture from official
 telemetry and creates collisionless frame models directly in the game world. The frames are normal
@@ -25,54 +22,36 @@ buffer, constant buffer, or post-process overlay is read or modified.
 - Collisionless low-profile line entities placed on the predicted ground path.
 - Automatic display only while reverse gear is selected.
 - Visible through normal game rendering from exterior, interior, free, and mirror views.
-- Multiple `BuildProfile` entries for exact 1.62.1.0, 1.62.2.1, 1.61.1.0, 1.61.1.1, 1.61.1.9 and
-  1.60.1.7 Steam executables plus the verified 1.60 hook layout.
-- Every enabled hook is signature-checked. The 1.61 and 1.62 profiles also verify the
-  four active model-lifecycle helpers; a mismatch skips all native hooks.
+- Native rendering checks the executable SHA-256, four required hook signatures, and four model-lifecycle helper signatures.
 - No ReShade, `dxgi.dll`, `d3d11.dll`, or graphics API dependency.
 
-## v1.62.2.1 update
+## v1.62.3.2 update
 
-Adds a hash-bound native profile for ETS2 1.62.2.1 and retains the exact
-1.62.1.0, 1.61.1.0, 1.61.1.1, 1.61.1.9 and 1.60.1.7 profiles. The mod
-version v1.62.2.1 exactly matches the tested ETS2 1.62.2.1 build. See
-[release notes](RELEASE_NOTES_v1.62.2.1.md).
+Updates the native runtime for ETS2 1.62.3.2 Steam x64. See [release notes](RELEASE_NOTES_v1.62.3.2.md).
 
 ## Installation
 
 ### Full standalone package
 
-1. Download the `ETS2_Reverse_Posture_Assistant_v1.62.2.1_Full.zip` release package.
+1. Download the `ETS2_Reverse_Posture_Assistant_v1.62.3.2_Full.zip` release package.
 2. Extract it and run `Install-Full.bat`.
 3. Enable **ETS2 Reverse Posture Assistant** in the ETS2 Mod Manager.
 
 ### Steam Workshop package
 
 1. Subscribe to the [Steam Workshop item](https://steamcommunity.com/sharedfiles/filedetails/?id=3776052935).
-2. Download the `ETS2_Reverse_Posture_Assistant_v1.62.2.1_Runtime_for_Workshop.zip` release package.
+2. Download the `ETS2_Reverse_Posture_Assistant_v1.62.3.2_Runtime_for_Workshop.zip` release package.
 3. Extract it and run `Install-Runtime-Only.bat`.
 
 The Workshop cannot install the telemetry plug-in into the game directory, so the GitHub runtime package is required.
 
-### Upgrade from v0.6.0
-
-1. Download `ETS2_Reverse_Posture_Assistant_v1.62.2.1_Upgrade_from_v0.6.0.zip`.
-2. Exit ETS2, extract the package, and run `Upgrade-From-v0.6.0.bat`.
-3. The installer backs up and disables the old Reverse Assistant runtime, then installs v1.62.2.1.
-
-The upgrade does not modify or remove `dxgi.dll`, `d3d11.dll`, or ambiguous shared
-libraries. This allows Snowymoon, ReShade, and other graphics mods to keep their own proxy DLL.
-
 ## Supported game version
 
-- Euro Truck Simulator 2 `1.62.2.1` and `1.62.1.0`, each with an exact native profile. Other 1.62 builds safely fall back to telemetry-only mode until an exact profile is added.
-- Euro Truck Simulator 2 `1.61.1.0`, `1.61.1.1` and `1.61.1.9`, each with an exact native profile.
-- Euro Truck Simulator 2 `1.60.1.7` with an exact profile; other 1.60 builds require all enabled hooks to match its verified layout.
-- Windows x64
+- Euro Truck Simulator 2 1.62.3.2 Steam public, Windows x64, revision f8b10df2da6f.
 
 ## 中文说明
 
-**欧卡 2 倒车姿态助手**模组版本为 v1.62.2.1，与 Euro Truck Simulator 2 1.62.2.1 完全一致；包含 1.62.2.1、1.62.1.0、1.61.1.0、1.61.1.1、1.61.1.9 与 1.60.1.7 精确原生适配配置。其他 1.62 和 1.61 构建跳过原生 Hook 并保留遥测；其他 1.60 构建仅在启用 Hook 全部匹配已验证布局时启用原生绘制。
+**欧卡 2 倒车姿态助手** v1.62.3.2 适配 Steam Windows x64 版 ETS2 1.62.3.2。原生绘制要求可执行文件哈希和所有必需签名匹配。
 
 主要特点：
 
@@ -89,7 +68,7 @@ libraries. This allows Snowymoon, ReShade, and other graphics mods to keep their
 - 模型不含 PMC 碰撞文件，不参与车辆碰撞。
 - 不安装、不替换也不删除 `dxgi.dll` 或 `d3d11.dll`。
 
-完整安装请下载 `v1.62.2.1 Full` 包；通过 Steam 创意工坊订阅时，还需要安装 `v1.62.2.1 Runtime_for_Workshop`。从 0.6.0 升级请选择 `v1.62.2.1 Upgrade_from_v0.6.0`，它会备份并停用旧版倒车助手运行组件，但保留其他模组可能使用的 `dxgi.dll`。
+完整安装请下载 `v1.62.3.2 Full` 包；通过 Steam 创意工坊订阅时，还需要安装 `v1.62.3.2 Runtime_for_Workshop`。
 
 ## Credits
 

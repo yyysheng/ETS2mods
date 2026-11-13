@@ -45,68 +45,12 @@ struct BuildProfile
     std::string_view id;
     std::string_view game_version;
     std::string_view executable_sha256;
-    bool signature_compatible_fallback;
     std::array<HookSpec, 4> enabled_hooks;
     std::array<EngineHelperSpec, 4> engine_helpers;
 };
 
-// Installed Steam public 1.61.1.9 build (commit 05126873bfae). The model
-// transfer and scene-node helpers are checked in addition to the four hooks:
-// they are called by the native model lifecycle after profile selection.
-constexpr std::array verified_161_1_9_engine_helpers{
-    EngineHelperSpec{EngineHelperId::model_transfer, "model_transfer",
-                     0x0033cc00,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
-                      0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x20, 0x48},
-                     16},
-    EngineHelperSpec{EngineHelperId::model_parameter_init,
-                     "model_parameter_init", 0x0041ccb0,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x6c,
-                      0x24, 0x18, 0x56, 0x57, 0x41, 0x56, 0x48, 0x83},
-                     16},
-    EngineHelperSpec{EngineHelperId::set_parent, "set_parent", 0x013ce580,
-                     {0x48, 0x83, 0xec, 0x28, 0x4c, 0x8b, 0xc1, 0x4c,
-                      0x8b, 0xca, 0x48, 0x8b, 0x49, 0x40, 0x48, 0x3b},
-                     16},
-    EngineHelperSpec{EngineHelperId::set_transform, "set_transform",
-                     0x013ce640,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x57, 0x48, 0x83,
-                      0xec, 0x40, 0x48, 0x8b, 0xd9, 0x48, 0x8b, 0xfa},
-                     16},
-};
-
-constexpr std::array verified_161_1_1_engine_helpers{
-    EngineHelperSpec{EngineHelperId::model_transfer, "model_transfer",
-                     0x0033cb90,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74}, 8},
-    EngineHelperSpec{EngineHelperId::model_parameter_init,
-                     "model_parameter_init", 0x0041cc20,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x6c}, 8},
-    EngineHelperSpec{EngineHelperId::set_parent, "set_parent", 0x013cc750,
-                     {0x48, 0x83, 0xec, 0x28, 0x4c, 0x8b, 0xc1}, 7},
-    EngineHelperSpec{EngineHelperId::set_transform, "set_transform",
-                     0x013cc810,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x57, 0x48, 0x83}, 8},
-};
-
-constexpr std::array verified_161_1_0_engine_helpers{
-    EngineHelperSpec{EngineHelperId::model_transfer, "model_transfer",
-                     0x0033cb90,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74}, 8},
-    EngineHelperSpec{EngineHelperId::model_parameter_init,
-                     "model_parameter_init", 0x0041cc20,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x6c}, 8},
-    EngineHelperSpec{EngineHelperId::set_parent, "set_parent", 0x013cbca0,
-                     {0x48, 0x83, 0xec, 0x28, 0x4c, 0x8b, 0xc1}, 7},
-    EngineHelperSpec{EngineHelperId::set_transform, "set_transform",
-                     0x013cbd60,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x57, 0x48, 0x83}, 8},
-};
-
-// Installed Steam public 1.62.1.0 build (commit 1afd6ae63840). The model
-// owner transfer, parameter initialization, and scene-node helpers were
-// located and signature-checked in the installed 1.62 executable.
-constexpr std::array verified_162_1_0_engine_helpers{
+// ETS2 1.62.3.2 Steam x64, revision f8b10df2da6f.
+constexpr std::array verified_162_3_2_engine_helpers{
     EngineHelperSpec{EngineHelperId::model_transfer, "model_transfer",
                      0x00345f00,
                      {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
@@ -117,204 +61,38 @@ constexpr std::array verified_162_1_0_engine_helpers{
                      {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x6c,
                       0x24, 0x18, 0x56, 0x57, 0x41, 0x56, 0x48, 0x83},
                      16},
-    EngineHelperSpec{EngineHelperId::set_parent, "set_parent", 0x01401e10,
+    EngineHelperSpec{EngineHelperId::set_parent, "set_parent", 0x01402130,
                      {0x48, 0x83, 0xec, 0x28, 0x4c, 0x8b, 0xc1, 0x4c,
                       0x8b, 0xca, 0x48, 0x8b, 0x49, 0x40, 0x48, 0x3b},
                      16},
     EngineHelperSpec{EngineHelperId::set_transform, "set_transform",
-                     0x01401ed0,
+                     0x014021f0,
                      {0x48, 0x89, 0x5c, 0x24, 0x08, 0x57, 0x48, 0x83,
                       0xec, 0x40, 0x48, 0x8b, 0xd9, 0x48, 0x8b, 0xfa},
                      16},
 };
 
-// Installed Steam public ETS2 1.62.2.1 build (commit
-// 4c8b31398d9e255afb851981f4bb9eaee7c3791b). All four active model-lifecycle
-// helpers were signature-checked in the installed executable.
-constexpr std::array verified_162_2_1_engine_helpers{
-    EngineHelperSpec{EngineHelperId::model_transfer, "model_transfer",
-                     0x00345f00,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
-                      0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x20, 0x48},
-                     16},
-    EngineHelperSpec{EngineHelperId::model_parameter_init,
-                     "model_parameter_init", 0x00426a60,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x6c,
-                      0x24, 0x18, 0x56, 0x57, 0x41, 0x56, 0x48, 0x83},
-                     16},
-    EngineHelperSpec{EngineHelperId::set_parent, "set_parent", 0x01401ee0,
-                     {0x48, 0x83, 0xec, 0x28, 0x4c, 0x8b, 0xc1, 0x4c,
-                      0x8b, 0xca, 0x48, 0x8b, 0x49, 0x40, 0x48, 0x3b},
-                     16},
-    EngineHelperSpec{EngineHelperId::set_transform, "set_transform",
-                     0x01401fa0,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x57, 0x48, 0x83,
-                      0xec, 0x40, 0x48, 0x8b, 0xd9, 0x48, 0x8b, 0xfa},
-                     16},
-};
-
-constexpr std::array<EngineHelperSpec, 4> no_engine_helpers{};
-
-constexpr std::array verified_160_1_7_hooks{
-    HookSpec{HookId::model_load, "model_load", 0x015184f0,
-             {0x40, 0x53, 0x56, 0x41, 0x56, 0x48, 0x83, 0xec,
-              0x40, 0x80, 0xbc, 0x24, 0x80, 0x00, 0x00, 0x00}},
-    HookSpec{HookId::vehicle_render_dispatch, "vehicle_render_dispatch",
-             0x00772020,
-             {0x40, 0x53, 0x57, 0x48, 0x83, 0xec, 0x28, 0x48,
-              0x8b, 0x42, 0x18, 0x48, 0x8b, 0xda, 0x48, 0x8b}},
-    HookSpec{HookId::trailer_visual_update, "trailer_visual_update",
-             0x00614190,
-             {0x48, 0x8b, 0xc4, 0x48, 0x89, 0x70, 0x10, 0x48,
-              0x89, 0x78, 0x18, 0x55, 0x48, 0x8d, 0x68, 0xa1}},
-    HookSpec{HookId::trailer_render, "trailer_render", 0x006148f0,
-             {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
-              0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x30, 0x49}},
-};
-
-// Steam public 1.61.1.1 (6949e633e779). All four sites were identified in
-// the installed executable; the vehicle dispatch stack frame changed in 1.61.
-constexpr std::array verified_161_1_1_hooks{
-    HookSpec{HookId::model_load, "model_load", 0x015d99f0,
-             {0x40, 0x53, 0x56, 0x41, 0x56, 0x48, 0x83, 0xec,
-              0x40, 0x80, 0xbc, 0x24, 0x80, 0x00, 0x00, 0x00}},
-    HookSpec{HookId::vehicle_render_dispatch, "vehicle_render_dispatch",
-             0x00798720,
-             {0x48, 0x89, 0x74, 0x24, 0x20, 0x57, 0x48, 0x83,
-              0xec, 0x20, 0x48, 0x8b, 0x42, 0x18, 0x48, 0x8b}},
-    HookSpec{HookId::trailer_visual_update, "trailer_visual_update",
-             0x00637620,
-             {0x48, 0x8b, 0xc4, 0x48, 0x89, 0x70, 0x10, 0x48,
-              0x89, 0x78, 0x18, 0x55, 0x48, 0x8d, 0x68, 0xa1}},
-    HookSpec{HookId::trailer_render, "trailer_render", 0x00637d90,
-             {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
-              0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x30, 0x49}},
-};
-
-// Steam public 1.61.1.0 (f02fca2efa75). All four sites were identified in
-// the installed executable; the vehicle dispatch stack frame changed in 1.61.
-constexpr std::array verified_161_1_0_hooks{
-    HookSpec{HookId::model_load, "model_load", 0x015d8f40,
-             {0x40, 0x53, 0x56, 0x41, 0x56, 0x48, 0x83, 0xec,
-              0x40, 0x80, 0xbc, 0x24, 0x80, 0x00, 0x00, 0x00}},
-    HookSpec{HookId::vehicle_render_dispatch, "vehicle_render_dispatch",
-             0x00798570,
-             {0x48, 0x89, 0x74, 0x24, 0x20, 0x57, 0x48, 0x83,
-              0xec, 0x20, 0x48, 0x8b, 0x42, 0x18, 0x48, 0x8b}},
-    HookSpec{HookId::trailer_visual_update, "trailer_visual_update",
-             0x00637500,
-             {0x48, 0x8b, 0xc4, 0x48, 0x89, 0x70, 0x10, 0x48,
-              0x89, 0x78, 0x18, 0x55, 0x48, 0x8d, 0x68, 0xa1}},
-    HookSpec{HookId::trailer_render, "trailer_render", 0x00637c70,
-             {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
-              0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x30, 0x49}},
-};
-
-// Exact profiles are listed before the 1.60 signature-compatible fallback.
-// The fallback admits another 1.60 binary only when every enabled hook keeps
-// the verified RVA and bytes; 1.61 and 1.62 profiles carry active helpers.
-constexpr std::array build_profiles{
-    BuildProfile{
-        "ets2-1.61.1.9-steam-public-05126873bfae",
-        "1.61.1.9",
-        "B70C2357CC56EB5834EE47FEA3C60B2F2D4591383FF2AC479CFD3CD254301B8C",
-        false,
-        std::array{
-            HookSpec{HookId::model_load, "model_load", 0x015db820,
-                     {0x40, 0x53, 0x56, 0x41, 0x56, 0x48, 0x83, 0xec,
-                      0x40, 0x80, 0xbc, 0x24, 0x80, 0x00, 0x00, 0x00}},
-            HookSpec{HookId::vehicle_render_dispatch,
-                     "vehicle_render_dispatch", 0x00798b30,
-                     {0x48, 0x89, 0x74, 0x24, 0x20, 0x57, 0x48, 0x83,
-                      0xec, 0x20, 0x48, 0x8b, 0x42, 0x18, 0x48, 0x8b}},
-            HookSpec{HookId::trailer_visual_update,
-                     "trailer_visual_update", 0x00637940,
-                     {0x48, 0x8b, 0xc4, 0x48, 0x89, 0x70, 0x10, 0x48,
-                      0x89, 0x78, 0x18, 0x55, 0x48, 0x8d, 0x68, 0xa1}},
-            HookSpec{HookId::trailer_render, "trailer_render", 0x006380b0,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
-                      0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x30, 0x49}},
-        },
-        verified_161_1_9_engine_helpers,
+constexpr BuildProfile current_build{
+    "ets2-1.62.3.2-steam-public-f8b10df2da6f",
+    "1.62.3.2",
+    "6690F7ADEE3EB1701C798DCA812F180B6737B83B43F4D2E48722C42F64979812",
+    std::array{
+        HookSpec{HookId::model_load, "model_load", 0x0160f230,
+                 {0x40, 0x53, 0x56, 0x41, 0x56, 0x48, 0x83, 0xec,
+                  0x40, 0x80, 0xbc, 0x24, 0x80, 0x00, 0x00, 0x00}},
+        HookSpec{HookId::vehicle_render_dispatch,
+                 "vehicle_render_dispatch", 0x00784140,
+                 {0x48, 0x89, 0x74, 0x24, 0x20, 0x57, 0x48, 0x83,
+                  0xec, 0x20, 0x48, 0x8b, 0x42, 0x18, 0x48, 0x8b}},
+        HookSpec{HookId::trailer_visual_update,
+                 "trailer_visual_update", 0x0062c5a0,
+                 {0x48, 0x8b, 0xc4, 0x48, 0x89, 0x70, 0x10, 0x48,
+                  0x89, 0x78, 0x18, 0x55, 0x48, 0x8d, 0x68, 0xa1}},
+        HookSpec{HookId::trailer_render, "trailer_render", 0x0062cd10,
+                 {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
+                  0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x30, 0x49}},
     },
-    BuildProfile{
-        "ets2-1.61.1.1-steam-public-6949e633e779",
-        "1.61.1.1",
-        "2014BFCC850A06108F4CA3C233A5BB6D31D7D83346C5D449F94C8E0675E5199A",
-        false,
-        verified_161_1_1_hooks,
-        verified_161_1_1_engine_helpers,
-    },
-    BuildProfile{
-        "ets2-1.61.1.0-steam-public-f02fca2efa75",
-        "1.61.1.0",
-        "4DCB548CAAD924254A60AF7C3BD1DB69DCAF42F7ADF19B5BB5D77EBA2814AF21",
-        false,
-        verified_161_1_0_hooks,
-        verified_161_1_0_engine_helpers,
-    },
-    BuildProfile{
-        "ets2-1.60.1.7-steam-public-23966373",
-        "1.60.1.7",
-        "B7DFFE6B27402C7DB6DFD52CF982CD5BF292584138B35E3EB8EFB311814AB3F8",
-        false,
-        verified_160_1_7_hooks,
-        no_engine_helpers,
-    },
-    BuildProfile{
-        "ets2-1.60-compatible-hook-layout",
-        "1.60.x signature-compatible",
-        "",
-        true,
-        verified_160_1_7_hooks,
-        no_engine_helpers,
-    },
-    BuildProfile{
-        "ets2-1.62.1.0-steam-public-1afd6ae63840",
-        "1.62.1.0",
-        "A938CB388121F9B884A2E1B0F048C230A7BC19638EF6D641A70775F8C7FEA956",
-        false,
-        std::array{
-            HookSpec{HookId::model_load, "model_load", 0x0160ef10,
-                     {0x40, 0x53, 0x56, 0x41, 0x56, 0x48, 0x83, 0xec,
-                      0x40, 0x80, 0xbc, 0x24, 0x80, 0x00, 0x00, 0x00}},
-            HookSpec{HookId::vehicle_render_dispatch,
-                     "vehicle_render_dispatch", 0x00783c90,
-                     {0x48, 0x89, 0x74, 0x24, 0x20, 0x57, 0x48, 0x83,
-                      0xec, 0x20, 0x48, 0x8b, 0x42, 0x18, 0x48, 0x8b}},
-            HookSpec{HookId::trailer_visual_update,
-                     "trailer_visual_update", 0x0062c110,
-                     {0x48, 0x8b, 0xc4, 0x48, 0x89, 0x70, 0x10, 0x48,
-                      0x89, 0x78, 0x18, 0x55, 0x48, 0x8d, 0x68, 0xa1}},
-            HookSpec{HookId::trailer_render, "trailer_render", 0x0062c880,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
-                      0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x30, 0x49}},
-        },
-        verified_162_1_0_engine_helpers,
-    },
-    BuildProfile{
-        "ets2-1.62.2.1-steam-public-4c8b31398d9e",
-        "1.62.2.1",
-        "8F17D3505C2E6C25A93F38A1119FFBBCCFBA6A3BE2EDDA3771E0186276AD9434",
-        false,
-        std::array{
-            HookSpec{HookId::model_load, "model_load", 0x0160efe0,
-                     {0x40, 0x53, 0x56, 0x41, 0x56, 0x48, 0x83, 0xec,
-                      0x40, 0x80, 0xbc, 0x24, 0x80, 0x00, 0x00, 0x00}},
-            HookSpec{HookId::vehicle_render_dispatch,
-                     "vehicle_render_dispatch", 0x00784120,
-                     {0x48, 0x89, 0x74, 0x24, 0x20, 0x57, 0x48, 0x83,
-                      0xec, 0x20, 0x48, 0x8b, 0x42, 0x18, 0x48, 0x8b}},
-            HookSpec{HookId::trailer_visual_update,
-                     "trailer_visual_update", 0x0062c5a0,
-                     {0x48, 0x8b, 0xc4, 0x48, 0x89, 0x70, 0x10, 0x48,
-                      0x89, 0x78, 0x18, 0x55, 0x48, 0x8d, 0x68, 0xa1}},
-            HookSpec{HookId::trailer_render, "trailer_render", 0x0062cd10,
-                     {0x48, 0x89, 0x5c, 0x24, 0x08, 0x48, 0x89, 0x74,
-                      0x24, 0x10, 0x57, 0x48, 0x83, 0xec, 0x30, 0x49}},
-        },
-        verified_162_2_1_engine_helpers,
-    },
+    verified_162_3_2_engine_helpers,
 };
 
 template <typename SignatureReader>
@@ -341,23 +119,11 @@ const BuildProfile *select_build_profile(std::string_view executable_sha256,
                                          std::size_t *failed_index = nullptr)
 {
     if (exact_hash_match) *exact_hash_match = false;
-    for (const auto &profile : build_profiles)
-    {
-        if (profile.executable_sha256.empty() ||
-            profile.executable_sha256 != executable_sha256)
-            continue;
-        if (!enabled_hook_signatures_match(profile, reader, failed_index))
-            return nullptr;
-        if (exact_hash_match) *exact_hash_match = true;
-        return &profile;
-    }
-    for (const auto &profile : build_profiles)
-    {
-        if (!profile.signature_compatible_fallback) continue;
-        if (enabled_hook_signatures_match(profile, reader, failed_index))
-            return &profile;
-    }
-    return nullptr;
+    if (executable_sha256 != current_build.executable_sha256 ||
+        !enabled_hook_signatures_match(current_build, reader, failed_index))
+        return nullptr;
+    if (exact_hash_match) *exact_hash_match = true;
+    return &current_build;
 }
 
 constexpr const HookSpec *find_hook(const BuildProfile &profile, HookId id)

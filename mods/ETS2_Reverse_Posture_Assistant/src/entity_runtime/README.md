@@ -7,13 +7,10 @@ This is the replacement for the discarded ReShade/6g drawing prototype.
 - Prediction uses the unchanged `reverse_kinematics.hpp`.
 - Output consists of normal Prism3D model entities with world transforms.
 - The supplied model assets intentionally have no `.pmc`, so they do not participate in collision.
-- Native access is selected through `BuildProfile` entries. Exact 1.62.1.0,
-  1.62.2.1, 1.61.1.0, 1.61.1.1, 1.61.1.9 and 1.60.1.7 Steam public hashes and the byte-compatible
-  1.60 hook layout are covered.
-- Every profile checks the four hooks compiled as enabled. The 1.61 and 1.62 profiles
-  additionally verify four active model-lifecycle helpers and select their
-  per-build RVAs. Any active hook/helper mismatch skips native hook installation
-  and retains telemetry-only mode.
+- Native access targets the exact ETS2 1.62.3.2 Steam x64 executable.
+- A matching SHA-256, all four hook signatures and all four model-lifecycle
+  helper signatures are required for native hook installation. Other builds
+  stay in telemetry-only mode.
 
 The runtime loads:
 

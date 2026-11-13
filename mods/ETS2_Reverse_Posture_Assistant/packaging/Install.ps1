@@ -55,7 +55,7 @@ if (-not (Test-Path -LiteralPath $runtimeSource)) { throw "Runtime file is missi
 
 New-Item -ItemType Directory -Path $modDir,(Join-Path $gameBin 'plugins') -Force | Out-Null
 
-$backupDir = Join-Path $gameBin ('reverse_assist_backup\v1.62.2.1_' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
+$backupDir = Join-Path $gameBin ('reverse_assist_backup\v1.62.3.2_' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
 New-Item -ItemType Directory -Path $backupDir -Force | Out-Null
 $installedRuntime = Join-Path $gameBin 'plugins\ETS2ReverseEntityRuntime.dll'
 if (Test-Path -LiteralPath $installedRuntime) {
@@ -63,14 +63,15 @@ if (Test-Path -LiteralPath $installedRuntime) {
 }
 
 if (-not $RuntimeOnly) {
-    $modSource = Join-Path $packageRoot 'mod\ETS2_Reverse_Posture_Assistant_1.62.2.1.scs'
+    $modSource = Join-Path $packageRoot 'mod\ETS2_Reverse_Posture_Assistant_1.62.3.2.scs'
     if (-not (Test-Path -LiteralPath $modSource)) { throw "Mod file is missing: $modSource" }
     foreach ($oldName in @('ETS2_DAF_Reverse_Assist_Screen_1.60.scs',
                            'ETS2_Reverse_Posture_Assistant_1.60.scs',
                            'ETS2_Reverse_Posture_Assistant_1.61.scs',
                            'ETS2_Reverse_Posture_Assistant_1.62.scs',
                            'ETS2_Reverse_Posture_Assistant_1.62.1.scs',
-                           'ETS2_Reverse_Posture_Assistant_1.62.2.1.scs')) {
+                           'ETS2_Reverse_Posture_Assistant_1.62.2.1.scs',
+                           'ETS2_Reverse_Posture_Assistant_1.62.3.2.scs')) {
         $oldPath = Join-Path $modDir $oldName
         if (Test-Path -LiteralPath $oldPath) {
             Move-Item -LiteralPath $oldPath -Destination $backupDir
@@ -81,7 +82,7 @@ Copy-Item -LiteralPath $runtimeSource -Destination $installedRuntime -Force
 if (-not $RuntimeOnly) { Copy-Item -LiteralPath $modSource -Destination $modDir }
 
 Write-Host ''
-Write-Host 'ETS2 Reverse Posture Assistant v1.62.2.1 installed successfully.' -ForegroundColor Green
+Write-Host 'ETS2 Reverse Posture Assistant v1.62.3.2 installed successfully.' -ForegroundColor Green
 Write-Host "Game directory: $gameRoot"
 Write-Host "Previous Reverse Posture Assistant files: $backupDir"
 Write-Host 'This build uses an SCS telemetry plug-in and native world entities.'

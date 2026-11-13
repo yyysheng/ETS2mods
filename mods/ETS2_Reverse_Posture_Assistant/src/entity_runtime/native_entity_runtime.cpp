@@ -1757,7 +1757,8 @@ bool initialize_engine()
                std::memcmp(engine.base + rva, bytes, size) == 0;
     };
     bool exact_hash_match = false;
-    std::size_t failed_hook = 0;
+    const auto &hooks = reverse_assist::compatibility::current_build.enabled_hooks;
+    std::size_t failed_hook = hooks.size();
     active_build_profile = reverse_assist::compatibility::select_build_profile(
         digest, signature_reader, &exact_hash_match, &failed_hook);
     if (!active_build_profile)
@@ -1765,10 +1766,9 @@ bool initialize_engine()
         std::ostringstream message;
         message << "[reverse-entity] Compatibility disabled: no BuildProfile matched sha256="
                 << digest;
-        if (failed_hook <
-            reverse_assist::compatibility::verified_160_1_7_hooks.size())
+        if (failed_hook < hooks.size())
             message << " failed-enabled-hook="
-                    << reverse_assist::compatibility::verified_161_1_0_hooks[failed_hook].name;
+                    << hooks[failed_hook].name;
         message << "; native hooks skipped, telemetry-only mode active.";
         log_line(message.str(), SCS_LOG_TYPE_warning);
         return false;

@@ -1,3 +1,2 @@
-Mod version v1.62.2.1 exactly matches ETS2 1.62.2.1. Exact native profiles: ETS2 1.62.2.1, 1.62.1.0, 1.61.1.0, 1.61.1.1, 1.61.1.9 and 1.60.1.7; other 1.60 builds require the verified hook layout.
-
-模组版本 v1.62.2.1 与欧卡 2 1.62.2.1 完全一致。精确原生适配配置包括 1.62.2.1、1.62.1.0、1.61.1.0、1.61.1.1、1.61.1.9 与 1.60.1.7；其他 1.60 构建需匹配已验证 Hook 布局。
+倒车姿态助手 v1.62.3.2，适用于 ETS2 1.62.3.2 Steam Windows x64。请配套安装 v1.62.3.2 原生遥测 DLL。
+Reverse Posture Assistant v1.62.3.2 for ETS2 1.62.3.2 Steam Windows x64. Requires the matching native telemetry DLL.

@@ -5,18 +5,8 @@ package_version_info : .universal {
  informational: true
 }
 
-package_version_info : .v160 {
- package_name: "160_content"
- compatible_versions[]: "1.60.*"
-}
-
-package_version_info : .v161 {
- package_name: "161_content"
- compatible_versions[]: "1.61.*"
-}
-
 package_version_info : .v162 {
  package_name: "162_content"
- compatible_versions[]: "1.62.*"
+ compatible_versions[]: "1.62.3.2"
 }
 }
