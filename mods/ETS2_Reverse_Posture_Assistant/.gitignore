@@ -7,3 +7,12 @@
 /third_party/
 /workshop/160_content/
 /workshop/161_content/
+
+# Private licensing evidence/drafts live outside this repository.
+/FILE_LICENSES.csv
+/ASSET_OWNERSHIP.csv
+/LICENSE_ACTIVATION.json
+/DEPENDENCY_PROVENANCE.md
+/FUTURE_LICENSING_PLAN.md
+/licenses/LICENSE.proprietary-code.txt
+/licenses/LICENSE.original-assets.txt

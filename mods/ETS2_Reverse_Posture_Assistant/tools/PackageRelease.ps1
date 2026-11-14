@@ -1,4 +1,8 @@
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'LicensePackaging.ps1')
+$licenseProjectRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..')).TrimEnd('\','/')
+$null = Get-LicensePackageFiles -ProjectRoot $licenseProjectRoot
+
 $root = Split-Path -Parent $PSScriptRoot
 & (Join-Path $PSScriptRoot 'PackageMod.ps1')
 $version = 'v1.62.3.3'
@@ -14,7 +18,6 @@ foreach ($variant in @('Full', 'Runtime_for_Workshop')) {
     Copy-Item -LiteralPath $runtime -Destination "$stage/runtime"
     Copy-Item -LiteralPath "$root/packaging/Install.ps1" -Destination "$stage/installer"
     Copy-Item -LiteralPath "$root/README.md","$root/RELEASE_NOTES_v1.62.3.3.md","$root/LICENSE","$root/THIRD_PARTY_NOTICES.md" -Destination $stage
-    Copy-Item -LiteralPath "$root/licenses" -Destination $stage -Recurse
     if ($variant -eq 'Runtime_for_Workshop') {
         Copy-Item -LiteralPath "$root/packaging/Install-Runtime-Only.bat" -Destination $stage
     } else {
@@ -24,6 +27,7 @@ foreach ($variant in @('Full', 'Runtime_for_Workshop')) {
     }
     $archive = Join-Path $release "ETS2_Reverse_Posture_Assistant_${version}_$variant.zip"
     [IO.Compression.ZipFile]::CreateFromDirectory($stage, $archive)
+    Add-LicenseFilesToArchive -ProjectRoot $licenseProjectRoot -Archive $archive
     $zip = [IO.Compression.ZipFile]::OpenRead($archive)
     try {
         $entry = @($zip.Entries) | Where-Object {

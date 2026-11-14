@@ -1,4 +1,8 @@
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'LicensePackaging.ps1')
+$licenseProjectRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..')).TrimEnd('\','/')
+$null = Get-LicensePackageFiles -ProjectRoot $licenseProjectRoot
+
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $root = Split-Path -Parent $PSScriptRoot
 $mod = Join-Path $root 'src\mod'
@@ -14,6 +18,7 @@ try {
             $zip,$_.FullName,$name,'Optimal') | Out-Null
     }
 } finally { $zip.Dispose() }
+Add-LicenseFilesToArchive -ProjectRoot $licenseProjectRoot -Archive $archive
 $zip = [IO.Compression.ZipFile]::OpenRead($archive)
 try {
     foreach ($required in @('manifest.sii','description.txt','mod_icon.jpg',

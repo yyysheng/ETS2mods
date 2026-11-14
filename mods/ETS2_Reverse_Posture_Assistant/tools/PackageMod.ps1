@@ -1,4 +1,8 @@
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'LicensePackaging.ps1')
+$licenseProjectRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..')).TrimEnd('\','/')
+$null = Get-LicensePackageFiles -ProjectRoot $licenseProjectRoot
+
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $root = Split-Path -Parent $PSScriptRoot
 $version = 'v1.62.3.3'
@@ -21,6 +25,7 @@ try {
             $zip, $_.FullName, $name, 'Optimal') | Out-Null
     }
 } finally { $zip.Dispose() }
+Add-LicenseFilesToArchive -ProjectRoot $licenseProjectRoot -Archive $archive
 $zip = [IO.Compression.ZipFile]::OpenRead($archive)
 try {
     foreach ($required in @('manifest.sii', 'model/reverse_assist/accessory_anchor.pmd',

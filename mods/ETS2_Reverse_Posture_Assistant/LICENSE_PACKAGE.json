@@ -1,0 +1,16 @@
+{
+  "files": [
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "licenses/LICENSE.scs-sdk.txt",
+    "licenses/LICENSE.scs-telemetry.txt",
+    "licenses/LICENSE.minhook.txt",
+    "licenses/LICENSE.historical-MIT.txt"
+  ],
+  "purpose": "Public reproducible-build configuration; not included in end-user packages. No private evidence is required.",
+  "release_version": "1.62.3.3",
+  "license_mode": "historical-MIT-code",
+  "historical_mit_sha256_lf": "1e9643b5f92000c22078a31798aef2ad61f243ca9deceb62afe7d2c0de34ad6b",
+  "historical_mit_hash_rule": "sha256:utf8-crlf-to-lf-only-v1",
+  "proprietary_active": false
+}
